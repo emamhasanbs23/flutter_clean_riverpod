@@ -75,4 +75,4 @@ app.*.map.json
 
 /flutter_template_momshad_bhai
 .puku/
-.puku-cli/
+.puku-cli/.github/workflows/
