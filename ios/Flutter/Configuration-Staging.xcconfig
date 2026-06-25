@@ -1,0 +1,10 @@
+// Per-flavor configuration for the staging build. See Configuration-Dev.xcconfig
+// for the conventions.
+
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+#include "Generated.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterCleanRiverpodBoilerplate.staging
+PRODUCT_NAME = Boilerplate (Staging)
+DEVELOPMENT_LANGUAGE = en
+FLUTTER_BUILD_MODE = debug

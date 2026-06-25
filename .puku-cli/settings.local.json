@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(fvm --version)",
+      "Bash(fvm flutter:*)",
+      "Bash(fvm dart:*)",
+      "Bash(flutter --version)",
+      "Bash(python3 -c \"from PIL import Image; print\\(''PIL OK''\\)\")",
+      "Bash(python3 -c \"import struct, zlib; print\\(''use stdlib''\\)\")",
+      "Bash(python3:*)",
+      "Bash(find ~/.pub-cache -path *flutter_native_splash*README*)",
+      "WebFetch(domain:riverpod.dev)",
+      "Bash(find ~/.pub-cache -name *.dart -path *riverpod*)",
+      "Bash(flutter test:*)",
+      "Bash(flutter analyze:*)",
+      "Read(//Applications/Visual Studio Code.app/**)",
+      "Bash(mdfind \"kMDItemCFBundleIdentifier == ''''com.microsoft.VSCode''''\")",
+      "Bash(~/.local/bin/code --version)",
+      "Bash(code:*)"
+    ]
+  }
+}

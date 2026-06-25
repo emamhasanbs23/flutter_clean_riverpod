@@ -1,0 +1,8 @@
+# Launcher icons for the **dev** flavor.
+# Run: fvm dart run flutter_launcher_icons --flavor dev
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/branding/icon_dev.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true

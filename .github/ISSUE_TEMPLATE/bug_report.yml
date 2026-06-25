@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a defect or unexpected behaviour in the boilerplate.
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: flavor
+    attributes:
+      label: Flavor
+      description: Which build flavor were you running?
+      options:
+        - dev
+        - staging
+        - prod
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Flutter / Dart version
+      description: Output of `flutter --version`
+      placeholder: "Flutter 3.41.8 / Dart 3.11.5"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device + OS
+      description: e.g. Pixel 7 / Android 14, iPhone 15 / iOS 17.4
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `flutter run --flavor dev -t lib/main_dev.dart`
+        2. Sign in with demo@example.com / password
+        3. Tap the FAB
+        4. Observe crash
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: Paste `flutter run` output or attach an image. Sanitise any tokens.

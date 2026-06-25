@@ -1,0 +1,30 @@
+{
+  "_comment_": "Template for the production flavor's Firebase Android config. See android/app/src/dev/google-services.json.example for the full schema.",
+  "project_info": {
+    "project_number": "000000000000",
+    "project_id": "PLACEHOLDER_REPLACE_WITH_REAL_VALUE",
+    "storage_bucket": "PLACEHOLDER_REPLACE_WITH_REAL_VALUE.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "android_client_info": {
+          "package_name": "com.example.flutter_clean_riverpod_boilerplate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "PLACEHOLDER_REPLACE_WITH_REAL_VALUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,23 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - "lib/l10n/generated/**"
+  errors:
+    invalid_annotation_target: ignore
+    # The dynamic repository accessor in [AuthInterceptor] reads
+    # `refreshAccessToken` through `dynamic` to avoid a cycle between
+    # `core/network` and `features/auth/data`.
+    invalid_use_of_visible_for_testing_member: false
+
+linter:
+  rules:
+    # Riverpod providers are intentionally public so test files can override
+    # them via ProviderScope.very_good_analysis otherwise flags every
+    # provider declaration.
+    public_member_api_docs: false
+    # We use Object? heavily for JSON nullables (json_serializable-free).
+    avoid_dynamic_calls: false

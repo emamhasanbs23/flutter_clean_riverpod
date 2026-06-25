@@ -1,0 +1,30 @@
+{
+  "_comment_": "Template for the dev flavor's Firebase Android config. Copy to google-services.json and populate with values from your Firebase Console (Project Settings → Your Android app). The real file is gitignored.",
+  "project_info": {
+    "project_number": "000000000000",
+    "project_id": "PLACEHOLDER_REPLACE_WITH_REAL_VALUE",
+    "storage_bucket": "PLACEHOLDER_REPLACE_WITH_REAL_VALUE.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "android_client_info": {
+          "package_name": "com.example.flutter_clean_riverpod_boilerplate.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "PLACEHOLDER_REPLACE_WITH_REAL_VALUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

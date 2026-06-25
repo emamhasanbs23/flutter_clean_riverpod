@@ -1,0 +1,12 @@
+# Native splash for the **staging** flavor.
+# Run: fvm dart run flutter_native_splash:create -A
+flutter_native_splash:
+  color: "#F57C00"
+  image: "assets/branding/splash_staging.png"
+  ios: true
+  android: true
+  android_12:
+    color: "#F57C00"
+    image: "assets/branding/splash_staging.png"
+    icon_background_color: "#F57C00"
+  fullscreen: true

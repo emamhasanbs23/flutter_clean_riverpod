@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<!-- Required for push notifications (FCM via APNs). The
+		     environment string MUST match the build configuration:
+		     `development` for debug builds, `production` for release.
+		     Xcode will substitute this based on the active scheme. -->
+		<key>aps-environment</key>
+		<string>development</string>
+
+		<!-- Universal / App Links. Each domain listed here MUST host a
+		     /.well-known/apple-app-site-association file that lists this
+		     app's bundle identifier and team prefix. The boilerplate
+		     assumes the production domain is example.com; update for
+		     your real marketing domain. -->
+		<key>com.apple.developer.associated-domains</key>
+		<array>
+			<string>applinks:example.com</string>
+			<string>applinks:staging.example.com</string>
+			<string>applinks:dev.example.com</string>
+		</array>
+	</dict>
+</plist>

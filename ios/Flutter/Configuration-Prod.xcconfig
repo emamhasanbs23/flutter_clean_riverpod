@@ -1,0 +1,10 @@
+// Per-flavor configuration for the production build. See Configuration-Dev.xcconfig
+// for the conventions.
+
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "Generated.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterCleanRiverpodBoilerplate
+PRODUCT_NAME = Boilerplate
+DEVELOPMENT_LANGUAGE = en
+FLUTTER_BUILD_MODE = release

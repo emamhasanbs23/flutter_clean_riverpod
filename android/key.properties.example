@@ -1,0 +1,12 @@
+## Copy this file to `key.properties` and fill in your release keystore
+## credentials. `key.properties` is gitignored.
+##
+## Generate a keystore with:
+##   keytool -genkey -v -keystore /path/to/upload-keystore.jks \
+##     -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+##
+## Then update the paths/passwords below to match.
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=/absolute/path/to/upload-keystore.jks

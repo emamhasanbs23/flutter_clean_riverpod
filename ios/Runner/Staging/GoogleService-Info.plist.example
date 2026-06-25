@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+  Template for the staging flavor's Firebase config. See
+  ios/Runner/Dev/GoogleService-Info.plist.example for the full list of
+  required keys.
+-->
+<dict>
+  <key>API_KEY</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>BUNDLE_ID</key>
+  <string>com.example.flutter_clean_riverpod_boilerplate.staging</string>
+  <key>CLIENT_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>GCM_SENDER_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>GOOGLE_APP_ID</key>
+  <string>1:000000000000:ios:0000000000000000000000</string>
+  <key>IS_GCM_ENABLED</key>
+  <true/>
+  <key>PLIST_VERSION</key>
+  <string>1</string>
+  <key>PROJECT_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>STORAGE_BUCKET</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE.appspot.com</string>
+</dict>
+</plist>

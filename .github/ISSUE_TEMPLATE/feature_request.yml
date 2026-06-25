@@ -1,0 +1,35 @@
+name: Feature request
+description: Propose a new boilerplate feature or improvement.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What gap in the boilerplate does this address?
+      placeholder: |
+        As a maintainer I want to ... so that ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      placeholder: |
+        - Add `X` provider / class
+        - Wire it through Y / Z
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you weigh? Why this one?
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Breaking change?
+      description: Will this require callers to update their code? If so, sketch the migration.

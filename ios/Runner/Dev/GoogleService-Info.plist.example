@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+  Template for the dev flavor's Firebase config. Copy to
+  GoogleService-Info.plist and populate with values from your Firebase
+  Console (Project Settings → Your iOS app). The real file is gitignored.
+
+  Required keys (Firebase will fail at runtime without them):
+    CLIENT_ID
+    REVERSED_CLIENT_ID
+    API_KEY
+    GCM_SENDER_ID
+    PLIST_VERSION
+    BUNDLE_ID
+    PROJECT_ID
+    STORAGE_BUCKET
+    IS_ADS_ENABLED
+    IS_ANALYTICS_ENABLED
+    IS_APPINVITE_ENABLED
+    IS_GCM_ENABLED
+    IS_SIGNIN_ENABLED
+    GOOGLE_APP_ID
+    DATABASE_URL
+-->
+<dict>
+  <key>_OBFUSCATION_KEY</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>API_KEY</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>BUNDLE_ID</key>
+  <string>com.example.flutter_clean_riverpod_boilerplate.dev</string>
+  <key>CLIENT_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>DATABASE_URL</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>GCM_SENDER_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>GOOGLE_APP_ID</key>
+  <string>1:000000000000:ios:0000000000000000000000</string>
+  <key>IS_ADS_ENABLED</key>
+  <false/>
+  <key>IS_ANALYTICS_ENABLED</key>
+  <false/>
+  <key>IS_APPINVITE_ENABLED</key>
+  <false/>
+  <key>IS_GCM_ENABLED</key>
+  <true/>
+  <key>IS_SIGNIN_ENABLED</key>
+  <false/>
+  <key>PLIST_VERSION</key>
+  <string>1</string>
+  <key>PROJECT_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>REVERSED_CLIENT_ID</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE</string>
+  <key>STORAGE_BUCKET</key>
+  <string>PLACEHOLDER_REPLACE_WITH_REAL_VALUE.appspot.com</string>
+</dict>
+</plist>

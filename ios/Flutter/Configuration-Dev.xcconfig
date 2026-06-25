@@ -1,0 +1,20 @@
+// Per-flavor configuration for the dev build.
+//
+// Bundled by ios/Runner.xcodeproj/.../xcschemes/Runner-Dev.xcscheme via the
+// INFOPLIST_FILE build setting. Anything here becomes a build setting for
+// the Runner target when the Dev scheme is active.
+//
+// Override values at build time with `-dart-define` if you need per-build
+// overrides:
+//   fvm flutter build ios --flavor dev --dart-define=BASE_URL=https://...
+
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+#include "Generated.xcconfig"
+
+// Display name and bundle id suffix so dev builds sit alongside staging/prod
+// on the home screen and can be installed in parallel on the same device.
+PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterCleanRiverpodBoilerplate.dev
+PRODUCT_NAME = Boilerplate (Dev)
+DEVELOPMENT_LANGUAGE = en
+// dart-define passed through to Flutter for runtime use.
+FLUTTER_BUILD_MODE = debug

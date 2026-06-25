@@ -1,0 +1,12 @@
+# Native splash for the **prod** flavor.
+# Run: fvm dart run flutter_native_splash:create -A
+flutter_native_splash:
+  color: "#1976D2"
+  image: "assets/branding/splash_prod.png"
+  ios: true
+  android: true
+  android_12:
+    color: "#1976D2"
+    image: "assets/branding/splash_prod.png"
+    icon_background_color: "#1976D2"
+  fullscreen: true
