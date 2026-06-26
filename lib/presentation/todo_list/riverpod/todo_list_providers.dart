@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/api/todo_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_data_source.dart';
@@ -8,14 +7,16 @@ import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_da
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/mock/todo_mock_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/remote/todo_remote_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/repository_impl/todo_repository_impl.dart';
-import 'package:flutter_clean_riverpod_boilerplate/domain/todo/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/repositories/todo_repository.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/create_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/delete_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/get_todos_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/toggle_todo_use_case.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/riverpod/todo_list_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+export 'todo_list_state.dart';
 
 part 'todo_list_providers.g.dart';
 
@@ -74,49 +75,6 @@ DeleteTodoUseCase deleteTodoUseCase(Ref ref) {
   return DeleteTodoUseCase(ref.watch(todoRepositoryProvider));
 }
 
-/// Sealed state used by the list UI. Each variant tells the page what to
-/// render without forcing consumers to handle nulls.
-sealed class TodoListState {
-  const TodoListState();
-}
-
-class TodoInitial extends TodoListState {
-  const TodoInitial();
-}
-
-class TodoLoading extends TodoListState {
-  const TodoLoading();
-}
-
-class TodoLoaded extends TodoListState {
-  const TodoLoaded({
-    required this.todos,
-    required this.hasMore,
-    this.isLoadingMore = false,
-  });
-
-  final List<Todo> todos;
-  final bool hasMore;
-  final bool isLoadingMore;
-
-  TodoLoaded copyWith({
-    List<Todo>? todos,
-    bool? hasMore,
-    bool? isLoadingMore,
-  }) => TodoLoaded(
-    todos: todos ?? this.todos,
-    hasMore: hasMore ?? this.hasMore,
-    isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-  );
-}
-
-class TodoError extends TodoListState {
-  /// Carries the domain [Failure] so the page can call
-  /// `failure.toMessage(context)` at the render site.
-  const TodoError(this.failure);
-  final Failure failure;
-}
-
 /// Manages the list state and exposes mutating methods. Mutations
 /// optimistically re-fetch to keep the data source authoritative, which also
 /// keeps the implementation simple at the cost of an extra round-trip.
@@ -155,10 +113,9 @@ class TodoListController extends _$TodoListController {
 
     state = AsyncValue.data(current.copyWith(isLoadingMore: true));
 
-    final result = await ref.read(getTodosUseCaseProvider).call(
-      skip: current.todos.length,
-      cancelToken: _cancelToken,
-    );
+    final result = await ref
+        .read(getTodosUseCaseProvider)
+        .call(skip: current.todos.length, cancelToken: _cancelToken);
     if (_cancelToken.isCancelled) return;
 
     result.fold(

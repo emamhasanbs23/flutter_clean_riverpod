@@ -1,4 +1,3 @@
-import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart'
     show AuthInterceptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
@@ -13,8 +12,11 @@ import 'package:flutter_clean_riverpod_boilerplate/domain/auth/repositories/auth
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/usecases/get_current_user_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/usecases/login_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/usecases/logout_use_case.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/login_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+export 'login_state.dart';
 
 part 'auth_providers.g.dart';
 
@@ -111,33 +113,6 @@ Future<bool> isAuthenticated(Ref ref) async {
   });
   final repository = ref.watch(authRepositoryProvider);
   return repository.isAuthenticated();
-}
-
-/// Sealed view of the login submission lifecycle so the UI can render
-/// appropriate loading / error states without parsing nullable values.
-sealed class LoginState {
-  const LoginState();
-}
-
-class LoginIdle extends LoginState {
-  const LoginIdle();
-}
-
-class LoginSubmitting extends LoginState {
-  const LoginSubmitting();
-}
-
-/// Carries the domain [Failure] so the page can render a localized message
-/// via `failure.toMessage(context)` at the render site. We do NOT store a
-/// pre-localized string here because BuildContext is unavailable inside
-/// the controller and we want one source of truth for failure text.
-class LoginError extends LoginState {
-  const LoginError(this.failure);
-  final Failure failure;
-}
-
-class LoginSuccess extends LoginState {
-  const LoginSuccess();
 }
 
 /// Holds the current submission state plus simple form controllers.

@@ -1,44 +1,19 @@
 import 'package:dio/dio.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/domain/todo/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/get_todo_use_case.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/riverpod/todo_detail_state.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/riverpod/todo_list_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+export 'todo_detail_state.dart';
 
 part 'todo_detail_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 GetTodoUseCase getTodoUseCase(Ref ref) {
   return GetTodoUseCase(ref.watch(todoRepositoryProvider));
-}
-
-/// Sealed state for the todo detail screen.
-sealed class TodoDetailState {
-  const TodoDetailState();
-}
-
-final class TodoDetailInitial extends TodoDetailState {
-  const TodoDetailInitial();
-}
-
-final class TodoDetailLoading extends TodoDetailState {
-  const TodoDetailLoading();
-}
-
-final class TodoDetailLoaded extends TodoDetailState {
-  const TodoDetailLoaded(this.todo);
-  final Todo todo;
-}
-
-final class TodoDetailNotFound extends TodoDetailState {
-  const TodoDetailNotFound();
-}
-
-final class TodoDetailError extends TodoDetailState {
-  const TodoDetailError(this.failure);
-  final Failure failure;
 }
 
 /// Loads a single todo by id for the detail route. Each route id gets an
