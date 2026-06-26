@@ -39,6 +39,14 @@ dependencies:
   # --- Logging ---
   logger: ^2.4.0
 
+  # --- Value classes (DTOs + entities) ---
+  # freezed_annotation: declarative @freezed classes + generated
+  #   copyWith / == / hashCode / toString / sealed unions.
+  # json_annotation:   @JsonSerializable on freezed classes — codegen
+  #   produces fromJson/toJson that respect @JsonKey renames.
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
   # --- Internationalization ---
   intl: any
 
@@ -63,9 +71,11 @@ dev_dependencies:
   # --- Code generation ---
   # Riverpod providers are hand-written throughout this boilerplate, so the
   # codegen packages (riverpod_generator, riverpod_annotation) are intentionally
-  # absent. build_runner is kept available so future migrations to @riverpod
-  # or freezed can be staged without re-adding top-level deps.
+  # absent. build_runner is shared between freezed and json_serializable so
+  # we generate `.freezed.dart` + `.g.dart` part files in one run.
   build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
 
   # --- Testing ---
   mocktail: ^1.0.4

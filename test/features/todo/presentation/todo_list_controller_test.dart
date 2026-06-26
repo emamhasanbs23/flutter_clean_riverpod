@@ -4,9 +4,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/todo.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/todo_repository.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/todo_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/repositories/todo_repository.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/riverpod/todo_providers.dart';
 
 class _MockTodoRepository extends Mock implements TodoRepository {}
 

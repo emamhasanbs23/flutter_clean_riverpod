@@ -18,7 +18,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_desc
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor_parser.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/observability/analytics.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/observability/crash_reporter.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/auth_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
 
 /// Initialises framework bindings, resolves the flavor, wires global error
 /// capture, and mounts [App] inside a [ProviderScope].

@@ -4,8 +4,12 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/auth_remote_data_source.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/auth_repository_impl.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_request.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_response.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/repository_impl/auth_repository_impl.dart';
 
 class _MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
@@ -13,6 +17,12 @@ class _MockAuthRemoteDataSource extends Mock
     implements AuthRemoteDataSource {}
 
 void main() {
+  setUpAll(() {
+    // mocktail needs fallback values for non-primitive named arguments.
+    registerFallbackValue(const LoginRequest(email: '', password: ''));
+    registerFallbackValue(const RefreshTokenRequest(refreshToken: ''));
+  });
+
   group('AuthRepositoryImpl', () {
     late _MockFlutterSecureStorage storage;
     late _MockAuthRemoteDataSource remote;
@@ -38,14 +48,13 @@ void main() {
           .thenAnswer((_) async {});
     });
 
-    test('login persists token and returns AuthUser', () async {
-      when(() => remote.login(
-            email: any(named: 'email'),
-            password: any(named: 'password'),
-          )).thenAnswer(
-        (_) async => const AuthTokens(
+    test('login persists tokens and returns AuthUser', () async {
+      when(() => remote.login(request: any(named: 'request'))).thenAnswer(
+        (_) async => const LoginResponse(
           accessToken: 'fake.access',
           refreshToken: 'fake.refresh',
+          userId: 'usr_server_42',
+          userEmail: 'demo@example.com',
         ),
       );
 
@@ -59,7 +68,7 @@ void main() {
         (failure) => fail('Expected success, got ${failure.message}'),
         (user) {
           expect(user.email, 'demo@example.com');
-          expect(user.id, isNotEmpty);
+          expect(user.id, 'usr_server_42');
         },
       );
 
@@ -78,11 +87,33 @@ void main() {
           )).called(1);
     });
 
+    test(
+        'login falls back to deterministic id when server omits the nested '
+        'user object', () async {
+      when(() => remote.login(request: any(named: 'request'))).thenAnswer(
+        (_) async => const LoginResponse(
+          accessToken: 'fake.access',
+        ),
+      );
+
+      final result = await repository.login(
+        email: 'demo@example.com',
+        password: 'password123',
+      );
+
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (failure) => fail('Expected success, got ${failure.message}'),
+        (user) {
+          expect(user.email, 'demo@example.com');
+          expect(user.id, startsWith('usr_'));
+        },
+      );
+    });
+
     test('login returns UnauthorizedFailure when remote rejects', () async {
-      when(() => remote.login(
-            email: any(named: 'email'),
-            password: any(named: 'password'),
-          )).thenThrow(const UnauthorizedFailure());
+      when(() => remote.login(request: any(named: 'request')))
+          .thenThrow(const UnauthorizedFailure());
 
       final result = await repository.login(
         email: 'demo@example.com',
@@ -101,7 +132,6 @@ void main() {
     });
 
     test('logout deletes all persisted auth keys', () async {
-      // Seed a token so isAuthenticated would otherwise return true.
       when(() => storage.read(key: 'access_token'))
           .thenAnswer((_) async => 'fake.token.value');
 
@@ -117,8 +147,8 @@ void main() {
     test('refreshAccessToken swaps stored tokens on success', () async {
       when(() => storage.read(key: 'refresh_token'))
           .thenAnswer((_) async => 'old.refresh');
-      when(() => remote.refresh(refreshToken: 'old.refresh')).thenAnswer(
-        (_) async => const AuthTokens(
+      when(() => remote.refresh(request: any(named: 'request'))).thenAnswer(
+        (_) async => const RefreshTokenResponse(
           accessToken: 'new.access',
           refreshToken: 'new.refresh',
         ),
@@ -165,9 +195,57 @@ void main() {
       expect(await repository.isAuthenticated(), isFalse);
     });
 
-    test('InvalidCredentialsFailure is a Failure', () {
-      // Smoke test ensuring the auth failure subtype satisfies the domain.
-      expect(const InvalidCredentialsFailure(), isA<Failure>());
+    group('getCurrentUser', () {
+      test('returns Right(user) when both id and email are persisted',
+          () async {
+        when(() => storage.read(key: 'user_id'))
+            .thenAnswer((_) async => 'usr_42');
+        when(() => storage.read(key: 'user_email'))
+            .thenAnswer((_) async => 'demo@example.com');
+
+        final result = await repository.getCurrentUser();
+
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (_) => fail('Expected success'),
+          (user) {
+            expect(user, isNotNull);
+            expect(user!.id, 'usr_42');
+            expect(user.email, 'demo@example.com');
+          },
+        );
+      });
+
+      test('returns Right(null) when no user is persisted', () async {
+        final result = await repository.getCurrentUser();
+
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (_) => fail('Expected success'),
+          (user) => expect(user, isNull),
+        );
+      });
+
+      test('returns Right(null) when only one of id/email is persisted',
+          () async {
+        when(() => storage.read(key: 'user_id'))
+            .thenAnswer((_) async => 'usr_42');
+        when(() => storage.read(key: 'user_email'))
+            .thenAnswer((_) async => null);
+
+        final result = await repository.getCurrentUser();
+
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (_) => fail('Expected success'),
+          (user) => expect(user, isNull),
+        );
+      });
+
+      test('InvalidCredentialsFailure is a Failure', () {
+        // Smoke test ensuring the auth failure subtype satisfies the domain.
+        expect(const InvalidCredentialsFailure(), isA<Failure>());
+      });
     });
   });
 }

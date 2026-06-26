@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/auth_repository.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 
