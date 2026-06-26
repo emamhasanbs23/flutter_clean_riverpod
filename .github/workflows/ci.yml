@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  # Run only when a tag starting with "release" is pushed
+  # (e.g. `release`, `release-v1.2.0`). Normal pushes and PRs
+  # do NOT trigger this workflow.
+  push:
+    tags:
+      - 'release*'
+      - 'release/**'
+
+# Cancel duplicate workflows on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format-and-analyze:
+    name: Format & analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install FVM
+        uses: kuhnroyal/flutter-fvm-action@v1
+        with:
+          channel: stable
+
+      - name: Install Flutter SDK
+        run: fvm install
+
+      - name: Use Flutter version from .fvm
+        run: fvm use 3.41.8
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: fvm flutter pub get
+
+      - name: Format check
+        # Fails the build if any file is not dart-formatted. Use
+        # `dart format .` locally to fix.
+        run: fvm dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        # --fatal-infos turns warnings into errors so they can't be ignored.
+        run: fvm flutter analyze --fatal-infos
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install FVM
+        uses: kuhnroyal/flutter-fvm-action@v1
+        with:
+          channel: stable
+
+      - name: Install Flutter SDK
+        run: fvm install
+
+      - name: Use Flutter version from .fvm
+        run: fvm use 3.41.8
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: fvm flutter pub get
+
+      - name: Test
+        run: fvm flutter test --no-pub --reporter expanded
+
+  android-build:
+    name: Android smoke build (dev)
+    runs-on: ubuntu-latest
+    needs: [format-and-analyze, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install FVM
+        uses: kuhnroyal/flutter-fvm-action@v1
+        with:
+          channel: stable
+
+      - name: Install Flutter SDK
+        run: fvm install
+
+      - name: Install dependencies
+        run: fvm flutter pub get
+
+      - name: Build APK (dev flavor)
+        run: fvm flutter build apk --debug --flavor dev -t lib/main_dev.dart
