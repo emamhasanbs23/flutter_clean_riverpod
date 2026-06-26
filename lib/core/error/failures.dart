@@ -1,12 +1,14 @@
+import 'package:dio/dio.dart' show DioException;
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
+import 'package:fpdart/fpdart.dart' show Either;
 
 /// Base type for all domain-level failures.
 ///
 /// Repositories return [Failure] inside [Either] values so the presentation
 /// layer can branch on the concrete subtype without leaking exceptions.
-sealed class Failure {
+sealed class Failure implements Exception {
   const Failure(this.message);
 
   /// Human-readable fallback description. Use [toMessage] when you have a

@@ -2,15 +2,14 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
+import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
+import 'package:mocktail/mocktail.dart';
 
 class _MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
@@ -65,7 +64,6 @@ void main() {
           captured.complete(options);
           handler.resolve(Response<dynamic>(
             requestOptions: options,
-            data: null,
             statusCode: 200,
           ));
         }),

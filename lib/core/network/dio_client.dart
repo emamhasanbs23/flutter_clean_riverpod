@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/config/flavor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart' show AuthRepository;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 /// Builds a configured [Dio] instance for the active [FlavorConfig].
 ///
-/// The [authRepositoryBuilder] is a callback that returns the auth repository
-/// at request time, so the [AuthInterceptor] can refresh expired tokens via
+/// The `authRepositoryBuilder` is a callback that returns the auth repository
+/// at request time, so the `AuthInterceptor` can refresh expired tokens via
 /// the same repository singleton the rest of the app uses. The callback is
 /// deferred (not invoked here) to avoid an import cycle: `core/network` does
 /// not import `features/auth/data`.
 ///
-/// The [onSessionExpired] callback is invoked when the interceptor gives up
+/// The `onSessionExpired` callback is invoked when the interceptor gives up
 /// on refreshing an expired token (network error or revoked refresh token).
-/// Bootstrap uses this to flip [sessionExpiredProvider] so the router can
+/// Bootstrap uses this to flip `sessionExpiredProvider` so the router can
 /// redirect to the login screen.
 class DioClient {
   static Dio create({
@@ -50,11 +50,7 @@ class DioClient {
     if (config.enableDioLogging) {
       dio.interceptors.add(
         PrettyDioLogger(
-          requestHeader: false,
           requestBody: true,
-          responseBody: true,
-          responseHeader: false,
-          compact: true,
         ),
       );
     }

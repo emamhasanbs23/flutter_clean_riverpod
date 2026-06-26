@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/repositories/todo_repository.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_list_page.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/riverpod/todo_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_list_page.dart';
 import 'package:flutter_clean_riverpod_boilerplate/l10n/generated/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -109,7 +108,9 @@ void main() {
     verify(() => todoRepository.toggleTodo('1')).called(1);
   });
 
-  testWidgets('shows an error widget when the repository fails', (tester) async {
+  testWidgets('shows an error widget when the repository fails', (
+    tester,
+  ) async {
     when(() => todoRepository.getTodos()).thenAnswer(
       (_) async => const Left<Failure, List<Todo>>(NetworkFailure()),
     );

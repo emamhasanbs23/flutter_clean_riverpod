@@ -31,7 +31,7 @@ abstract interface class DeepLinkService {
 }
 
 /// Provider entry point. Default implementation is a no-op so unit tests
-/// (which never call [getInitialLink]) stay green. Bootstrap overrides this
+/// (which never call `getInitialLink`) stay green. Bootstrap overrides this
 /// with the real platform-backed implementation.
 final deepLinkServiceProvider = Provider<DeepLinkService>((ref) {
   return const NoOpDeepLinkService();

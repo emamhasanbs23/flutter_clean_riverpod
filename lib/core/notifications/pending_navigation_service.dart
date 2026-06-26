@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Holds the next [RouteDescriptor] the app should navigate to.
 ///

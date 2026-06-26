@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/deep_link_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('NoOpDeepLinkService', () {
@@ -27,8 +26,9 @@ void main() {
 
       final received = <Uri>[];
       final sub = service.incoming.listen(received.add);
-      controller.add(Uri.parse('boilerplate-dev://todos/2'));
-      controller.add(Uri.parse('boilerplate-dev://todos/3'));
+      controller
+        ..add(Uri.parse('boilerplate-dev://todos/2'))
+        ..add(Uri.parse('boilerplate-dev://todos/3'));
       await Future<void>.delayed(Duration.zero);
       await controller.close();
       await sub.cancel();
@@ -41,16 +41,16 @@ void main() {
 
     test('getInitialLink returns the seeded URI exactly once', () async {
       var calls = 0;
+      // Use a counter to verify the implementation only invokes the
+      // underlying source once per call.
       final service = _FakeDeepLinkService(
         incoming: const Stream<Uri>.empty(),
         initial: Uri.parse('https://example.com/todos/7'),
+        onGetInitial: () {
+          calls++;
+          return Future.value(Uri.parse('https://example.com/todos/7'));
+        },
       );
-      // Use a counter to verify the implementation only invokes the
-      // underlying source once per call.
-      service.onGetInitial = () {
-        calls++;
-        return Future.value(Uri.parse('https://example.com/todos/7'));
-      };
 
       expect(await service.getInitialLink(), isNotNull);
       expect(calls, 1);
@@ -69,19 +69,21 @@ class _FakeDeepLinkService implements DeepLinkService {
   _FakeDeepLinkService({
     required Stream<Uri> incoming,
     required Uri? initial,
+    Future<Uri?> Function()? onGetInitial,
   })  : _incoming = incoming,
-        _initial = initial;
+        _initial = initial,
+        _onGetInitial = onGetInitial;
 
   final Stream<Uri> _incoming;
   final Uri? _initial;
-  Future<Uri?> Function()? onGetInitial;
+  final Future<Uri?> Function()? _onGetInitial;
 
   @override
   Stream<Uri> get incoming => _incoming;
 
   @override
   Future<Uri?> getInitialLink() {
-    final fn = onGetInitial;
+    final fn = _onGetInitial;
     if (fn != null) return fn();
     return Future.value(_initial);
   }

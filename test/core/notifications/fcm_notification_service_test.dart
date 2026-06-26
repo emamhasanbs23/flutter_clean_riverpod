@@ -1,6 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
-
+import 'package:flutter_clean_riverpod_boilerplate/core/notifications/fcm_notification_service.dart' show FcmNotificationService;
+import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart' show RouteDescriptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor_parser.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 /// Exercises the [FcmNotificationService] -> [RouteDescriptorParser] boundary
 /// without needing to mock the Firebase plugin (which has many statics).

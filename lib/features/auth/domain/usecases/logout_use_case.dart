@@ -1,7 +1,7 @@
-import 'package:fpdart/fpdart.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases/login_use_case.dart' show LoginUseCase;
+import 'package:fpdart/fpdart.dart';
 
 /// Clears persisted tokens and the stored user profile.
 ///

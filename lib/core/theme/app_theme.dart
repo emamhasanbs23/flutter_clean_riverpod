@@ -79,13 +79,20 @@ class AppCustomTextStyles extends ThemeExtension<AppCustomTextStyles> {
   }
 
   @override
-  AppCustomTextStyles lerp(ThemeExtension<AppCustomTextStyles>? other, double t) {
+  AppCustomTextStyles lerp(
+    ThemeExtension<AppCustomTextStyles>? other,
+    double t,
+  ) {
     if (other is! AppCustomTextStyles) return this;
     return AppCustomTextStyles(
       button: TextStyle.lerp(button, other.button, t) ?? button,
       link: TextStyle.lerp(link, other.link, t) ?? link,
-      strikeThrough:
-          TextStyle.lerp(strikeThrough, other.strikeThrough, t) ?? strikeThrough,
+      strikeThrough: TextStyle.lerp(
+            strikeThrough,
+            other.strikeThrough,
+            t,
+          ) ??
+          strikeThrough,
     );
   }
 }
@@ -105,11 +112,11 @@ class AppTheme {
       brightness: brightness,
     );
 
-    final semanticColors = AppSemanticColors(
-      success: const Color(0xFF2E7D32),
-      warning: const Color(0xFFF9A825),
-      danger: const Color(0xFFC62828),
-      info: const Color(0xFF0277BD),
+    const semanticColors = AppSemanticColors(
+      success: Color(0xFF2E7D32),
+      warning: Color(0xFFF9A825),
+      danger: Color(0xFFC62828),
+      info: Color(0xFF0277BD),
     );
 
     final customTextStyles = AppCustomTextStyles(
@@ -127,8 +134,8 @@ class AppTheme {
       strikeThrough: TextStyle(
         decoration: TextDecoration.lineThrough,
         // Use onSurfaceVariant so completed items read as muted in both
-        // light and dark themes without depending on Theme.of(...).disabledColor,
-        // which collapses to grey in dark mode.
+        // light and dark themes without depending on
+        // Theme.of(...).disabledColor, which collapses to grey in dark mode.
         color: colorScheme.onSurfaceVariant,
       ),
     );

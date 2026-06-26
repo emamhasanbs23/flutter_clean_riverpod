@@ -1,7 +1,6 @@
-import 'package:fpdart/fpdart.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart' show AuthInterceptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/mapper/auth_mapper.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/logi
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/entities/auth_user.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
+import 'package:fpdart/fpdart.dart';
 
 /// Real [AuthRepository] backed by [AuthRemoteDataSource] and secure storage.
 ///

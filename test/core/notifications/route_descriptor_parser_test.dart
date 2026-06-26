@@ -203,7 +203,7 @@ void main() {
       // The constructor itself is const-constructible so the prefix check
       // runs lazily in toUri() rather than at construction.
       expect(
-        () => RouteDescriptor(path: 'todos/1').toUri(),
+        () => const RouteDescriptor(path: 'todos/1').toUri(),
         throwsA(isA<StateError>()),
       );
     });

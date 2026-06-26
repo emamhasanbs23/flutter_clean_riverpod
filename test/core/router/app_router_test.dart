@@ -1,9 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/router/app_router.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('authRedirect', () {

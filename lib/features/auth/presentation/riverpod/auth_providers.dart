@@ -1,6 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart' show AuthInterceptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/reposito
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases/get_current_user_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases/login_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases/logout_use_case.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Broadcast stream of "session expired" events.
 ///
@@ -148,8 +148,9 @@ final loginControllerProvider =
 final logoutControllerProvider = Provider<Future<void> Function()>((ref) {
   return () async {
     await ref.read(logoutUseCaseProvider).call();
-    ref.invalidate(isAuthenticatedProvider);
-    ref.invalidate(currentUserProvider);
+    ref
+      ..invalidate(isAuthenticatedProvider)
+      ..invalidate(currentUserProvider);
     // Force an immediate recompute so the router sees the new state now.
     await ref.read(isAuthenticatedProvider.future);
   };

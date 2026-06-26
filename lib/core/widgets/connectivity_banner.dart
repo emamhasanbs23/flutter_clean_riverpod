@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/connectivity/connectivity_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Top-of-screen banner shown when the device has no connectivity.
 ///

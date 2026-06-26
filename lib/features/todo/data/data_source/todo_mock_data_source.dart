@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/model/todo_dto.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_remote_data_source.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/model/todo_dto.dart';
 
 /// In-memory data source used to demonstrate the full Clean Architecture
 /// flow without depending on a real backend.
@@ -18,35 +19,38 @@ class TodoMockDataSource implements TodoDataSource {
   final Duration _latency;
   final List<TodoDto> _todos = [];
 
+  @override
   Future<List<TodoDto>> fetchAll() async {
     await Future<void>.delayed(_latency);
     // Return a copy so callers cannot mutate the source of truth.
     return List.unmodifiable(_todos.map((t) => t));
   }
 
+  @override
   Future<TodoDto> create(String title) async {
     await Future<void>.delayed(_latency);
     final dto = TodoDto(
       id: _generateId(),
       title: title,
-      completed: false,
       createdAt: DateTime.now(),
     );
     _todos.insert(0, dto);
     return dto;
   }
 
+  @override
   Future<TodoDto> toggle(String id) async {
     await Future<void>.delayed(_latency);
     final index = _todos.indexWhere((t) => t.id == id);
     if (index < 0) {
-      throw StateError('Todo not found: $id');
+      throw NotFoundFailure('Todo not found: $id');
     }
     final updated = _todos[index].copyWith(completed: !_todos[index].completed);
     _todos[index] = updated;
     return updated;
   }
 
+  @override
   Future<void> delete(String id) async {
     await Future<void>.delayed(_latency);
     _todos.removeWhere((t) => t.id == id);
@@ -58,7 +62,6 @@ class TodoMockDataSource implements TodoDataSource {
       TodoDto(
         id: _generateId(),
         title: 'Read the Clean Architecture book',
-        completed: false,
         createdAt: now.subtract(const Duration(hours: 2)),
       ),
       TodoDto(
@@ -70,7 +73,6 @@ class TodoMockDataSource implements TodoDataSource {
       TodoDto(
         id: _generateId(),
         title: 'Ship the boilerplate 🚀',
-        completed: false,
         createdAt: now.subtract(const Duration(minutes: 30)),
       ),
     ]);

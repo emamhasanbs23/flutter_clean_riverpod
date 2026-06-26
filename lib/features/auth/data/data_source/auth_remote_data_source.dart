@@ -3,6 +3,7 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/logi
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_response.dart';
+import 'package:fpdart/fpdart.dart' show Either;
 
 /// Network-side contract for auth.
 ///

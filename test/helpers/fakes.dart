@@ -1,5 +1,5 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
 
 /// Convenience extension to reduce boilerplate when asserting on Either values
 /// in tests. Inspired by the typical `.shouldBeRight()` / `.shouldBeLeft()`

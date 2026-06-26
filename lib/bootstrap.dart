@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/app.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/config/flavor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
@@ -19,6 +17,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_desc
 import 'package:flutter_clean_riverpod_boilerplate/core/observability/analytics.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/observability/crash_reporter.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Initialises framework bindings, resolves the flavor, wires global error
 /// capture, and mounts [App] inside a [ProviderScope].

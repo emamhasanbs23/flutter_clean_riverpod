@@ -1,10 +1,9 @@
-import 'package:fpdart/fpdart.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/mapper/todo_mapper.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_remote_data_source.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/mapper/todo_mapper.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/repositories/todo_repository.dart';
+import 'package:fpdart/fpdart.dart';
 
 /// Concrete repository backed by any [TodoDataSource] (mock or remote).
 ///
@@ -24,8 +23,6 @@ class TodoRepositoryImpl implements TodoRepository {
       return Right(dtos.map((d) => d.toDomain()).toList(growable: false));
     } on Failure catch (failure) {
       return Left(failure);
-    } on StateError catch (e) {
-      return Left(NotFoundFailure(e.message));
     } on Object {
       return const Left(UnexpectedFailure());
     }
@@ -50,8 +47,6 @@ class TodoRepositoryImpl implements TodoRepository {
       return Right(dto.toDomain());
     } on Failure catch (failure) {
       return Left(failure);
-    } on StateError catch (e) {
-      return Left(NotFoundFailure(e.message));
     } on Object {
       return const Left(UnexpectedFailure());
     }
@@ -64,8 +59,6 @@ class TodoRepositoryImpl implements TodoRepository {
       return const Right(null);
     } on Failure catch (failure) {
       return Left(failure);
-    } on StateError catch (e) {
-      return Left(NotFoundFailure(e.message));
     } on Object {
       return const Left(UnexpectedFailure());
     }

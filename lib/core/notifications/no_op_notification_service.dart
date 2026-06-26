@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/notification_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Default no-op [NotificationService] used by unit tests and any flavor
 /// that hasn't wired FCM yet.

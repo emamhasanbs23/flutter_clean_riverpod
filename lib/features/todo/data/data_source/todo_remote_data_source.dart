@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/dio_failure_mapper.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_mock_data_source.dart' show TodoMockDataSource;
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/model/todo_dto.dart';
 
 /// Contract every Todo data source must satisfy. The mock implementation

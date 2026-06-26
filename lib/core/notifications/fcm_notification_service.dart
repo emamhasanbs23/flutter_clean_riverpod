@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/notification_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor_parser.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Firebase Cloud Messaging-backed [NotificationService].
 ///
@@ -130,7 +129,7 @@ class FcmNotificationService implements NotificationService {
 }
 
 /// Provider that wires the FCM-backed service. Bootstrap overrides
-/// [notificationServiceProvider] with this in flavors where Firebase has
+/// `notificationServiceProvider` with this in flavors where Firebase has
 /// been configured.
 final fcmNotificationServiceProvider = Provider<NotificationService>((ref) {
   final service = FcmNotificationService();

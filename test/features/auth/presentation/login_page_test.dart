@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/entities/auth_user.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/widgets/login_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
-
-import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/entities/auth_user.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/widgets/login_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/l10n/generated/app_localizations.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -123,7 +122,7 @@ void main() {
 
     expect(find.byType(SnackBar), findsOneWidget);
     expect(
-      find.textContaining('Session expired', findRichText: false),
+      find.textContaining('Session expired'),
       findsOneWidget,
     );
   });

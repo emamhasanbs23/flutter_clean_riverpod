@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_theme.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_error_widget
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indicator.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/riverpod/todo_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Detail page for a single Todo, reached via `/todos/:id` (e.g. from a
 /// deep link or push notification payload of `{"route": "/todos/42"}`).

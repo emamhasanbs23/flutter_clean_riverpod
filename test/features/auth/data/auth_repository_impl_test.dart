@@ -1,7 +1,3 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
@@ -10,6 +6,9 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/logi
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/repository_impl/auth_repository_impl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 class _MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 

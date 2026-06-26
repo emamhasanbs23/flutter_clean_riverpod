@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/pending_navigation_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// Email/password sign-in page.
 ///

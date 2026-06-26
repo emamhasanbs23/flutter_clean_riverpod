@@ -1,7 +1,6 @@
-import 'package:fpdart/fpdart.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
+import 'package:fpdart/fpdart.dart';
 
 /// Contract for any Todo data source. The mock implementation and a future
 /// REST implementation both satisfy this interface, so swapping is just a

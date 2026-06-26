@@ -15,7 +15,7 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refr
 /// paths so the wiring is visible without requiring a live backend.
 ///
 /// The default endpoint shape is intentionally minimal — a real backend
-/// can override the path by passing [loginPath] / [refreshPath] to the
+/// can override the path by passing `loginPath` / `refreshPath` to the
 /// constructor. The response is expected to be
 /// `{"access_token": "...", "refresh_token": "...", "user": {"id": "...",
 /// "email": "..."}}`.

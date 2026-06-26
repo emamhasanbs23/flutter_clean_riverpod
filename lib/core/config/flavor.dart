@@ -26,7 +26,7 @@ enum Flavor {
 
 /// Runtime configuration derived from the active [Flavor].
 ///
-/// Populated once during [bootstrap] and consumed via Riverpod providers.
+/// Populated once during `bootstrap` and consumed via Riverpod providers.
 ///
 /// Build-time overrides (any of these win over the flavor defaults):
 ///
@@ -73,10 +73,12 @@ class FlavorConfig {
     required this.enableDioLogging,
   });
 
-  final Flavor flavor;
-  final String baseUrl;
-  final String appName;
-  final bool enableDioLogging;
+  const FlavorConfig._forFlavor({
+    required this.flavor,
+    required this.baseUrl,
+    required this.appName,
+    required this.enableDioLogging,
+  });
 
   /// Resolves the runtime config for [flavor], layered with any
   /// `--dart-define` overrides from [Env]. Build-time overrides win over
@@ -92,29 +94,40 @@ class FlavorConfig {
     );
   }
 
+  final Flavor flavor;
+  final String baseUrl;
+  final String appName;
+  final bool enableDioLogging;
+
+  static const FlavorConfig _devDefaults = FlavorConfig._forFlavor(
+    flavor: Flavor.dev,
+    baseUrl: 'https://dev.api.example.com',
+    appName: 'Boilerplate (Dev)',
+    enableDioLogging: true,
+  );
+
+  static const FlavorConfig _stagingDefaults = FlavorConfig._forFlavor(
+    flavor: Flavor.staging,
+    baseUrl: 'https://staging.api.example.com',
+    appName: 'Boilerplate (Staging)',
+    enableDioLogging: true,
+  );
+
+  static const FlavorConfig _prodDefaults = FlavorConfig._forFlavor(
+    flavor: Flavor.prod,
+    baseUrl: 'https://api.example.com',
+    appName: 'Boilerplate',
+    enableDioLogging: false,
+  );
+
   static FlavorConfig _defaultsFor(Flavor flavor) {
     switch (flavor) {
       case Flavor.dev:
-        return const FlavorConfig(
-          flavor: Flavor.dev,
-          baseUrl: 'https://dev.api.example.com',
-          appName: 'Boilerplate (Dev)',
-          enableDioLogging: true,
-        );
+        return _devDefaults;
       case Flavor.staging:
-        return const FlavorConfig(
-          flavor: Flavor.staging,
-          baseUrl: 'https://staging.api.example.com',
-          appName: 'Boilerplate (Staging)',
-          enableDioLogging: true,
-        );
+        return _stagingDefaults;
       case Flavor.prod:
-        return const FlavorConfig(
-          flavor: Flavor.prod,
-          baseUrl: 'https://api.example.com',
-          appName: 'Boilerplate',
-          enableDioLogging: false,
-        );
+        return _prodDefaults;
     }
   }
 }

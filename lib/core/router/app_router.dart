@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/pending_navigation_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
@@ -10,6 +7,8 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/ri
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/widgets/login_page.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_detail_page.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_list_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// Strongly-typed route name constants. Use these instead of raw strings at
 /// call sites to keep navigation refactor-safe.

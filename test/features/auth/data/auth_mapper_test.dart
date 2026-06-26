@@ -1,7 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/mapper/auth_mapper.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AuthResponseMapper.toDomainOrNull', () {

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
@@ -10,6 +8,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indi
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/riverpod/todo_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Renders the list of todos with sealed-state rendering and a logout action
 /// in the app bar.
@@ -40,7 +39,8 @@ class TodoListPage extends ConsumerWidget {
         label: Text(l10n.todoListAdd),
       ),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(todoListControllerProvider.notifier).refresh(),
+        onRefresh: () =>
+            ref.read(todoListControllerProvider.notifier).refresh(),
         child: asyncState.when(
           loading: () => const AppLoadingIndicator(),
           error: (error, _) => AppErrorWidget(
@@ -130,7 +130,9 @@ class _TodoList extends ConsumerWidget {
             title: Text(
               todo.title,
               style: todo.completed
-                  ? Theme.of(context).extension<AppCustomTextStyles>()?.strikeThrough
+                  ? Theme.of(context)
+                      .extension<AppCustomTextStyles>()
+                      ?.strikeThrough
                   : null,
             ),
             trailing: IconButton(

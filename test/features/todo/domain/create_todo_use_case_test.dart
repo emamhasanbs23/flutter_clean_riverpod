@@ -1,11 +1,10 @@
-import 'package:fpdart/fpdart.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/create_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/repositories/todo_repository.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/create_todo_use_case.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
 
 class _MockTodoRepository extends Mock implements TodoRepository {}
 
@@ -23,7 +22,10 @@ void main() {
         () async {
       final result = await useCase('   ');
 
-      expect(result, equals(const Left<Failure, Todo>(NotFoundFailure('Title is required'))));
+      expect(
+        result,
+        equals(const Left<Failure, Todo>(NotFoundFailure('Title is required'))),
+      );
       verifyNever(() => repository.createTodo(any()));
     });
 

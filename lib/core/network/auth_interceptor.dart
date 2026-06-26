@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart' show DioClient;
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 
 /// Attaches the access token to every outgoing request and recovers from

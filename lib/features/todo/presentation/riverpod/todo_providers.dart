@@ -1,16 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_mock_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/repository_impl/todo_repository_impl.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/repositories/todo_repository.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/create_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/delete_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/get_todos_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/toggle_todo_use_case.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/repositories/todo_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Default data source. Wires [TodoRemoteDataSource] to [dioProvider] so the
 /// full Clean Architecture data flow runs end-to-end against a real HTTP API.
@@ -77,9 +76,9 @@ class TodoError extends TodoListState {
   final Failure failure;
 }
 
-/// Manages the list state and exposes mutating methods. Mutations optimistically
-/// re-fetch to keep the data source authoritative, which also keeps the
-/// implementation simple at the cost of an extra round-trip.
+/// Manages the list state and exposes mutating methods. Mutations
+/// optimistically re-fetch to keep the data source authoritative, which also
+/// keeps the implementation simple at the cost of an extra round-trip.
 class TodoListController extends AsyncNotifier<TodoListState> {
   @override
   Future<TodoListState> build() async {
@@ -89,8 +88,8 @@ class TodoListController extends AsyncNotifier<TodoListState> {
   Future<TodoListState> _load() async {
     final result = await ref.read(getTodosUseCaseProvider).call();
     return result.fold(
-      (failure) => TodoError(failure),
-      (todos) => TodoLoaded(todos),
+      TodoError.new,
+      TodoLoaded.new,
     );
   }
 
