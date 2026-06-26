@@ -3,10 +3,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/network_guard.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/api/todo_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/model/todo_dto.dart';
+import 'package:flutter_clean_riverpod_boilerplate/data/todo/model/todos_response_dto.dart';
 
 /// Network-side contract for todo.
 abstract interface class TodoRemoteSource {
-  Future<List<TodoDto>> fetchAll({CancelToken? cancelToken});
+  Future<TodosResponseDto> fetchPage({
+    required int limit,
+    required int skip,
+    CancelToken? cancelToken,
+  });
   Future<TodoDto> fetchById(String id, {CancelToken? cancelToken});
   Future<TodoDto> create(String title, {CancelToken? cancelToken});
   Future<TodoDto> toggle(
@@ -32,11 +37,14 @@ class TodoRemoteSourceImpl implements TodoRemoteSource {
   final TodoApi _api;
 
   @override
-  Future<List<TodoDto>> fetchAll({CancelToken? cancelToken}) =>
-      guard('TodoRemoteSource.fetchAll', () async {
-        final response = await _api.getTodos(cancelToken: cancelToken);
-        return response.todos;
-      });
+  Future<TodosResponseDto> fetchPage({
+    required int limit,
+    required int skip,
+    CancelToken? cancelToken,
+  }) => guard(
+    'TodoRemoteSource.fetchPage',
+    () => _api.getTodos(limit: limit, skip: skip, cancelToken: cancelToken),
+  );
 
   @override
   Future<TodoDto> fetchById(String id, {CancelToken? cancelToken}) => guard(

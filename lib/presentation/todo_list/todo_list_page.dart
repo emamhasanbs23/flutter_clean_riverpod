@@ -47,10 +47,14 @@ class TodoListPage extends ConsumerWidget {
               onRetry: () =>
                   ref.read(todoListControllerProvider.notifier).refresh(),
             ),
-            TodoLoaded(:final todos) when todos.isEmpty => TodoEmptyStateWidget(
-              message: l10n.todoListEmpty,
-            ),
-            TodoLoaded(:final todos) => TodoListViewWidget(todos: todos),
+            TodoLoaded(:final todos) when todos.isEmpty =>
+              TodoEmptyStateWidget(message: l10n.todoListEmpty),
+            TodoLoaded(:final todos, :final hasMore, :final isLoadingMore) =>
+              TodoListViewWidget(
+                todos: todos,
+                hasMore: hasMore,
+                isLoadingMore: isLoadingMore,
+              ),
           },
         ),
       ),

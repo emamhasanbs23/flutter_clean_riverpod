@@ -49,4 +49,7 @@ class AppSize {
   // --- Progress indicators ---
   static double get progressIndicatorSm => 20.sp;
   static const progressIndicatorStrokeSm = 2.0;
+
+  /// Distance from the bottom of a scroll view that triggers pagination.
+  static double get loadMoreThreshold => space4xl;
 }

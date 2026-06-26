@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/model/todo_dto.dart';
+import 'package:flutter_clean_riverpod_boilerplate/data/todo/model/todos_response_dto.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/remote/todo_remote_source.dart';
 
 /// In-memory data source used to demonstrate the full Clean Architecture
@@ -20,9 +21,19 @@ class TodoMockSource implements TodoDataSource {
   int _nextId = 100;
 
   @override
-  Future<List<TodoDto>> fetchAll({CancelToken? cancelToken}) async {
+  Future<TodosResponseDto> fetchPage({
+    required int limit,
+    required int skip,
+    CancelToken? cancelToken,
+  }) async {
     await Future<void>.delayed(_latency);
-    return List.unmodifiable(_todos.map((t) => t));
+    final page = _todos.skip(skip).take(limit).toList(growable: false);
+    return TodosResponseDto(
+      todos: page,
+      total: _todos.length,
+      skip: skip,
+      limit: limit,
+    );
   }
 
   @override

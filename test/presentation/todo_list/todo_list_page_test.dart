@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/repositories/auth_repository.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/entities/todo.dart';
+import 'package:flutter_clean_riverpod_boilerplate/domain/todo/entities/todo_page.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/repositories/todo_repository.dart';
 import 'package:flutter_clean_riverpod_boilerplate/l10n/generated/app_localizations.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/auth_providers.dart';
@@ -45,6 +46,13 @@ const _seed = [
   Todo(id: '2', title: 'write tests', completed: true),
 ];
 
+TodoPage _page(List<Todo> todos) => TodoPage(
+  todos: todos,
+  total: todos.length,
+  skip: 0,
+  limit: TodoListPageSize.defaultLimit,
+);
+
 void main() {
   late _MockAuthRepository authRepository;
   late _MockTodoRepository todoRepository;
@@ -58,8 +66,12 @@ void main() {
 
     todoRepository = _MockTodoRepository();
     when(
-      () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
-    ).thenAnswer((_) async => const Right<Failure, List<Todo>>(_seed));
+      () => todoRepository.getTodos(
+        limit: any(named: 'limit'),
+        skip: any(named: 'skip'),
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).thenAnswer((_) async => Right<Failure, TodoPage>(_page(_seed)));
     when(
       () => todoRepository.toggleTodo(
         any(),
@@ -134,10 +146,12 @@ void main() {
     tester,
   ) async {
     when(
-      () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
-    ).thenAnswer(
-      (_) async => const Left<Failure, List<Todo>>(NetworkFailure()),
-    );
+      () => todoRepository.getTodos(
+        limit: any(named: 'limit'),
+        skip: any(named: 'skip'),
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).thenAnswer((_) async => const Left<Failure, TodoPage>(NetworkFailure()));
 
     await tester.pumpWidget(
       _wrap(
@@ -156,8 +170,12 @@ void main() {
     'shows the empty state when the repository returns an empty list',
     (tester) async {
       when(
-        () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
-      ).thenAnswer((_) async => const Right<Failure, List<Todo>>(<Todo>[]));
+        () => todoRepository.getTodos(
+          limit: any(named: 'limit'),
+          skip: any(named: 'skip'),
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).thenAnswer((_) async => Right<Failure, TodoPage>(_page(const [])));
 
       await tester.pumpWidget(
         _wrap(

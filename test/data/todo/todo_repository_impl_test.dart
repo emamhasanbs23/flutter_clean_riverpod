@@ -2,7 +2,6 @@ import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/mock/todo_mock_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/repository_impl/todo_repository_impl.dart';
-import 'package:flutter_clean_riverpod_boilerplate/domain/todo/entities/todo.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -20,9 +19,14 @@ void main() {
       final result = await repository.getTodos();
 
       expect(result.isRight(), isTrue);
-      final todos = result.fold((_) => <Todo>[], (t) => t);
-      expect(todos, isNotEmpty);
-      expect(todos.any((t) => t.title == 'Wire up Riverpod providers'), isTrue);
+      final page = result.fold((_) => null, (p) => p);
+      expect(page, isNotNull);
+      expect(page!.todos, isNotEmpty);
+      expect(
+        page.todos.any((t) => t.title == 'Wire up Riverpod providers'),
+        isTrue,
+      );
+      expect(page.hasMore, isFalse);
     });
 
     test('getTodo returns a single domain entity by id', () async {
@@ -45,9 +49,23 @@ void main() {
       );
     });
 
+    test('getTodos paginates through the mock source', () async {
+      final first = await repository.getTodos(limit: 2, skip: 0);
+      final second = await repository.getTodos(limit: 2, skip: 2);
+
+      first.fold((_) => fail('Expected success'), (page) {
+        expect(page.todos.length, 2);
+        expect(page.hasMore, isTrue);
+      });
+      second.fold((_) => fail('Expected success'), (page) {
+        expect(page.todos.length, 1);
+        expect(page.hasMore, isFalse);
+      });
+    });
+
     test('createTodo prepends the new todo to the list', () async {
       final initialLength = await repository.getTodos().then(
-        (r) => r.fold((_) => 0, (todos) => todos.length),
+        (r) => r.fold((_) => 0, (page) => page.todos.length),
       );
 
       final result = await repository.createTodo('Buy milk');
@@ -59,16 +77,16 @@ void main() {
       });
 
       final after = await repository.getTodos();
-      after.fold((_) => fail('Expected success'), (todos) {
-        expect(todos.length, initialLength + 1);
-        expect(todos.first.title, 'Buy milk');
+      after.fold((_) => fail('Expected success'), (page) {
+        expect(page.todos.length, initialLength + 1);
+        expect(page.todos.first.title, 'Buy milk');
       });
     });
 
     test('toggleTodo flips completion flag', () async {
       final loaded = await repository.getTodos();
       final original = loaded
-          .fold((_) => throw StateError('no data'), (t) => t)
+          .fold((_) => throw StateError('no data'), (page) => page.todos)
           .first;
 
       final result = await repository.toggleTodo(
@@ -99,7 +117,7 @@ void main() {
     test('deleteTodo removes the item and returns Right(null)', () async {
       final loaded = await repository.getTodos();
       final target = loaded
-          .fold((_) => throw StateError('no data'), (t) => t)
+          .fold((_) => throw StateError('no data'), (page) => page.todos)
           .first;
 
       final result = await repository.deleteTodo(target.id);
@@ -108,7 +126,7 @@ void main() {
       final after = await repository.getTodos();
       after.fold(
         (_) => fail('Expected success'),
-        (todos) => expect(todos.where((t) => t.id == target.id), isEmpty),
+        (page) => expect(page.todos.where((t) => t.id == target.id), isEmpty),
       );
     });
   });

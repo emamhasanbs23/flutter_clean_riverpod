@@ -89,8 +89,25 @@ class TodoLoading extends TodoListState {
 }
 
 class TodoLoaded extends TodoListState {
-  const TodoLoaded(this.todos);
+  const TodoLoaded({
+    required this.todos,
+    required this.hasMore,
+    this.isLoadingMore = false,
+  });
+
   final List<Todo> todos;
+  final bool hasMore;
+  final bool isLoadingMore;
+
+  TodoLoaded copyWith({
+    List<Todo>? todos,
+    bool? hasMore,
+    bool? isLoadingMore,
+  }) => TodoLoaded(
+    todos: todos ?? this.todos,
+    hasMore: hasMore ?? this.hasMore,
+    isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+  );
 }
 
 class TodoError extends TodoListState {
@@ -124,7 +141,35 @@ class TodoListController extends _$TodoListController {
     if (_cancelToken.isCancelled) {
       return const TodoInitial();
     }
-    return result.fold(TodoError.new, TodoLoaded.new);
+    return result.fold(
+      TodoError.new,
+      (page) => TodoLoaded(todos: page.todos, hasMore: page.hasMore),
+    );
+  }
+
+  Future<void> loadMore() async {
+    final current = state.valueOrNull;
+    if (current is! TodoLoaded || !current.hasMore || current.isLoadingMore) {
+      return;
+    }
+
+    state = AsyncValue.data(current.copyWith(isLoadingMore: true));
+
+    final result = await ref.read(getTodosUseCaseProvider).call(
+      skip: current.todos.length,
+      cancelToken: _cancelToken,
+    );
+    if (_cancelToken.isCancelled) return;
+
+    result.fold(
+      (failure) => state = AsyncValue.data(TodoError(failure)),
+      (page) => state = AsyncValue.data(
+        TodoLoaded(
+          todos: [...current.todos, ...page.todos],
+          hasMore: page.hasMore,
+        ),
+      ),
+    );
   }
 
   Future<void> refresh() async {
@@ -141,11 +186,14 @@ class TodoListController extends _$TodoListController {
       todo,
     ) {
       final current = state.valueOrNull;
-      final updated = switch (current) {
-        TodoLoaded(:final todos) => [todo, ...todos],
-        _ => [todo],
-      };
-      state = AsyncValue.data(TodoLoaded(updated));
+      switch (current) {
+        case TodoLoaded(:final todos, :final hasMore):
+          state = AsyncValue.data(
+            TodoLoaded(todos: [todo, ...todos], hasMore: hasMore),
+          );
+        default:
+          state = AsyncValue.data(TodoLoaded(todos: [todo], hasMore: false));
+      }
     });
   }
 
@@ -165,7 +213,9 @@ class TodoListController extends _$TodoListController {
       final updated = result.fold((_) => current.todos[index], (todo) => todo);
       final todos = [...current.todos];
       todos[index] = updated;
-      state = AsyncValue.data(TodoLoaded(todos));
+      state = AsyncValue.data(
+        TodoLoaded(todos: todos, hasMore: current.hasMore),
+      );
     }
   }
 
@@ -178,7 +228,9 @@ class TodoListController extends _$TodoListController {
       final current = state.valueOrNull;
       if (current is TodoLoaded) {
         final todos = current.todos.where((t) => t.id != id).toList();
-        state = AsyncValue.data(TodoLoaded(todos));
+        state = AsyncValue.data(
+          TodoLoaded(todos: todos, hasMore: current.hasMore),
+        );
       }
     }
   }

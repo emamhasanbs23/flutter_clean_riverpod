@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/model/todo_dto.dart';
+import 'package:flutter_clean_riverpod_boilerplate/data/todo/model/todos_response_dto.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/remote/todo_remote_source.dart';
 
 /// Facade that delegates todo network calls to [TodoRemoteSource].
@@ -11,8 +12,15 @@ class TodoDataSourceImpl implements TodoDataSource {
   final TodoRemoteSource _remoteSource;
 
   @override
-  Future<List<TodoDto>> fetchAll({CancelToken? cancelToken}) =>
-      _remoteSource.fetchAll(cancelToken: cancelToken);
+  Future<TodosResponseDto> fetchPage({
+    required int limit,
+    required int skip,
+    CancelToken? cancelToken,
+  }) => _remoteSource.fetchPage(
+    limit: limit,
+    skip: skip,
+    cancelToken: cancelToken,
+  );
 
   @override
   Future<TodoDto> fetchById(String id, {CancelToken? cancelToken}) =>
