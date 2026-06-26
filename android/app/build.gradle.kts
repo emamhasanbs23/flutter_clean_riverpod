@@ -1,5 +1,6 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Locale
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -8,12 +9,17 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val googleServicesFlavors = listOf("dev", "staging", "prod")
+fun googleServicesJsonFor(flavor: String) = file("src/$flavor/google-services.json")
+val hasGoogleServicesConfig =
+    googleServicesFlavors.any { googleServicesJsonFor(it).exists() }
+
 // Apply the Google Services plugin only when at least one flavor's
-// google-services.json is present. The plugin is declared (apply false)
-// in settings.gradle.kts so the build doesn't fail for contributors
-// who haven't set up Firebase yet — they get a working app, just
-// without push notifications.
-apply(plugin = "com.google.gms.google-services")
+// google-services.json is present. Variants for flavors without a file
+// disable their process*GoogleServices task in afterEvaluate below.
+if (hasGoogleServicesConfig) {
+    apply(plugin = "com.google.gms.google-services")
+}
 
 // Release signing config. The keystore path/credentials live in
 // `android/key.properties` (gitignored). When the file is missing the build
@@ -120,4 +126,25 @@ android {
 
 flutter {
     source = "../.."
+}
+
+afterEvaluate {
+    if (!hasGoogleServicesConfig) {
+        return@afterEvaluate
+    }
+    android.applicationVariants.configureEach {
+        val flavorName =
+            productFlavors
+                .firstOrNull { flavor -> flavor.dimension == "environment" }
+                ?.name
+                ?: return@configureEach
+        if (googleServicesJsonFor(flavorName).exists()) {
+            return@configureEach
+        }
+        val taskName =
+            "process${name.replaceFirstChar { char ->
+                if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString()
+            }}GoogleServices"
+        tasks.findByName(taskName)?.enabled = false
+    }
 }
