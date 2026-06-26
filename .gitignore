@@ -12,11 +12,14 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# IntelliJ related — commit shared run configs; ignore local IDE state
 *.iml
 *.ipr
 *.iws
-.idea/
+.idea/*
+!.idea/libraries/
+!.idea/runConfigurations/
+!.idea/modules.xml
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -76,5 +79,8 @@ app.*.map.json
 .puku/
 .puku-cli/.github/workflows/
 
-# FVM Version Cache
-.fvm/
+# FVM — commit .fvmrc and .fvm/fvm_config.json; ignore local SDK symlink/cache
+.fvm/flutter_sdk
+.fvm/versions
+.fvm/release
+.fvm/version

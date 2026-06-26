@@ -1,7 +1,7 @@
 {
   // Cursor / VS Code launch configurations for flutter_clean_riverpod_boilerplate.
   // Requires the Dart-Code.flutter extension and FVM initialised locally:
-  //   fvm install && fvm use 3.44.0
+  //   fvm install   (creates .fvm/flutter_sdk from .fvmrc)
   "version": "0.2.0",
   "configurations": [
     // ─── DEV ──────────────────────────────────────────────────────────────────
