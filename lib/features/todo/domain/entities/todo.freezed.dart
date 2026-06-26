@@ -20,7 +20,6 @@ mixin _$Todo {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   bool get completed => throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
 
   /// Create a copy of Todo
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +32,7 @@ abstract class $TodoCopyWith<$Res> {
   factory $TodoCopyWith(Todo value, $Res Function(Todo) then) =
       _$TodoCopyWithImpl<$Res, Todo>;
   @useResult
-  $Res call({String id, String title, bool completed, DateTime? createdAt});
+  $Res call({String id, String title, bool completed});
 }
 
 /// @nodoc
@@ -54,7 +53,6 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
     Object? id = null,
     Object? title = null,
     Object? completed = null,
-    Object? createdAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -70,10 +68,6 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
                 ? _value.completed
                 : completed // ignore: cast_nullable_to_non_nullable
                       as bool,
-            createdAt: freezed == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
           )
           as $Val,
     );
@@ -88,7 +82,7 @@ abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
   ) = __$$TodoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String title, bool completed, DateTime? createdAt});
+  $Res call({String id, String title, bool completed});
 }
 
 /// @nodoc
@@ -106,7 +100,6 @@ class __$$TodoImplCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? completed = null,
-    Object? createdAt = freezed,
   }) {
     return _then(
       _$TodoImpl(
@@ -122,10 +115,6 @@ class __$$TodoImplCopyWithImpl<$Res>
             ? _value.completed
             : completed // ignore: cast_nullable_to_non_nullable
                   as bool,
-        createdAt: freezed == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
       ),
     );
   }
@@ -138,7 +127,6 @@ class _$TodoImpl implements _Todo {
     required this.id,
     required this.title,
     required this.completed,
-    this.createdAt,
   });
 
   @override
@@ -147,12 +135,10 @@ class _$TodoImpl implements _Todo {
   final String title;
   @override
   final bool completed;
-  @override
-  final DateTime? createdAt;
 
   @override
   String toString() {
-    return 'Todo(id: $id, title: $title, completed: $completed, createdAt: $createdAt)';
+    return 'Todo(id: $id, title: $title, completed: $completed)';
   }
 
   @override
@@ -163,13 +149,11 @@ class _$TodoImpl implements _Todo {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.completed, completed) ||
-                other.completed == completed) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.completed == completed));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, completed, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, title, completed);
 
   /// Create a copy of Todo
   /// with the given fields replaced by the non-null parameter values.
@@ -185,7 +169,6 @@ abstract class _Todo implements Todo {
     required final String id,
     required final String title,
     required final bool completed,
-    final DateTime? createdAt,
   }) = _$TodoImpl;
 
   @override
@@ -194,8 +177,6 @@ abstract class _Todo implements Todo {
   String get title;
   @override
   bool get completed;
-  @override
-  DateTime? get createdAt;
 
   /// Create a copy of Todo
   /// with the given fields replaced by the non-null parameter values.

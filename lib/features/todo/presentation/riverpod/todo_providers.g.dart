@@ -160,7 +160,7 @@ final deleteTodoUseCaseProvider = Provider<DeleteTodoUseCase>.internal(
 // ignore: unused_element
 typedef DeleteTodoUseCaseRef = ProviderRef<DeleteTodoUseCase>;
 String _$todoListControllerHash() =>
-    r'2fb1024a54a6f39d6c0eae9099f317afcc9faef7';
+    r'428bdd1da76ca33fbb4b4e47f94fed06a205fb62';
 
 /// Manages the list state and exposes mutating methods. Mutations
 /// optimistically re-fetch to keep the data source authoritative, which also

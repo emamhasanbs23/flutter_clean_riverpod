@@ -21,7 +21,6 @@ void main() {
 
     setUp(() {
       repository = _MockTodoRepository();
-      // getTodos is called by the build() / _load() helpers; pre-stub.
       when(
         () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
       ).thenAnswer((_) async => const Right<Failure, List<Todo>>(_seed));
@@ -38,6 +37,7 @@ void main() {
       when(
         () => repository.toggleTodo(
           any(),
+          completed: any(named: 'completed'),
           cancelToken: any(named: 'cancelToken'),
         ),
       ).thenAnswer(
@@ -67,22 +67,31 @@ void main() {
       expect((state as TodoLoaded).todos, equals(_seed));
     });
 
-    test('toggle re-fetches the list when successful', () async {
+    test('toggle updates the list optimistically without re-fetch', () async {
       await container.read(todoListControllerProvider.future);
       await container.read(todoListControllerProvider.notifier).toggle('1');
-      // Initial load + post-toggle reload.
+
       verify(
-        () =>
-            repository.toggleTodo('1', cancelToken: any(named: 'cancelToken')),
+        () => repository.toggleTodo(
+          '1',
+          completed: true,
+          cancelToken: any(named: 'cancelToken'),
+        ),
       ).called(1);
       verify(
         () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
-      ).called(2);
+      ).called(1);
+
+      final state = container.read(todoListControllerProvider).value!;
+      expect(state, isA<TodoLoaded>());
+      final todos = (state as TodoLoaded).todos;
+      expect(todos.firstWhere((t) => t.id == '1').completed, isTrue);
     });
 
-    test('add re-fetches the list with the trimmed title', () async {
+    test('add prepends the new todo without re-fetch', () async {
       await container.read(todoListControllerProvider.future);
       await container.read(todoListControllerProvider.notifier).add('  new  ');
+
       verify(
         () => repository.createTodo(
           'new',
@@ -91,16 +100,34 @@ void main() {
       ).called(1);
       verify(
         () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
-      ).called(2);
+      ).called(1);
+
+      final state = container.read(todoListControllerProvider).value!;
+      expect(state, isA<TodoLoaded>());
+      expect((state as TodoLoaded).todos.first.id, '3');
     });
 
-    test('delete re-fetches the list when successful', () async {
+    test('delete removes the item without re-fetch', () async {
       await container.read(todoListControllerProvider.future);
       await container.read(todoListControllerProvider.notifier).delete('2');
+
       verify(
         () =>
             repository.deleteTodo('2', cancelToken: any(named: 'cancelToken')),
       ).called(1);
+      verify(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).called(1);
+
+      final state = container.read(todoListControllerProvider).value!;
+      expect(state, isA<TodoLoaded>());
+      expect((state as TodoLoaded).todos.where((t) => t.id == '2'), isEmpty);
+    });
+
+    test('refresh reloads from the repository', () async {
+      await container.read(todoListControllerProvider.future);
+      await container.read(todoListControllerProvider.notifier).refresh();
+
       verify(
         () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
       ).called(2);

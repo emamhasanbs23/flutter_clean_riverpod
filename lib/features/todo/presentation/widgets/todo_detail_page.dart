@@ -132,15 +132,6 @@ class _Detail extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (todo.createdAt != null) ...[
-                    SizedBox(height: AppSize.spaceMd),
-                    Text(
-                      'Created ${todo.createdAt!.toLocal()}',
-                      style: context.textTheme.bodySmall?.copyWith(
-                        color: context.colors.outline,
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),

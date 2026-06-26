@@ -137,22 +137,35 @@ class TodoListController extends _$TodoListController {
         .read(createTodoUseCaseProvider)
         .call(title, cancelToken: _cancelToken);
     if (_cancelToken.isCancelled) return;
-    if (result.isRight()) {
-      await refresh();
-    } else {
-      state = AsyncValue.data(
-        TodoError(result.fold((f) => f, (_) => const UnexpectedFailure())),
-      );
-    }
+    result.fold((failure) => state = AsyncValue.data(TodoError(failure)), (
+      todo,
+    ) {
+      final current = state.valueOrNull;
+      final updated = switch (current) {
+        TodoLoaded(:final todos) => [todo, ...todos],
+        _ => [todo],
+      };
+      state = AsyncValue.data(TodoLoaded(updated));
+    });
   }
 
   Future<void> toggle(String id) async {
+    final current = state.valueOrNull;
+    if (current is! TodoLoaded) return;
+
+    final index = current.todos.indexWhere((t) => t.id == id);
+    if (index < 0) return;
+
+    final targetCompleted = !current.todos[index].completed;
     final result = await ref
         .read(toggleTodoUseCaseProvider)
-        .call(id, cancelToken: _cancelToken);
+        .call(id, completed: targetCompleted, cancelToken: _cancelToken);
     if (_cancelToken.isCancelled) return;
     if (result.isRight()) {
-      await refresh();
+      final updated = result.fold((_) => current.todos[index], (todo) => todo);
+      final todos = [...current.todos];
+      todos[index] = updated;
+      state = AsyncValue.data(TodoLoaded(todos));
     }
   }
 
@@ -162,7 +175,11 @@ class TodoListController extends _$TodoListController {
         .call(id, cancelToken: _cancelToken);
     if (_cancelToken.isCancelled) return;
     if (result.isRight()) {
-      await refresh();
+      final current = state.valueOrNull;
+      if (current is TodoLoaded) {
+        final todos = current.todos.where((t) => t.id != id).toList();
+        state = AsyncValue.data(TodoLoaded(todos));
+      }
     }
   }
 }

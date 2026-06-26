@@ -52,10 +52,15 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<Either<Failure, Todo>> toggleTodo(
     String id, {
+    required bool completed,
     CancelToken? cancelToken,
   }) async {
     try {
-      final dto = await _dataSource.toggle(id, cancelToken: cancelToken);
+      final dto = await _dataSource.toggle(
+        id,
+        completed: completed,
+        cancelToken: cancelToken,
+      );
       return Right(dto.toDomain());
     } on Failure catch (failure) {
       return Left(failure);

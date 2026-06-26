@@ -18,19 +18,25 @@ void main() {
       useCase = ToggleTodoUseCase(repository);
     });
 
-    test('forwards the id to the repository and returns its success', () async {
+    test('forwards id and completed to the repository', () async {
       const toggled = Todo(id: '42', title: 'x', completed: true);
       when(
-        () =>
-            repository.toggleTodo('42', cancelToken: any(named: 'cancelToken')),
+        () => repository.toggleTodo(
+          '42',
+          completed: true,
+          cancelToken: any(named: 'cancelToken'),
+        ),
       ).thenAnswer((_) async => const Right<Failure, Todo>(toggled));
 
-      final result = await useCase('42');
+      final result = await useCase('42', completed: true);
 
       expect(result, equals(const Right<Failure, Todo>(toggled)));
       verify(
-        () =>
-            repository.toggleTodo('42', cancelToken: any(named: 'cancelToken')),
+        () => repository.toggleTodo(
+          '42',
+          completed: true,
+          cancelToken: any(named: 'cancelToken'),
+        ),
       ).called(1);
     });
 
@@ -38,11 +44,12 @@ void main() {
       when(
         () => repository.toggleTodo(
           'missing',
+          completed: false,
           cancelToken: any(named: 'cancelToken'),
         ),
       ).thenAnswer((_) async => const Left<Failure, Todo>(NotFoundFailure()));
 
-      final result = await useCase('missing');
+      final result = await useCase('missing', completed: false);
 
       expect(result.isLeft(), isTrue);
       result.fold(

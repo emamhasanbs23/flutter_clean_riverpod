@@ -15,6 +15,5 @@ class Todo with _$Todo {
     required String id,
     required String title,
     required bool completed,
-    DateTime? createdAt,
   }) = _Todo;
 }

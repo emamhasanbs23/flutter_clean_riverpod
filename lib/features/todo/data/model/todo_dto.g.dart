@@ -8,18 +8,40 @@ part of 'todo_dto.dart';
 
 _$TodoDtoImpl _$$TodoDtoImplFromJson(Map<String, dynamic> json) =>
     _$TodoDtoImpl(
-      id: json['id'] as String,
-      title: json['title'] as String,
+      id: (json['id'] as num).toInt(),
+      todo: json['todo'] as String,
       completed: json['completed'] as bool? ?? false,
-      createdAt: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
+      userId: (json['userId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TodoDtoImplToJson(_$TodoDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'title': instance.title,
+      'todo': instance.todo,
       'completed': instance.completed,
-      'created_at': instance.createdAt?.toIso8601String(),
+      'userId': instance.userId,
     };
+
+_$CreateTodoRequestDtoImpl _$$CreateTodoRequestDtoImplFromJson(
+  Map<String, dynamic> json,
+) => _$CreateTodoRequestDtoImpl(
+  todo: json['todo'] as String,
+  userId: (json['userId'] as num).toInt(),
+  completed: json['completed'] as bool? ?? false,
+);
+
+Map<String, dynamic> _$$CreateTodoRequestDtoImplToJson(
+  _$CreateTodoRequestDtoImpl instance,
+) => <String, dynamic>{
+  'todo': instance.todo,
+  'userId': instance.userId,
+  'completed': instance.completed,
+};
+
+_$UpdateTodoRequestDtoImpl _$$UpdateTodoRequestDtoImplFromJson(
+  Map<String, dynamic> json,
+) => _$UpdateTodoRequestDtoImpl(completed: json['completed'] as bool);
+
+Map<String, dynamic> _$$UpdateTodoRequestDtoImplToJson(
+  _$UpdateTodoRequestDtoImpl instance,
+) => <String, dynamic>{'completed': instance.completed};

@@ -18,13 +18,17 @@ class _TodoApi implements TodoApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<TodoDto>> getTodos({CancelToken? cancelToken}) async {
+  Future<TodosResponseDto> getTodos({
+    int? limit,
+    int? skip,
+    CancelToken? cancelToken,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'limit': limit, r'skip': skip};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<TodoDto>>(
+    final _options = _setStreamType<TodosResponseDto>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -34,12 +38,10 @@ class _TodoApi implements TodoApi {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<TodoDto> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late TodosResponseDto _value;
     try {
-      _value = _result.data!
-          .map((dynamic i) => TodoDto.fromJson(i as Map<String, dynamic>))
-          .toList();
+      _value = TodosResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -48,7 +50,10 @@ class _TodoApi implements TodoApi {
   }
 
   @override
-  Future<TodoDto> createTodo(TodoDto body, {CancelToken? cancelToken}) async {
+  Future<TodoDto> createTodo(
+    CreateTodoRequestDto body, {
+    CancelToken? cancelToken,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
@@ -58,7 +63,7 @@ class _TodoApi implements TodoApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/todos',
+            '/todos/add',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -78,7 +83,7 @@ class _TodoApi implements TodoApi {
   @override
   Future<TodoDto> updateTodo(
     String id,
-    TodoDto body, {
+    UpdateTodoRequestDto body, {
     CancelToken? cancelToken,
   }) async {
     final _extra = <String, dynamic>{};
@@ -87,7 +92,7 @@ class _TodoApi implements TodoApi {
     final _headers = <String, dynamic>{};
     final _data = body;
     final _options = _setStreamType<TodoDto>(
-      Options(method: 'PUT', headers: _headers, extra: _extra)
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/todos/${id}',
@@ -108,13 +113,13 @@ class _TodoApi implements TodoApi {
   }
 
   @override
-  Future<void> deleteTodo(String id, {CancelToken? cancelToken}) async {
+  Future<TodoDto> deleteTodo(String id, {CancelToken? cancelToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<void>(
+    final _options = _setStreamType<TodoDto>(
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -124,32 +129,15 @@ class _TodoApi implements TodoApi {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    await _dio.fetch<void>(_options);
-  }
-
-  RequestOptions newRequestOptions(Object? options) {
-    if (options is RequestOptions) {
-      return options as RequestOptions;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late TodoDto _value;
+    try {
+      _value = TodoDto.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
     }
-    if (options is Options) {
-      return RequestOptions(
-        method: options.method,
-        sendTimeout: options.sendTimeout,
-        receiveTimeout: options.receiveTimeout,
-        extra: options.extra,
-        headers: options.headers,
-        responseType: options.responseType,
-        contentType: options.contentType.toString(),
-        validateStatus: options.validateStatus,
-        receiveDataWhenStatusError: options.receiveDataWhenStatusError,
-        followRedirects: options.followRedirects,
-        maxRedirects: options.maxRedirects,
-        requestEncoder: options.requestEncoder,
-        responseDecoder: options.responseDecoder,
-        path: '',
-      );
-    }
-    return RequestOptions(path: '');
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

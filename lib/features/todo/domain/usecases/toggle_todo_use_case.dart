@@ -10,6 +10,13 @@ class ToggleTodoUseCase {
 
   final TodoRepository _repository;
 
-  Future<Either<Failure, Todo>> call(String id, {CancelToken? cancelToken}) =>
-      _repository.toggleTodo(id, cancelToken: cancelToken);
+  Future<Either<Failure, Todo>> call(
+    String id, {
+    required bool completed,
+    CancelToken? cancelToken,
+  }) => _repository.toggleTodo(
+    id,
+    completed: completed,
+    cancelToken: cancelToken,
+  );
 }

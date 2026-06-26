@@ -51,7 +51,10 @@ void main() {
           .fold((_) => throw StateError('no data'), (t) => t)
           .first;
 
-      final result = await repository.toggleTodo(original.id);
+      final result = await repository.toggleTodo(
+        original.id,
+        completed: !original.completed,
+      );
 
       expect(result.isRight(), isTrue);
       result.fold((_) => fail('Expected success'), (todo) {
@@ -61,7 +64,10 @@ void main() {
     });
 
     test('toggleTodo returns NotFoundFailure for unknown id', () async {
-      final result = await repository.toggleTodo('does-not-exist');
+      final result = await repository.toggleTodo(
+        'does-not-exist',
+        completed: true,
+      );
 
       expect(result.isLeft(), isTrue);
       result.fold(

@@ -20,6 +20,7 @@ abstract interface class TodoRepository {
   });
   Future<Either<Failure, Todo>> toggleTodo(
     String id, {
+    required bool completed,
     CancelToken? cancelToken,
   });
   Future<Either<Failure, void>> deleteTodo(

@@ -10,6 +10,7 @@ abstract final class AuthEndpoints {
 
 abstract final class TodoEndpoints {
   static const String list = '/todos';
-  static const String create = '/todos';
+  static const String create = '/todos/add';
   static const String byId = '/todos/{id}';
+  static const String byUser = '/todos/user/{userId}';
 }

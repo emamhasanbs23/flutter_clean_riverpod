@@ -63,6 +63,7 @@ void main() {
     when(
       () => todoRepository.toggleTodo(
         any(),
+        completed: any(named: 'completed'),
         cancelToken: any(named: 'cancelToken'),
       ),
     ).thenAnswer(
@@ -123,6 +124,7 @@ void main() {
     verify(
       () => todoRepository.toggleTodo(
         '1',
+        completed: true,
         cancelToken: any(named: 'cancelToken'),
       ),
     ).called(1);
