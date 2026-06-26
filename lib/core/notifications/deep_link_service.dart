@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'deep_link_service.g.dart';
 
 /// Cross-platform abstraction over incoming deep links.
 ///
@@ -33,9 +36,10 @@ abstract interface class DeepLinkService {
 /// Provider entry point. Default implementation is a no-op so unit tests
 /// (which never call `getInitialLink`) stay green. Bootstrap overrides this
 /// with the real platform-backed implementation.
-final deepLinkServiceProvider = Provider<DeepLinkService>((ref) {
+@Riverpod(keepAlive: true)
+DeepLinkService deepLinkService(Ref ref) {
   return const NoOpDeepLinkService();
-});
+}
 
 /// Default no-op implementation.
 ///

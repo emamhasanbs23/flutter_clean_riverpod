@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'crash_reporter.g.dart';
 
 /// Abstraction for crash reporting.
 ///
@@ -48,6 +51,7 @@ class NoOpCrashReporter implements CrashReporter {
 
 /// Riverpod entry point. Override with a concrete implementation
 /// (e.g. `SentryCrashReporter`) at app startup.
-final crashReporterProvider = Provider<CrashReporter>((ref) {
+@Riverpod(keepAlive: true)
+CrashReporter crashReporter(Ref ref) {
   return const NoOpCrashReporter();
-});
+}

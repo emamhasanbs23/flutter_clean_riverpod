@@ -21,8 +21,9 @@ covers the local workflow and the conventions the project follows.
 
 ## Code conventions
 
-- The project intentionally avoids `freezed` / `riverpod_generator` / `build_runner`. Keep
-  new code hand-written and run `dart format .` before committing.
+- Use `build_runner` for Riverpod providers (`@riverpod`), Retrofit API contracts,
+  and `freezed` DTOs. UI states stay hand-written `sealed class` hierarchies.
+  Run `fvm dart format .` before committing.
 - Domain entities live in `lib/features/<feature>/domain/` and must not import anything
   from `data/` or `presentation/`. The opposite direction is also one-way: `data/`
   implements `domain/`, `presentation/` consumes both.

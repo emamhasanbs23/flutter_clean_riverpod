@@ -35,10 +35,12 @@
    `bootstrap.dart`, the Dio interceptor, and tests.
 3. **Sealed UI states**: every controller exposes a `sealed class` state;
    widgets render via exhaustive `switch`.
-4. **Retrofit + codegen for data layer**: Use `@RestApi` for API contracts,
-   `freezed` + `json_serializable` for DTOs, with `build_runner` generating
-   `*.g.dart` files. Riverpod providers remain hand-written (no `@riverpod`
-   codegen) to keep state management explicit and testable.
+4. **Codegen where it fits**: Prefer `build_runner` generators over hand-written
+   boilerplate. **Data layer**: `@RestApi` (Retrofit), `freezed` +
+   `json_serializable` for DTOs. **Presentation**: `@riverpod` /
+   `riverpod_generator` for providers. Controllers still expose `sealed class`
+   states; widgets render via exhaustive `switch`. Hand-write only what codegen
+   cannot express cleanly (mappers, use cases, test mocks).
 5. **Typed routes**: navigate with `context.goNamed(TodoRoutes.detail,
    pathParameters: {'id': id})`. Never raw paths outside
    `app_router.dart`.
@@ -76,7 +78,7 @@
 | [architecture.md](./docs/agents/architecture.md) | Clean Architecture in this repo, layer responsibilities, feature folder shape. |
 | [layering-rules.md](./docs/agents/layering-rules.md) | The import graph, what may import what, cross-feature access rules. |
 | [feature-recipe.md](./docs/agents/feature-recipe.md) | The canonical 6-file feature template (`auth`, `todo` are the reference). |
-| [state-management.md](./docs/agents/state-management.md) | Hand-written Riverpod, `Notifier` + sealed state, `ProviderScope.overrides` for tests. |
+| [state-management.md](./docs/agents/state-management.md) | `@riverpod` codegen, `Notifier` + sealed state, `ProviderScope.overrides` for tests. |
 | [navigation.md](./docs/agents/navigation.md) | `go_router` setup, typed `*Routes` constants, auth redirect. |
 | [deep-links.md](./docs/agents/deep-links.md) | `app_links`, FCM-to-route funnel via `pendingNavigationProvider`. |
 | [networking.md](./docs/agents/networking.md) | `DioClient`, interceptors, retry / dedup patterns. |
@@ -189,9 +191,10 @@ Base: `very_good_analysis`. Three rules are intentionally disabled (see
 
 ## State Management
 
-- **Hand-written Riverpod for presentation layer**. No `@riverpod` codegen,
-  no `riverpod_generator`, no `@Riverpod(keepAlive: ...)` annotations.
-  Controllers are `Notifier` subclasses exposing a `sealed class` state.
+- **Riverpod with codegen for the presentation layer**. Use `@riverpod` /
+  `riverpod_generator` for providers; run `build_runner` after changing
+  provider annotations. Controllers are `Notifier` subclasses exposing a
+  `sealed class` state (hand-written — not `freezed`).
 - **Data layer uses Retrofit + codegen**: API contracts via `@RestApi`,
   DTOs via `freezed` + `json_serializable` with generated `*.g.dart` files.
 - **No** `ValueNotifier` / `ChangeNotifier` / `ListenableBuilder` from
@@ -259,11 +262,12 @@ flowchart LR
 - This project **uses `build_runner`** for:
   - **Retrofit** API contracts (`*_api.g.dart`)
   - **freezed** + **json_serializable** DTOs (`*.freezed.dart`, `*.g.dart`)
+  - **Riverpod** providers (`@riverpod` → `*.g.dart` via `riverpod_generator`)
 - It **does not** use `build_runner` for tests (hand-written mocks with
-  `mocktail`) or Riverpod providers (hand-written).
+  `mocktail`).
 - It **does** use `fvm flutter gen-l10n` (offline, no build_runner) for
   `AppLocalizations`.
-- Run codegen after changing DTOs or API contracts:
+- Run codegen after changing DTOs, API contracts, or `@riverpod` providers:
   `fvm dart run build_runner build --delete-conflicting-outputs`.
 
 ## Testing
@@ -373,9 +377,8 @@ not introduce new `WidgetState` constants outside the existing theme.
 
 ## Cross-cutting "do not"s
 
-- :no_entry: Don't add `@riverpod` codegen (Riverpod providers remain hand-written).
-- :white_check_mark: **Do** use `freezed` + `json_serializable` + `build_runner`
-  for DTOs and Retrofit API contracts.
+- :white_check_mark: **Do** use codegen where supported: `@riverpod` for
+  providers, `freezed` + `json_serializable` + Retrofit for the data layer.
 - :no_entry: Don't use `build_runner` for tests (use `mocktail` hand-written mocks).
 - :no_entry: Don't use `ValueNotifier` / `ChangeNotifier` / `provider`
   package.
@@ -395,8 +398,8 @@ not introduce new `WidgetState` constants outside the existing theme.
 ## TL;DR for an agent
 
 - Flutter 3.41.8 via FVM -- always `fvm flutter ...` / `fvm dart ...`.
-- Clean Architecture, feature-first; **strict layering**, **Riverpod
-  hand-written**, **Retrofit + codegen for data layer**, **`Either<Failure, T>`**
+- Clean Architecture, feature-first; **strict layering**, **Riverpod +
+  codegen**, **Retrofit + freezed codegen for data layer**, **`Either<Failure, T>`**
   for errors.
 - Sealed UI states with exhaustive `switch`. `AppSize` + theme extensions.
   Localize everything.

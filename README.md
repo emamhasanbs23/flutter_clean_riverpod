@@ -11,7 +11,7 @@ example backed by a mock data source.
 
 | Concern | Choice |
 |---------|--------|
-| State management | Riverpod 2 (hand-written providers) |
+| State management | Riverpod 2 (`@riverpod` codegen + sealed UI states) |
 | Routing | GoRouter with auth redirect |
 | Networking | Dio + auth interceptor + refresh + pretty logger (dev only) |
 | Error handling | `Either<Failure, T>` via `fpdart`, localized via `Failure.toMessage` |

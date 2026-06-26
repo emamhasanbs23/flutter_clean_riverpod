@@ -13,6 +13,9 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases/login_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/usecases/logout_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'auth_providers.g.dart';
 
 /// Broadcast stream of "session expired" events.
 ///
@@ -20,63 +23,76 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// refresh retry) so the router can react: invalidate
 /// [isAuthenticatedProvider] and the redirect will fire on the next
 /// navigation.
-///
-/// Default value is `null`, meaning no session has ever been invalidated.
-final sessionExpiredProvider = StateProvider<bool>((ref) => false);
+@Riverpod(keepAlive: true)
+class SessionExpired extends _$SessionExpired {
+  @override
+  bool build() => false;
+
+  /// Flips the session-expired flag so auth providers and the router react.
+  void markExpired() => state = true;
+}
 
 /// Retrofit-generated `AuthApi` bound to the configured `Dio`.
 ///
 /// Shares the same Dio instance (and therefore the same
 /// [AuthInterceptor]) with the rest of the app, so the 401 -> dedup ->
 /// refresh -> retry funnel keeps working unchanged.
-final authApiProvider = Provider<AuthApi>((ref) {
+@Riverpod(keepAlive: true)
+AuthApi authApi(Ref ref) {
   return AuthApi(ref.watch(dioProvider));
-});
+}
 
 /// Dio-backed [AuthRemoteDataSource] driven by [authApiProvider].
 ///
 /// Tests can override this provider with a fake implementation.
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
+@Riverpod(keepAlive: true)
+AuthRemoteDataSource authRemoteDataSource(Ref ref) {
   return AuthRemoteDataSourceImpl(ref.watch(authApiProvider));
-});
+}
 
 /// Singleton repository bound to the active storage implementation.
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
+@Riverpod(keepAlive: true)
+AuthRepository authRepository(Ref ref) {
   final storage = ref.watch(secureStorageServiceProvider);
   final remote = ref.watch(authRemoteDataSourceProvider);
   return AuthRepositoryImpl(remoteDataSource: remote, storage: storage);
-});
+}
 
 /// Domain-layer use case wrapping the repository's login.
-final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
+@Riverpod(keepAlive: true)
+LoginUseCase loginUseCase(Ref ref) {
   return LoginUseCase(ref.watch(authRepositoryProvider));
-});
+}
 
 /// Reads the persisted user from secure storage. Returns `null` when no user
 /// is logged in. Invalidated whenever [logoutControllerProvider] runs.
-final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
+@Riverpod(keepAlive: true)
+GetCurrentUserUseCase getCurrentUserUseCase(Ref ref) {
   return GetCurrentUserUseCase(ref.watch(authRepositoryProvider));
-});
+}
 
 /// Domain-layer use case wrapping the repository's logout.
-final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
+@Riverpod(keepAlive: true)
+LogoutUseCase logoutUseCase(Ref ref) {
   return LogoutUseCase(ref.watch(authRepositoryProvider));
-});
+}
 
 /// Async snapshot of the currently logged-in user. `null` inside the data
 /// means "no user" (logged-out) — `AsyncValue.error` means the storage read
 /// itself failed.
-final currentUserProvider = FutureProvider<AuthUser?>((ref) async {
+@Riverpod(keepAlive: true)
+Future<AuthUser?> currentUser(Ref ref) async {
   final result = await ref.watch(getCurrentUserUseCaseProvider).call();
   return result.fold((failure) => throw failure, (user) => user);
-});
+}
 
 /// Synchronous view of whether the user is authenticated.
 ///
 /// The router reads this provider on every redirect, so we keep it cheap:
 /// a single secure storage read at construction time, then it stays in
 /// memory for the lifetime of the provider.
-final isAuthenticatedProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> isAuthenticated(Ref ref) async {
   // When the [AuthInterceptor] gives up on a refresh, it flips
   // [sessionExpiredProvider]. We listen here so the auth state re-evaluates
   // and the router redirects to the login screen.
@@ -87,7 +103,7 @@ final isAuthenticatedProvider = FutureProvider<bool>((ref) async {
   });
   final repository = ref.watch(authRepositoryProvider);
   return repository.isAuthenticated();
-});
+}
 
 /// Sealed view of the login submission lifecycle so the UI can render
 /// appropriate loading / error states without parsing nullable values.
@@ -117,7 +133,8 @@ class LoginSuccess extends LoginState {
 }
 
 /// Holds the current submission state plus simple form controllers.
-class LoginController extends Notifier<LoginState> {
+@Riverpod(keepAlive: true)
+class LoginController extends _$LoginController {
   @override
   LoginState build() => const LoginIdle();
 
@@ -143,13 +160,10 @@ class LoginController extends Notifier<LoginState> {
   }
 }
 
-final loginControllerProvider = NotifierProvider<LoginController, LoginState>(
-  LoginController.new,
-);
-
 /// Triggers a logout and refreshes the auth provider so the router redirects
 /// back to the login screen.
-final logoutControllerProvider = Provider<Future<void> Function()>((ref) {
+@Riverpod(keepAlive: true)
+Future<void> Function() logoutController(Ref ref) {
   return () async {
     await ref.read(logoutUseCaseProvider).call();
     ref
@@ -158,4 +172,4 @@ final logoutControllerProvider = Provider<Future<void> Function()>((ref) {
     // Force an immediate recompute so the router sees the new state now.
     await ref.read(isAuthenticatedProvider.future);
   };
-});
+}

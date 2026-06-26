@@ -13,12 +13,16 @@ import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/get_todos_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/toggle_todo_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'todo_providers.g.dart';
 
 /// Retrofit-generated `TodoApi` bound to the configured `Dio`. Shares the
 /// Dio's interceptors (auth + logging) with the rest of the app.
-final todoApiProvider = Provider<TodoApi>((ref) {
+@Riverpod(keepAlive: true)
+TodoApi todoApi(Ref ref) {
   return TodoApi(ref.watch(dioProvider));
-});
+}
 
 /// Default data source. Wires [TodoRemoteDataSource] to [todoApiProvider] so
 /// the full Clean Architecture data flow runs end-to-end against a real
@@ -26,38 +30,45 @@ final todoApiProvider = Provider<TodoApi>((ref) {
 ///
 /// Tests and offline development override this provider with
 /// [todoMockDataSourceProvider].
-final todoDataSourceProvider = Provider<TodoDataSource>((ref) {
+@Riverpod(keepAlive: true)
+TodoDataSource todoDataSource(Ref ref) {
   return TodoRemoteDataSource(ref.watch(todoApiProvider));
-});
+}
 
 /// In-memory data source used by tests and as an offline fallback.
 ///
 /// Lives behind its own provider so test setup can inject a zero-latency
 /// instance and production can swap in the remote source without code
 /// changes.
-final todoMockDataSourceProvider = Provider<TodoDataSource>((ref) {
+@Riverpod(keepAlive: true)
+TodoDataSource todoMockDataSource(Ref ref) {
   return TodoMockDataSource();
-});
+}
 
-final todoRepositoryProvider = Provider<TodoRepository>((ref) {
+@Riverpod(keepAlive: true)
+TodoRepository todoRepository(Ref ref) {
   return TodoRepositoryImpl(dataSource: ref.watch(todoDataSourceProvider));
-});
+}
 
-final getTodosUseCaseProvider = Provider<GetTodosUseCase>((ref) {
+@Riverpod(keepAlive: true)
+GetTodosUseCase getTodosUseCase(Ref ref) {
   return GetTodosUseCase(ref.watch(todoRepositoryProvider));
-});
+}
 
-final createTodoUseCaseProvider = Provider<CreateTodoUseCase>((ref) {
+@Riverpod(keepAlive: true)
+CreateTodoUseCase createTodoUseCase(Ref ref) {
   return CreateTodoUseCase(ref.watch(todoRepositoryProvider));
-});
+}
 
-final toggleTodoUseCaseProvider = Provider<ToggleTodoUseCase>((ref) {
+@Riverpod(keepAlive: true)
+ToggleTodoUseCase toggleTodoUseCase(Ref ref) {
   return ToggleTodoUseCase(ref.watch(todoRepositoryProvider));
-});
+}
 
-final deleteTodoUseCaseProvider = Provider<DeleteTodoUseCase>((ref) {
+@Riverpod(keepAlive: true)
+DeleteTodoUseCase deleteTodoUseCase(Ref ref) {
   return DeleteTodoUseCase(ref.watch(todoRepositoryProvider));
-});
+}
 
 /// Sealed state used by the UI. Each variant tells the page what to render
 /// without forcing consumers to handle nulls.
@@ -88,7 +99,8 @@ class TodoError extends TodoListState {
 /// Manages the list state and exposes mutating methods. Mutations
 /// optimistically re-fetch to keep the data source authoritative, which also
 /// keeps the implementation simple at the cost of an extra round-trip.
-class TodoListController extends AsyncNotifier<TodoListState> {
+@Riverpod(keepAlive: true)
+class TodoListController extends _$TodoListController {
   /// One [CancelToken] per controller build. We create it on first `build`
   /// and cancel it in `ref.onDispose` so any in-flight request is aborted
   /// when the consumer (typically the page widget) is torn down.
@@ -154,8 +166,3 @@ class TodoListController extends AsyncNotifier<TodoListState> {
     }
   }
 }
-
-final todoListControllerProvider =
-    AsyncNotifierProvider<TodoListController, TodoListState>(
-      TodoListController.new,
-    );

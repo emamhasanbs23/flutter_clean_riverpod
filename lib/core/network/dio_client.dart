@@ -6,6 +6,9 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/reposito
     show AuthRepository;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'dio_client.g.dart';
 
 /// Builds a configured [Dio] instance for the active [FlavorConfig].
 ///
@@ -71,16 +74,16 @@ typedef DioAuthRepositoryBuilder = Object Function();
 /// Implementations return whatever the interceptor needs (typically the
 /// `AuthRepository` instance). The default throws so a misconfigured app
 /// fails fast instead of silently skipping refresh.
-final dioAuthRepositoryBuilderProvider = Provider<DioAuthRepositoryBuilder>((
-  ref,
-) {
+@Riverpod(keepAlive: true)
+DioAuthRepositoryBuilder dioAuthRepositoryBuilder(Ref ref) {
   throw UnimplementedError(
     'dioAuthRepositoryBuilderProvider must be overridden in ProviderScope.',
   );
-});
+}
 
 /// Riverpod entry point for the configured Dio instance.
-final dioProvider = Provider<Dio>((ref) {
+@Riverpod(keepAlive: true)
+Dio dio(Ref ref) {
   final flavor = ref.watch(flavorConfigProvider);
   final storage = ref.watch(secureStorageServiceProvider);
   final onSessionExpired = ref.watch(sessionExpiredSignalProvider);
@@ -90,20 +93,22 @@ final dioProvider = Provider<Dio>((ref) {
     authRepositoryBuilder: ref.watch(dioAuthRepositoryBuilderProvider),
     onSessionExpired: onSessionExpired,
   );
-});
+}
 
 /// Provider exposing a callback that the [AuthInterceptor] invokes when it
 /// gives up on a token refresh. Default is a no-op so the dio can be used
 /// without Riverpod wiring (e.g. tests).
-final sessionExpiredSignalProvider = Provider<void Function()>((ref) {
+@Riverpod(keepAlive: true)
+void Function() sessionExpiredSignal(Ref ref) {
   return () {};
-});
+}
 
 /// Riverpod entry point for the active [FlavorConfig].
 ///
 /// Overridden at app startup with the value chosen by the entrypoint.
-final flavorConfigProvider = Provider<FlavorConfig>((ref) {
+@Riverpod(keepAlive: true)
+FlavorConfig flavorConfig(Ref ref) {
   throw UnimplementedError(
     'flavorConfigProvider must be overridden in ProviderScope.',
   );
-});
+}

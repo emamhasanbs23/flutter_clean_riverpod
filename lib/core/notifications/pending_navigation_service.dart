@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'pending_navigation_service.g.dart';
 
 /// Holds the next [RouteDescriptor] the app should navigate to.
 ///
@@ -28,7 +31,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Stacking destinations is out of scope. The first one wins; subsequent
 /// ones overwrite it. This matches user intuition for push notifications and
 /// keeps the state machine trivially testable.
-class PendingNavigationNotifier extends Notifier<RouteDescriptor?> {
+@Riverpod(keepAlive: true)
+class PendingNavigation extends _$PendingNavigation {
   @override
   RouteDescriptor? build() => null;
 
@@ -51,14 +55,6 @@ class PendingNavigationNotifier extends Notifier<RouteDescriptor?> {
     state = null;
   }
 }
-
-/// The single source of truth for the queued destination. Tests override
-/// this to seed a destination; production reads it from the
-/// [PendingNavigationNotifier] built above.
-final pendingNavigationProvider =
-    NotifierProvider<PendingNavigationNotifier, RouteDescriptor?>(
-      PendingNavigationNotifier.new,
-    );
 
 /// A [ChangeNotifier] that fires whenever [pendingNavigationProvider]'s
 /// value changes. GoRouter's `refreshListenable` wants a [Listenable], not
@@ -84,11 +80,12 @@ class _PendingNavigationBridge extends ChangeNotifier {
   }
 }
 
-final pendingNavigationBridgeProvider = Provider<ChangeNotifier>((ref) {
+@Riverpod(keepAlive: true)
+ChangeNotifier pendingNavigationBridge(Ref ref) {
   final bridge = _PendingNavigationBridge(ref);
   ref.onDispose(bridge.dispose);
   return bridge;
-});
+}
 
 /// Combined [Listenable] used by GoRouter's `refreshListenable`.
 ///

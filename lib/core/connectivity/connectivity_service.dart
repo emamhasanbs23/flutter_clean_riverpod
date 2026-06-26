@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'connectivity_service.g.dart';
 
 /// Reactive wrapper around [Connectivity].
 ///
@@ -28,12 +31,14 @@ class ConnectivityService {
   }
 }
 
-final connectivityServiceProvider = Provider<ConnectivityService>((ref) {
+@Riverpod(keepAlive: true)
+ConnectivityService connectivityService(Ref ref) {
   return ConnectivityService();
-});
+}
 
 /// Live connectivity status. `null` until the first event arrives.
-final connectivityStreamProvider = StreamProvider<bool>((ref) {
+@Riverpod(keepAlive: true)
+Stream<bool> connectivityStream(Ref ref) {
   final service = ref.watch(connectivityServiceProvider);
   return service.onStatusChange;
-});
+}

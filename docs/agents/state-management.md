@@ -1,35 +1,47 @@
 # State Management (Riverpod)
 
-> Hand-written Riverpod. **No** `riverpod_generator` / `@riverpod` annotations.
-> Part of the [AGENTS.md](../../AGENTS.md) index.
+> `@riverpod` codegen via `riverpod_generator`. Part of the
+> [AGENTS.md](../../AGENTS.md) index.
 
-## Why hand-written
+## Why codegen
 
-The project deliberately avoids code generation for providers — providers are explicit declarations, easy to grep, and play well with `mocktail` overrides in tests.
+Prefer `riverpod_generator` for provider declarations — less boilerplate,
+compile-time safety, and generated providers remain easy to override in tests
+via `ProviderScope.overrides`.
+
+UI **states** stay hand-written `sealed class` hierarchies (not `freezed`).
 
 ## Provider declarations
 
-All providers for a feature live in a single file:
+Annotate providers in `<feature>_providers.dart` (or split by concern within
+the feature). Run `build_runner` after edits:
 
-```
-features/<feature>/<feature>_providers.dart
+```bash
+fvm dart run build_runner build --delete-conflicting-outputs
 ```
 
-Export only the symbols that other features may consume. Keep internal providers private.
+Export only the symbols that other features may consume. Use `part`
+`'<feature>_providers.g.dart';` as required by the generator.
 
 ### Repository provider (typical)
 
 ```dart
-final repositoryProvider = Provider<FeatureRepository>((ref) {
+@Riverpod(keepAlive: true)
+FeatureRepository featureRepository(Ref ref) {
   throw UnimplementedError(); // overridden in bootstrap.dart or tests
-});
+}
 ```
 
 ### Controller provider (Notifier)
 
 ```dart
-final featureControllerProvider =
-    NotifierProvider<FeatureController, FeatureState>(FeatureController.new);
+@riverpod
+class FeatureController extends _$FeatureController {
+  @override
+  FeatureState build() => const FeatureInitial();
+
+  // ...
+}
 ```
 
 ## Sealed UI states
@@ -59,12 +71,18 @@ A feature may **only** access another feature through its providers file:
 // in features/orders/orders_providers.dart
 import '../auth/auth_providers.dart';
 
-final ordersControllerProvider = NotifierProvider<OrdersController, OrdersState>((ref) {
-  return OrdersController(ref.watch(authStateProvider));
-});
+@riverpod
+class OrdersController extends _$OrdersController {
+  @override
+  OrdersState build() {
+    ref.watch(authStateProvider);
+    return const OrdersInitial();
+  }
+}
 ```
 
-Do **not** import `features/auth/presentation/` directly — go through `auth_providers.dart`.
+Do **not** import `features/auth/presentation/` directly — go through
+`auth_providers.dart`.
 
 ## Test overrides
 
@@ -72,7 +90,7 @@ Do **not** import `features/auth/presentation/` directly — go through `auth_pr
 await tester.pumpWidget(
   ProviderScope(
     overrides: [
-      repositoryProvider.overrideWithValue(mockRepo),
+      featureRepositoryProvider.overrideWithValue(mockRepo),
     ],
     child: const MyApp(),
   ),
@@ -81,8 +99,9 @@ await tester.pumpWidget(
 
 ## Rules
 
-- No `@riverpod` codegen.
-- New provider → new declaration in `<feature>_providers.dart`.
+- Use `@riverpod` / `@Riverpod` for new providers; avoid hand-written
+  `Provider` / `NotifierProvider` unless codegen cannot express the case.
+- New provider → add to `<feature>_providers.dart` and regenerate.
 - Don't import a feature's `presentation/` from another feature.
 
 ## Related

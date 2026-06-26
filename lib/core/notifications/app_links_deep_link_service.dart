@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:app_links/app_links.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/deep_link_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'app_links_deep_link_service.g.dart';
 
 /// Production [DeepLinkService] backed by the `app_links` package.
 ///
@@ -29,10 +32,11 @@ class AppLinksDeepLinkService implements DeepLinkService {
 
 /// Provider that wires the real `app_links`-backed service. Bootstrap
 /// overrides [deepLinkServiceProvider] with this in production.
-final appLinksDeepLinkServiceProvider = Provider<DeepLinkService>((ref) {
+@Riverpod(keepAlive: true)
+DeepLinkService appLinksDeepLinkService(Ref ref) {
   final service = AppLinksDeepLinkService();
   ref.onDispose(() {
     unawaited(service.incoming.drain<void>());
   });
   return service;
-});
+}

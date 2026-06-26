@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'analytics.g.dart';
 
 /// Abstraction for product analytics.
 ///
@@ -29,6 +32,7 @@ class NoOpAnalytics implements Analytics {
   void setUserProperty(String name, {String? value}) {}
 }
 
-final analyticsProvider = Provider<Analytics>((ref) {
+@Riverpod(keepAlive: true)
+Analytics analytics(Ref ref) {
   return const NoOpAnalytics();
-});
+}

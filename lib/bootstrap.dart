@@ -107,7 +107,7 @@ Future<void> bootstrap(Flavor flavor) async {
           // redirect can pick the change up.
           sessionExpiredSignalProvider.overrideWith((ref) {
             return () {
-              ref.read(sessionExpiredProvider.notifier).state = true;
+              ref.read(sessionExpiredProvider.notifier).markExpired();
             };
           }),
           // Hook the global error reporter / analytics into the app.
@@ -206,12 +206,12 @@ void _wireRuntimeStreams(ProviderContainer container) {
   });
 }
 
-/// PendingNavigationNotifier pre-seeded with a cold-start destination.
+/// PendingNavigation pre-seeded with a cold-start destination.
 ///
 /// Used only when `bootstrap` finds a deep link at launch. After
 /// [consume] returns the seed once, behaviour is identical to the
 /// default notifier.
-class _SeededPendingNavigationNotifier extends PendingNavigationNotifier {
+class _SeededPendingNavigationNotifier extends PendingNavigation {
   _SeededPendingNavigationNotifier(this._seed);
 
   final RouteDescriptor _seed;

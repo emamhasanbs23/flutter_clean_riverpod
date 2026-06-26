@@ -9,6 +9,9 @@ import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/wi
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_list_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'app_router.g.dart';
 
 /// Strongly-typed route name constants. Use these instead of raw strings at
 /// call sites to keep navigation refactor-safe.
@@ -33,7 +36,8 @@ class TodoRoutes {
 ///
 /// `refreshListenable` is the composition of both signals so a change in
 /// either one triggers a redirect re-evaluation.
-final appRouterProvider = Provider<GoRouter>((ref) {
+@Riverpod(keepAlive: true)
+GoRouter appRouter(Ref ref) {
   final authRefresh = _AuthRefreshNotifier(ref);
   final pendingBridge = ref.watch(pendingNavigationBridgeProvider);
   final combined = CombinedRefreshListenable([authRefresh, pendingBridge]);
@@ -72,7 +76,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
     errorBuilder: (context, state) => UnknownRoutePage(error: state.error),
   );
-});
+}
 
 /// Pure decision function used by the router's `redirect` callback.
 ///

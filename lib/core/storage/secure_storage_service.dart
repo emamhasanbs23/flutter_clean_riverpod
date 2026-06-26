@@ -1,5 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'secure_storage_service.g.dart';
 
 /// Thin wrapper around [FlutterSecureStorage] so call sites never see the
 /// underlying API options (and so we can swap implementations in tests).
@@ -27,6 +30,7 @@ class SecureStorageService {
 }
 
 /// Riverpod entry point for [SecureStorageService].
-final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+@Riverpod(keepAlive: true)
+SecureStorageService secureStorageService(Ref ref) {
   return SecureStorageService();
-});
+}
