@@ -3,7 +3,7 @@
 > Goal: triage when users are being logged out unexpectedly or auth
 > refresh appears broken.
 
-> ⚠️ Code in `lib/core/network/` and `lib/features/auth/` is
+> ⚠️ Code in `lib/core/network/` and `lib/{domain,data,presentation}/auth/` is
 > **code-owner gated** — see
 > [code-ownership.md](../agents/code-ownership.md). Open a PR; don't
 > hot-fix.
@@ -42,8 +42,8 @@
 ## Escalation
 
 - If `core/network/` change is required: open PR, request
-  `@security-owner` / `@networking-owner` review.
-- If `features/auth/` change is required: same.
+  `@mozammal-hossain` review.
+- If `domain/auth/`, `data/auth/`, or `presentation/auth/` change is required: same.
 - If env-only: see [add-env-var.md](./add-env-var.md).
 
 ## Done criteria

@@ -20,6 +20,17 @@
   "todoListCancel": "Cancel",
   "todoListDelete": "Delete",
   "todoListDeleteConfirm": "Delete this todo?",
+  "todoDetailTitle": "Todo detail",
+  "todoDetailStatusCompleted": "Completed",
+  "todoDetailStatusPending": "Pending",
+  "todoDetailIdLabel": "Todo #{id}",
+  "@todoDetailIdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
   "connectivityOffline": "You are offline",
   "connectivityRetry": "Retry",
   "errorUnexpected": "Something went wrong",

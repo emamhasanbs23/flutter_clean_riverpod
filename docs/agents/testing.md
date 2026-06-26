@@ -18,7 +18,7 @@ fvm flutter test
 Or a single file:
 
 ```bash
-fvm flutter test test/features/todo/todo_repository_impl_test.dart
+fvm flutter test test/data/todo/todo_repository_impl_test.dart
 ```
 
 ## EitherAssertions

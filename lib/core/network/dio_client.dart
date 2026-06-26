@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/config/flavor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart'
+import 'package:flutter_clean_riverpod_boilerplate/domain/auth/repositories/auth_repository.dart'
     show AuthRepository;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -16,7 +16,7 @@ part 'dio_client.g.dart';
 /// at request time, so the `AuthInterceptor` can refresh expired tokens via
 /// the same repository singleton the rest of the app uses. The callback is
 /// deferred (not invoked here) to avoid an import cycle: `core/network` does
-/// not import `features/auth/data`.
+/// not import `data/auth`.
 ///
 /// The `onSessionExpired` callback is invoked when the interceptor gives up
 /// on refreshing an expired token (network error or revoked refresh token).
@@ -61,7 +61,7 @@ class DioClient {
 
 /// Lazy accessor for the active [AuthRepository]. Defined in `core/network`
 /// so that the dio layer can depend on it without dragging in
-/// `features/auth/data`. Concrete implementations are wired by callers
+/// `data/auth`. Concrete implementations are wired by callers
 /// (e.g. `bootstrap`) before [dioProvider] is first read.
 ///
 /// Throws by default; tests and `bootstrap` should override with

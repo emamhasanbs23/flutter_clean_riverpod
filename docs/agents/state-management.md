@@ -68,8 +68,8 @@ Adding a state = adding a sealed subclass + a switch arm (compile-time enforced)
 A feature may **only** access another feature through its providers file:
 
 ```dart
-// in features/orders/orders_providers.dart
-import '../auth/auth_providers.dart';
+// in presentation/orders/riverpod/orders_providers.dart
+import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/auth_providers.dart';
 
 @riverpod
 class OrdersController extends _$OrdersController {
@@ -81,7 +81,7 @@ class OrdersController extends _$OrdersController {
 }
 ```
 
-Do **not** import `features/auth/presentation/` directly — go through
+Do **not** import `presentation/auth/` directly — go through
 `auth_providers.dart`.
 
 ## Test overrides

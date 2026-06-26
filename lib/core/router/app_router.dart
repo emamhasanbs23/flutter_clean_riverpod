@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/pending_navigation_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/router/todo_routes.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/widgets/login_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_detail_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_list_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/login_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/auth_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/todo_detail_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/todo_list_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,12 +20,6 @@ part 'app_router.g.dart';
 class AuthRoutes {
   AuthRoutes._();
   static const login = 'login';
-}
-
-class TodoRoutes {
-  TodoRoutes._();
-  static const list = 'todo-list';
-  static const detail = 'todo-detail';
 }
 
 /// Top-level [GoRouter] wired with the auth redirect AND the deep-link /

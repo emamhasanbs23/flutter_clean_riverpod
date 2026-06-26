@@ -7,8 +7,8 @@
 
 ## Goal
 
-Create `lib/features/<feature>/` with domain, data, presentation, and tests,
-wired into Riverpod and the router.
+Create `lib/domain/<feature>/`, `lib/data/<feature>/`, and
+`lib/presentation/<feature>/` with tests, wired into Riverpod and the router.
 
 ## Preconditions
 
@@ -18,20 +18,19 @@ wired into Riverpod and the router.
 
 ## Steps (in order)
 
-1. **Create directory tree** under `lib/features/<feature>/` — see
-   [feature-recipe.md](../agents/feature-recipe.md) § Step 1.
-2. **Domain entity** in `domain/entities/<feature>.dart` — pure Dart.
-3. **Repository contract** in `domain/repositories/<feature>_repository.dart`
+1. **Create directory tree** — see [feature-recipe.md](../agents/feature-recipe.md) § Step 1.
+2. **Domain entity** in `lib/domain/<feature>/entities/<feature>.dart` — pure Dart.
+3. **Repository contract** in `lib/domain/<feature>/repositories/<feature>_repository.dart`
    returning `Future<Either<Failure, T>>`.
-4. **Data layer** — DTOs, mapper, remote (and local) data source, repository
+4. **Data layer** under `lib/data/<feature>/` — DTOs, mapper, remote (and local) data source, repository
    impl. See [error-handling.md](../agents/error-handling.md).
-5. **Providers** in `<feature>_providers.dart` — expose repository +
+5. **Providers** in `lib/presentation/<feature>/riverpod/<feature>_providers.dart` — expose repository +
    controller. See [state-management.md](../agents/state-management.md).
-6. **UI** — sealed `*State` + exhaustive `switch`. See
+6. **UI** under `lib/presentation/<feature>/widgets/` — sealed `*State` + exhaustive `switch`. See
    [styling.md](../agents/styling.md).
 7. **Routes** — add typed constant, register in `app_router.dart`. See
    [navigation.md](../agents/navigation.md).
-8. **Tests** — repository + mapper + controller + widget smoke. See
+8. **Tests** under `test/{domain,data,presentation}/<feature>/` — repository + mapper + controller + widget smoke. See
    [testing.md](../agents/testing.md).
 9. **Localization** — add keys to `app_en.arb` and `app_es.arb`. See
    [localization.md](../agents/localization.md).

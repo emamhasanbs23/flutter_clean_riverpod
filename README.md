@@ -98,21 +98,19 @@ lib/
     theme/                 # AppTheme, semantic extensions, AppSize
     widgets/               # AppLoadingIndicator, AppErrorWidget, ConnectivityBanner
   assets/branding/         # Source icon_*.png + splash_*.png (per flavor)
-  features/
+  domain/                  # Auth + todo entities, repos, use cases
     auth/
-      domain/              # AuthRepository, LoginUseCase, AuthUser
-      data/                # AuthRepositoryImpl, AuthRemoteDataSource
-      presentation/        # LoginPage, providers, sealed LoginState
     todo/
-      domain/              # Todo entity, repository interface, use cases
-      data/                # DTO, mapper, mock + remote sources, repository impl
-      presentation/        # TodoListPage, sealed states, controller
+  data/                      # DTOs, APIs, mappers, repository impls
+    auth/
+    todo/
+  presentation/              # Pages, Riverpod providers, sealed states
+    auth/
+    todo/
   l10n/                    # app_en.arb, app_es.arb
 test/
-  features/
-    auth/data/             # AuthRepositoryImpl tests (mock remote source)
-    todo/data/             # TodoRepositoryImpl CRUD tests (mock source)
-    todo/domain/           # GetTodosUseCase test
+  domain/   data/   presentation/
+  core/
   helpers/                 # Shared assertion extensions
 ```
 
@@ -224,13 +222,15 @@ gitignored file like `env.prod.local.json` and should be passed via
 
 ## Adding a new feature
 
-1. Create `lib/features/<feature>/{domain,data,presentation}`.
+1. Create `lib/domain/<feature>/`, `lib/data/<feature>/`, and
+   `lib/presentation/<feature>/`.
 2. **Domain**: define plain Dart entities (with hand-written `copyWith`/`==`),
    repository interface, use cases.
 3. **Data**: add DTO + mapper, data source(s) (mock + Dio-backed), repository
    implementation that returns `Either<Failure, T>`.
 4. **Presentation**: create the page widget(s) plus a `Notifier`/`AsyncNotifier`
-   exposing sealed states. Register providers in a `*_providers.dart` file.
+   exposing sealed states. Register providers in
+   `lib/presentation/<feature>/riverpod/<feature>_providers.dart`.
    Hold [Failure] objects in error states (not raw strings) and call
    `failure.toMessage(context)` at the render site.
 5. **Routes**: add a `GoRoute` in `core/router/app_router.dart` and a typed
@@ -264,9 +264,9 @@ fvm flutter test --reporter expanded
 ```
 
 Unit-test coverage targets:
-- `test/features/todo/data/todo_repository_impl_test.dart`
-- `test/features/todo/domain/get_todos_use_case_test.dart`
-- `test/features/auth/data/auth_repository_impl_test.dart`
+- `test/data/todo/todo_repository_impl_test.dart`
+- `test/domain/todo/get_todos_use_case_test.dart`
+- `test/data/auth/auth_repository_impl_test.dart`
 
 No widget, golden, or integration tests per scope.
 
@@ -449,7 +449,7 @@ checked in.
 - `test/core/notifications/app_links_deep_link_service_test.dart` — wraps
   `AppLinks().uriLinkStream` with a fake and asserts the service forwards
   URIs.
-- `test/features/todo/presentation/todo_detail_page_test.dart` — widget test
+- `test/presentation/todo/todo_detail_page_test.dart` — widget test
   for the new demo page (closes the integration story).
 
 ---

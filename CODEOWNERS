@@ -2,14 +2,16 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Default owner for everything not matched by a more specific rule.
-* @bs1101
+* @mozammal-hossain
 
 # Security / auth / refresh flow needs extra scrutiny.
-/lib/core/network/ @bs1101
-/lib/core/storage/ @bs1101
-/lib/features/auth/ @bs1101
-/android/app/build.gradle.kts @bs1101
-/android/app/proguard-rules.pro @bs1101
+/lib/core/network/ @mozammal-hossain
+/lib/core/storage/ @mozammal-hossain
+/lib/domain/auth/       @mozammal-hossain
+/lib/data/auth/         @mozammal-hossain
+/lib/presentation/auth/ @mozammal-hossain
+/android/app/build.gradle.kts @mozammal-hossain
+/android/app/proguard-rules.pro @mozammal-hossain
 
 # CI and build tooling.
-/.github/ @bs1101
+/.github/ @mozammal-hossain
