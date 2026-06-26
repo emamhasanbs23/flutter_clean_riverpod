@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_error_widget.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indicator.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/widgets/async_value_widget.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/riverpod/todo_list_providers.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/widgets/dialogs/create_todo_dialog.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/widgets/todo_app_bar_actions_widget.dart';
@@ -33,13 +33,10 @@ class TodoListPage extends ConsumerWidget {
       body: RefreshIndicator(
         onRefresh: () =>
             ref.read(todoListControllerProvider.notifier).refresh(),
-        child: asyncState.when(
-          loading: () => const AppLoadingIndicator(),
-          error: (error, _) => AppErrorWidget(
-            failure: UnexpectedFailure(error.toString()),
-            onRetry: () =>
-                ref.read(todoListControllerProvider.notifier).refresh(),
-          ),
+        child: AsyncValueWidget(
+          value: asyncState,
+          onRetry: () =>
+              ref.read(todoListControllerProvider.notifier).refresh(),
           data: (state) => switch (state) {
             TodoInitial() || TodoLoading() => const AppLoadingIndicator(),
             TodoError(:final failure) => AppErrorWidget(
@@ -47,8 +44,9 @@ class TodoListPage extends ConsumerWidget {
               onRetry: () =>
                   ref.read(todoListControllerProvider.notifier).refresh(),
             ),
-            TodoLoaded(:final todos) when todos.isEmpty =>
-              TodoEmptyStateWidget(message: l10n.todoListEmpty),
+            TodoLoaded(:final todos) when todos.isEmpty => TodoEmptyStateWidget(
+              message: l10n.todoListEmpty,
+            ),
             TodoLoaded(:final todos, :final hasMore, :final isLoadingMore) =>
               TodoListViewWidget(
                 todos: todos,

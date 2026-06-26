@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/riverpod/async_controller_mixins.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/api/todo_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/data/todo/data_source/todo_data_source_impl.dart';
@@ -79,24 +78,21 @@ DeleteTodoUseCase deleteTodoUseCase(Ref ref) {
 /// optimistically re-fetch to keep the data source authoritative, which also
 /// keeps the implementation simple at the cost of an extra round-trip.
 @Riverpod(keepAlive: true)
-class TodoListController extends _$TodoListController {
-  /// One [CancelToken] per controller build. We create it on first `build`
-  /// and cancel it in `ref.onDispose` so any in-flight request is aborted
-  /// when the consumer (typically the page widget) is torn down.
-  late final CancelToken _cancelToken;
-
+class TodoListController extends _$TodoListController
+    with
+        CancelableControllerMixin,
+        RefreshableAsyncControllerMixin<TodoListState> {
   @override
   Future<TodoListState> build() async {
-    _cancelToken = CancelToken();
-    ref.onDispose(_cancelToken.cancel);
+    initCancelToken(ref);
     return _load();
   }
 
   Future<TodoListState> _load() async {
     final result = await ref
         .read(getTodosUseCaseProvider)
-        .call(cancelToken: _cancelToken);
-    if (_cancelToken.isCancelled) {
+        .call(cancelToken: cancelToken);
+    if (isCancelled) {
       return const TodoInitial();
     }
     return result.fold(
@@ -115,8 +111,8 @@ class TodoListController extends _$TodoListController {
 
     final result = await ref
         .read(getTodosUseCaseProvider)
-        .call(skip: current.todos.length, cancelToken: _cancelToken);
-    if (_cancelToken.isCancelled) return;
+        .call(skip: current.todos.length, cancelToken: cancelToken);
+    if (isCancelled) return;
 
     result.fold(
       (failure) => state = AsyncValue.data(TodoError(failure)),
@@ -129,16 +125,14 @@ class TodoListController extends _$TodoListController {
     );
   }
 
-  Future<void> refresh() async {
-    state = const AsyncValue.data(TodoLoading());
-    state = await AsyncValue.guard(_load);
-  }
+  Future<void> refresh() =>
+      refreshWith(loadingState: const TodoLoading(), load: _load);
 
   Future<void> add(String title) async {
     final result = await ref
         .read(createTodoUseCaseProvider)
-        .call(title, cancelToken: _cancelToken);
-    if (_cancelToken.isCancelled) return;
+        .call(title, cancelToken: cancelToken);
+    if (isCancelled) return;
     result.fold((failure) => state = AsyncValue.data(TodoError(failure)), (
       todo,
     ) {
@@ -164,8 +158,8 @@ class TodoListController extends _$TodoListController {
     final targetCompleted = !current.todos[index].completed;
     final result = await ref
         .read(toggleTodoUseCaseProvider)
-        .call(id, completed: targetCompleted, cancelToken: _cancelToken);
-    if (_cancelToken.isCancelled) return;
+        .call(id, completed: targetCompleted, cancelToken: cancelToken);
+    if (isCancelled) return;
     if (result.isRight()) {
       final updated = result.fold((_) => current.todos[index], (todo) => todo);
       final todos = [...current.todos];
@@ -179,8 +173,8 @@ class TodoListController extends _$TodoListController {
   Future<void> delete(String id) async {
     final result = await ref
         .read(deleteTodoUseCaseProvider)
-        .call(id, cancelToken: _cancelToken);
-    if (_cancelToken.isCancelled) return;
+        .call(id, cancelToken: cancelToken);
+    if (isCancelled) return;
     if (result.isRight()) {
       final current = state.valueOrNull;
       if (current is TodoLoaded) {

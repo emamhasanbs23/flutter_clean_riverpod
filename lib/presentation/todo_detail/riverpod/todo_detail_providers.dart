@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
-
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/riverpod/async_controller_mixins.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/get_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/riverpod/todo_detail_state.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/riverpod/todo_list_providers.dart';
@@ -19,21 +18,21 @@ GetTodoUseCase getTodoUseCase(Ref ref) {
 /// Loads a single todo by id for the detail route. Each route id gets an
 /// isolated controller instance via the family parameter.
 @riverpod
-class TodoDetailController extends _$TodoDetailController {
-  late final CancelToken _cancelToken;
-
+class TodoDetailController extends _$TodoDetailController
+    with
+        CancelableControllerMixin,
+        RefreshableAsyncControllerMixin<TodoDetailState> {
   @override
   Future<TodoDetailState> build(String id) async {
-    _cancelToken = CancelToken();
-    ref.onDispose(_cancelToken.cancel);
+    initCancelToken(ref);
     return _load(id);
   }
 
   Future<TodoDetailState> _load(String id) async {
     final result = await ref
         .read(getTodoUseCaseProvider)
-        .call(id, cancelToken: _cancelToken);
-    if (_cancelToken.isCancelled) {
+        .call(id, cancelToken: cancelToken);
+    if (isCancelled) {
       return const TodoDetailInitial();
     }
     return result.fold(
@@ -45,8 +44,8 @@ class TodoDetailController extends _$TodoDetailController {
     );
   }
 
-  Future<void> refresh() async {
-    state = const AsyncValue.data(TodoDetailLoading());
-    state = await AsyncValue.guard(() => _load(id));
-  }
+  Future<void> refresh() => refreshWith(
+    loadingState: const TodoDetailLoading(),
+    load: () => _load(id),
+  );
 }

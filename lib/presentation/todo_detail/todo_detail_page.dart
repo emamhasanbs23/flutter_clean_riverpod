@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_error_widget.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indicator.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/widgets/async_value_widget.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/riverpod/todo_detail_providers.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/widgets/todo_detail_card_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,13 +34,10 @@ class TodoDetailPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.todoDetailTitle)),
-      body: asyncState.when(
-        loading: () => const AppLoadingIndicator(),
-        error: (error, _) => AppErrorWidget(
-          message: error.toString(),
-          onRetry: () =>
-              ref.read(todoDetailControllerProvider(id).notifier).refresh(),
-        ),
+      body: AsyncValueWidget(
+        value: asyncState,
+        onRetry: () =>
+            ref.read(todoDetailControllerProvider(id).notifier).refresh(),
         data: (state) => switch (state) {
           TodoDetailInitial() ||
           TodoDetailLoading() => const AppLoadingIndicator(),
