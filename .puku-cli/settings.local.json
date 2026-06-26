@@ -22,7 +22,8 @@
       "Bash(sed -n '1,12p' lib/features/auth/presentation/riverpod/auth_providers.dart)",
       "Bash(sed -n '1,15p' lib/features/todo/presentation/riverpod/todo_providers.dart)",
       "Bash(sed -n '1,10p' lib/features/todo/data/data_source/todo_remote_data_source.dart)",
-      "Bash(sed -n '8,14p' lib/core/router/app_router.dart)"
+      "Bash(sed -n '8,14p' lib/core/router/app_router.dart)",
+      "Bash(pkill -f 'gh auth refresh')"
     ]
   }
 }
