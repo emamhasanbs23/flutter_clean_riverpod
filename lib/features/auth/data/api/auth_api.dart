@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/constants/api_endpoints.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
@@ -23,7 +24,7 @@ part 'auth_api.g.dart';
 abstract class AuthApi {
   factory AuthApi(Dio dio, {String baseUrl}) = _AuthApi;
 
-  @POST('/auth/login')
+  @POST(AuthEndpoints.login)
   Future<LoginResponse> login(
     @Body() LoginRequest request, {
     CancelToken? cancelToken,
@@ -36,7 +37,7 @@ abstract class AuthApi {
   /// so the `AuthInterceptor` knows not to attach the (likely expired)
   /// access token to this request. The refresh endpoint must work with only
   /// the refresh token in the body.
-  @POST('/auth/refresh')
+  @POST(AuthEndpoints.refresh)
   Future<RefreshTokenResponse> refresh(
     @Body() RefreshTokenRequest request, {
     @DioOptions() Options? options,

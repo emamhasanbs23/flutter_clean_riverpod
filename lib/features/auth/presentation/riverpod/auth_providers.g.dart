@@ -193,7 +193,7 @@ final logoutControllerProvider = Provider<Future<void> Function()>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef LogoutControllerRef = ProviderRef<Future<void> Function()>;
-String _$sessionExpiredHash() => r'f51328043a40b232166743834f74fddbd4d9a32a';
+String _$sessionExpiredHash() => r'946fa6deb10a32ffadd3d4fd17160e34b7a78ed0';
 
 /// Broadcast stream of "session expired" events.
 ///

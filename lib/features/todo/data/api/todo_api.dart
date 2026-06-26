@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/constants/api_endpoints.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/model/todo_dto.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -18,22 +19,22 @@ part 'todo_api.g.dart';
 abstract class TodoApi {
   factory TodoApi(Dio dio, {String baseUrl}) = _TodoApi;
 
-  @GET('/todos')
+  @GET(TodoEndpoints.list)
   Future<List<TodoDto>> getTodos({CancelToken? cancelToken});
 
-  @POST('/todos')
+  @POST(TodoEndpoints.create)
   Future<TodoDto> createTodo(@Body() TodoDto body, {CancelToken? cancelToken});
 
   /// jsonplaceholder does not accept PATCH, so this is a `@PUT` carrying
   /// the full updated record. A real backend that supports PATCH can swap
   /// this annotation without changing call sites.
-  @PUT('/todos/{id}')
+  @PUT(TodoEndpoints.byId)
   Future<TodoDto> updateTodo(
     @Path('id') String id,
     @Body() TodoDto body, {
     CancelToken? cancelToken,
   });
 
-  @DELETE('/todos/{id}')
+  @DELETE(TodoEndpoints.byId)
   Future<void> deleteTodo(@Path('id') String id, {CancelToken? cancelToken});
 }
