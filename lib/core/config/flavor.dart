@@ -36,11 +36,7 @@ enum Flavor {
 ///     off regardless of flavor.
 ///   * `ENV_FILE` — path to a `dart-define-from-file` JSON file (the same
 ///     flag the Dart CLI consumes).
-enum EnvKeys {
-  baseUrl,
-  appName,
-  dioLogging;
-}
+enum EnvKeys { baseUrl, appName, dioLogging }
 
 /// Static accessor for build-time `--dart-define` overrides. Reads the value
 /// once per key; safe to call from any layer.
@@ -51,11 +47,9 @@ class Env {
   static const _appNameDefine = String.fromEnvironment('APP_NAME');
   static const _dioLoggingDefine = String.fromEnvironment('DIO_LOGGING');
 
-  static String? get baseUrl =>
-      _baseUrlDefine.isEmpty ? null : _baseUrlDefine;
+  static String? get baseUrl => _baseUrlDefine.isEmpty ? null : _baseUrlDefine;
 
-  static String? get appName =>
-      _appNameDefine.isEmpty ? null : _appNameDefine;
+  static String? get appName => _appNameDefine.isEmpty ? null : _appNameDefine;
 
   static bool? get dioLogging {
     if (_dioLoggingDefine.isEmpty) return null;

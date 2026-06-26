@@ -18,34 +18,57 @@ void main() {
       useCase = CreateTodoUseCase(repository);
     });
 
-    test('rejects empty/whitespace titles without touching the repository',
-        () async {
-      final result = await useCase('   ');
+    test(
+      'rejects empty/whitespace titles without touching the repository',
+      () async {
+        final result = await useCase('   ');
 
-      expect(
-        result,
-        equals(const Left<Failure, Todo>(NotFoundFailure('Title is required'))),
-      );
-      verifyNever(() => repository.createTodo(any()));
-    });
+        expect(
+          result,
+          equals(
+            const Left<Failure, Todo>(NotFoundFailure('Title is required')),
+          ),
+        );
+        verifyNever(
+          () => repository.createTodo(
+            any(),
+            cancelToken: any(named: 'cancelToken'),
+          ),
+        );
+      },
+    );
 
     test('trims titles before delegating to the repository', () async {
       const newTodo = Todo(id: '1', title: 'write tests', completed: false);
-      when(() => repository.createTodo('write tests')).thenAnswer(
-        (_) async => const Right<Failure, Todo>(newTodo),
-      );
+      when(
+        () => repository.createTodo(
+          'write tests',
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).thenAnswer((_) async => const Right<Failure, Todo>(newTodo));
 
       final result = await useCase('  write tests  ');
 
       expect(result.isRight(), isTrue);
-      verify(() => repository.createTodo('write tests')).called(1);
-      verifyNever(() => repository.createTodo('  write tests  '));
+      verify(
+        () => repository.createTodo(
+          'write tests',
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).called(1);
+      verifyNever(
+        () => repository.createTodo(
+          '  write tests  ',
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      );
     });
 
     test('propagates repository failures', () async {
-      when(() => repository.createTodo('x')).thenAnswer(
-        (_) async => const Left<Failure, Todo>(NetworkFailure()),
-      );
+      when(
+        () =>
+            repository.createTodo('x', cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer((_) async => const Left<Failure, Todo>(NetworkFailure()));
 
       final result = await useCase('x');
 

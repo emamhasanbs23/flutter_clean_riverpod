@@ -19,9 +19,7 @@ void main() {
     setUp(() {
       repository = _MockAuthRepository();
       container = ProviderContainer(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(repository),
-        ],
+        overrides: [authRepositoryProvider.overrideWithValue(repository)],
       );
     });
 
@@ -34,12 +32,12 @@ void main() {
     });
 
     test('submit flips to LoginSuccess on a successful login', () async {
-      when(() => repository.login(
-            email: any(named: 'email'),
-            password: any(named: 'password'),
-          )).thenAnswer(
-        (_) async => const Right<Failure, AuthUser>(_stubUser),
-      );
+      when(
+        () => repository.login(
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => const Right<Failure, AuthUser>(_stubUser));
       when(repository.isAuthenticated).thenAnswer((_) async => true);
 
       final success = await container
@@ -47,41 +45,45 @@ void main() {
           .submit(email: 'a@b.com', password: 'password');
 
       expect(success, isTrue);
-      expect(
-        container.read(loginControllerProvider),
-        isA<LoginSuccess>(),
-      );
+      expect(container.read(loginControllerProvider), isA<LoginSuccess>());
     });
 
-    test('submit flips to LoginError carrying the Failure on a bad login',
-        () async {
-      when(() => repository.login(
+    test(
+      'submit flips to LoginError carrying the Failure on a bad login',
+      () async {
+        when(
+          () => repository.login(
             email: any(named: 'email'),
             password: any(named: 'password'),
-          )).thenAnswer(
-        (_) async => const Left<Failure, AuthUser>(InvalidCredentialsFailure()),
-      );
+          ),
+        ).thenAnswer(
+          (_) async =>
+              const Left<Failure, AuthUser>(InvalidCredentialsFailure()),
+        );
 
-      final success = await container
-          .read(loginControllerProvider.notifier)
-          .submit(email: 'a@b.com', password: 'password');
+        final success = await container
+            .read(loginControllerProvider.notifier)
+            .submit(email: 'a@b.com', password: 'password');
 
-      expect(success, isFalse);
-      final state = container.read(loginControllerProvider);
-      expect(state, isA<LoginError>());
-      expect((state as LoginError).failure, isA<InvalidCredentialsFailure>());
-    });
+        expect(success, isFalse);
+        final state = container.read(loginControllerProvider);
+        expect(state, isA<LoginError>());
+        expect((state as LoginError).failure, isA<InvalidCredentialsFailure>());
+      },
+    );
 
-    test('logoutControllerProvider delegates to AuthRepository.logout',
-        () async {
-      when(repository.logout).thenAnswer(
-        (_) async => const Right<Failure, void>(null),
-      );
-      when(repository.isAuthenticated).thenAnswer((_) async => false);
+    test(
+      'logoutControllerProvider delegates to AuthRepository.logout',
+      () async {
+        when(
+          repository.logout,
+        ).thenAnswer((_) async => const Right<Failure, void>(null));
+        when(repository.isAuthenticated).thenAnswer((_) async => false);
 
-      await container.read(logoutControllerProvider).call();
+        await container.read(logoutControllerProvider).call();
 
-      verify(repository.logout).called(1);
-    });
+        verify(repository.logout).called(1);
+      },
+    );
   });
 }

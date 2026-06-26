@@ -19,11 +19,10 @@ void main() {
     });
 
     test('delegates to the repository and returns its success', () async {
-      final todos = [
-        const Todo(id: '1', title: 'a', completed: false),
-      ];
-      when(() => repository.getTodos())
-          .thenAnswer((_) async => Right<Failure, List<Todo>>(todos));
+      final todos = [const Todo(id: '1', title: 'a', completed: false)];
+      when(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer((_) async => Right<Failure, List<Todo>>(todos));
 
       final result = await useCase();
 
@@ -32,11 +31,15 @@ void main() {
         (_) => fail('Expected success'),
         (list) => expect(list, equals(todos)),
       );
-      verify(() => repository.getTodos()).called(1);
+      verify(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).called(1);
     });
 
     test('propagates repository failures', () async {
-      when(() => repository.getTodos()).thenAnswer(
+      when(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer(
         (_) async => const Left<Failure, List<Todo>>(UnexpectedFailure()),
       );
 

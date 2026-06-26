@@ -73,18 +73,13 @@ void main() {
       // Uri.parse itself throws FormatException on a string with an empty
       // scheme, so it never reaches the parser. Callers that obtain URIs
       // from `app_links` are guaranteed non-empty schemes.
-      expect(
-        () => Uri.parse('://todos/42'),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => Uri.parse('://todos/42'), throwsA(isA<FormatException>()));
     });
 
     test('returns null for malformed https URI', () {
       // "not a uri" parses to scheme="not" host="" path=" a uri" which is
       // not a recognized link — the parser returns null rather than crash.
-      final result = RouteDescriptorParser.parse(
-        Uri.parse('not a uri'),
-      );
+      final result = RouteDescriptorParser.parse(Uri.parse('not a uri'));
       expect(result, isNull);
     });
 
@@ -149,9 +144,7 @@ void main() {
     });
 
     test('returns null when route is missing', () {
-      final result = RouteDescriptorParser.parsePushPayload({
-        'foo': 'bar',
-      });
+      final result = RouteDescriptorParser.parsePushPayload({'foo': 'bar'});
       expect(result, isNull);
     });
 
@@ -173,10 +166,7 @@ void main() {
     });
 
     test('toUri encodes query params', () {
-      const d = RouteDescriptor(
-        path: '/todos/42',
-        query: {'focus': 'title'},
-      );
+      const d = RouteDescriptor(path: '/todos/42', query: {'focus': 'title'});
       expect(d.toUri().toString(), '/todos/42?focus=title');
     });
 
@@ -188,14 +178,8 @@ void main() {
     });
 
     test('equality is order-independent for query', () {
-      const a = RouteDescriptor(
-        path: '/todos/1',
-        query: {'a': '1', 'b': '2'},
-      );
-      const b = RouteDescriptor(
-        path: '/todos/1',
-        query: {'b': '2', 'a': '1'},
-      );
+      const a = RouteDescriptor(path: '/todos/1', query: {'a': '1', 'b': '2'});
+      const b = RouteDescriptor(path: '/todos/1', query: {'b': '2', 'a': '1'});
       expect(a, equals(b));
     });
 

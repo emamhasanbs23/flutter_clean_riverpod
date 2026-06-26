@@ -11,8 +11,6 @@ part 'auth_user.freezed.dart';
 /// `AuthMapper`.
 @freezed
 class AuthUser with _$AuthUser {
-  const factory AuthUser({
-    required String id,
-    required String email,
-  }) = _AuthUser;
+  const factory AuthUser({required String id, required String email}) =
+      _AuthUser;
 }

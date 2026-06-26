@@ -87,11 +87,8 @@ class AppCustomTextStyles extends ThemeExtension<AppCustomTextStyles> {
     return AppCustomTextStyles(
       button: TextStyle.lerp(button, other.button, t) ?? button,
       link: TextStyle.lerp(link, other.link, t) ?? link,
-      strikeThrough: TextStyle.lerp(
-            strikeThrough,
-            other.strikeThrough,
-            t,
-          ) ??
+      strikeThrough:
+          TextStyle.lerp(strikeThrough, other.strikeThrough, t) ??
           strikeThrough,
     );
   }
@@ -179,10 +176,7 @@ class AppTheme {
         ),
         color: colorScheme.surfaceContainerHigh,
       ),
-      extensions: <ThemeExtension<dynamic>>[
-        semanticColors,
-        customTextStyles,
-      ],
+      extensions: <ThemeExtension<dynamic>>[semanticColors, customTextStyles],
     );
   }
 }

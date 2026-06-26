@@ -18,25 +18,55 @@ sealed class Failure implements Exception {
   /// Maps this failure to a localized message for the user.
   String toMessage(BuildContext context) {
     return switch (this) {
+      NoConnectionFailure() => context.l10n.errorNoConnection,
+      TimeoutFailure() => context.l10n.errorTimeout,
+      ServerFailure() => context.l10n.errorServer,
       NetworkFailure() => context.l10n.errorNetwork,
       UnauthorizedFailure() => context.l10n.errorUnauthorized,
       NotFoundFailure() => context.l10n.errorNotFound,
+      ValidationFailure(:final errors) =>
+        errors?.values.firstOrNull ?? context.l10n.errorValidation,
+      RateLimitFailure() => context.l10n.errorRateLimit,
+      CancelledFailure() => context.l10n.errorCancelled,
+      SerializationFailure() => context.l10n.errorSerialization,
       UnexpectedFailure() => context.l10n.errorUnexpected,
       InvalidCredentialsFailure() => context.l10n.loginInvalidCredentials,
     };
   }
 }
 
-/// Auth-specific failure subtype. Lives in the core library because
-/// [Failure] is sealed and cannot be extended from other libraries.
-final class InvalidCredentialsFailure extends Failure {
-  const InvalidCredentialsFailure()
-      : super('Invalid email or password');
+// ============================================================================
+// Transport / Connectivity Failures
+// ============================================================================
+
+/// No network connection (device offline, airplane mode, no interface).
+final class NoConnectionFailure extends Failure {
+  const NoConnectionFailure() : super('No internet connection');
 }
 
-/// Connectivity / transport errors. Wraps [DioException] and friends.
+/// Request timed out (connect, send, or receive timeout).
+final class TimeoutFailure extends Failure {
+  const TimeoutFailure() : super('Request timed out');
+}
+
+/// Connectivity / transport errors not covered by more specific subtypes.
+/// Wraps [DioException] connection issues.
 final class NetworkFailure extends Failure {
   const NetworkFailure([super.message = 'Network error']);
+}
+
+/// Request was cancelled (e.g., widget disposed, user navigated away).
+final class CancelledFailure extends Failure {
+  const CancelledFailure() : super('Request cancelled');
+}
+
+// ============================================================================
+// HTTP Status-Based Failures
+// ============================================================================
+
+/// HTTP 5xx — server-side errors.
+final class ServerFailure extends Failure {
+  const ServerFailure([super.message = 'Server error']);
 }
 
 /// HTTP 401 / 403 — caller must re-authenticate.
@@ -48,6 +78,46 @@ final class UnauthorizedFailure extends Failure {
 final class NotFoundFailure extends Failure {
   const NotFoundFailure([super.message = 'Not found']);
 }
+
+/// HTTP 400 / 422 — validation errors with optional field-level messages.
+final class ValidationFailure extends Failure {
+  const ValidationFailure({this.errors}) : super('Validation failed');
+
+  /// Field-level error messages: {fieldName: errorMessage}
+  final Map<String, String>? errors;
+}
+
+/// HTTP 429 — rate limit exceeded.
+final class RateLimitFailure extends Failure {
+  const RateLimitFailure({this.retryAfter})
+    : super('Rate limit exceeded. Please try again later.');
+
+  /// Seconds until the rate limit resets, if provided by the server.
+  final int? retryAfter;
+}
+
+// ============================================================================
+// Data / Serialization Failures
+// ============================================================================
+
+/// JSON parsing or deserialization failed.
+final class SerializationFailure extends Failure {
+  const SerializationFailure([super.message = 'Failed to parse response']);
+}
+
+// ============================================================================
+// Auth-Specific Failures
+// ============================================================================
+
+/// Auth-specific failure subtype. Lives in the core library because
+/// [Failure] is sealed and cannot be extended from other libraries.
+final class InvalidCredentialsFailure extends Failure {
+  const InvalidCredentialsFailure() : super('Invalid email or password');
+}
+
+// ============================================================================
+// Catch-All Failure
+// ============================================================================
 
 /// Anything that did not match a known category. Use sparingly — prefer
 /// adding a specific subtype when the UI needs to react differently.

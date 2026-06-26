@@ -7,19 +7,11 @@ import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities
 /// `json_serializable` types — and the wire format can evolve independently
 /// of the domain shape.
 extension TodoDtoMapper on TodoDto {
-  Todo toDomain() => Todo(
-        id: id,
-        title: title,
-        completed: completed,
-        createdAt: createdAt,
-      );
+  Todo toDomain() =>
+      Todo(id: id, title: title, completed: completed, createdAt: createdAt);
 }
 
 extension TodoDomainMapper on Todo {
-  TodoDto toDto() => TodoDto(
-        id: id,
-        title: title,
-        completed: completed,
-        createdAt: createdAt,
-      );
+  TodoDto toDto() =>
+      TodoDto(id: id, title: title, completed: completed, createdAt: createdAt);
 }

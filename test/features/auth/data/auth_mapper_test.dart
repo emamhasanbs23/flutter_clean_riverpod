@@ -29,10 +29,7 @@ void main() {
     });
 
     test('returns null when user email is missing', () {
-      const response = LoginResponse(
-        accessToken: 'a',
-        userId: 'usr_42',
-      );
+      const response = LoginResponse(accessToken: 'a', userId: 'usr_42');
 
       expect(response.toDomainOrNull(), isNull);
     });

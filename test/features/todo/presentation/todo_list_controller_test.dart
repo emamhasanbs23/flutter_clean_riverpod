@@ -22,27 +22,38 @@ void main() {
     setUp(() {
       repository = _MockTodoRepository();
       // getTodos is called by the build() / _load() helpers; pre-stub.
-      when(() => repository.getTodos()).thenAnswer(
-        (_) async => const Right<Failure, List<Todo>>(_seed),
-      );
-      when(() => repository.createTodo(any())).thenAnswer(
+      when(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer((_) async => const Right<Failure, List<Todo>>(_seed));
+      when(
+        () => repository.createTodo(
+          any(),
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).thenAnswer(
         (_) async => const Right<Failure, Todo>(
           Todo(id: '3', title: 'new', completed: false),
         ),
       );
-      when(() => repository.toggleTodo(any())).thenAnswer(
+      when(
+        () => repository.toggleTodo(
+          any(),
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).thenAnswer(
         (_) async => const Right<Failure, Todo>(
           Todo(id: '1', title: 'first', completed: true),
         ),
       );
-      when(() => repository.deleteTodo(any())).thenAnswer(
-        (_) async => const Right<Failure, void>(null),
-      );
+      when(
+        () => repository.deleteTodo(
+          any(),
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).thenAnswer((_) async => const Right<Failure, void>(null));
 
       container = ProviderContainer(
-        overrides: [
-          todoRepositoryProvider.overrideWithValue(repository),
-        ],
+        overrides: [todoRepositoryProvider.overrideWithValue(repository)],
       );
     });
 
@@ -60,32 +71,49 @@ void main() {
       await container.read(todoListControllerProvider.future);
       await container.read(todoListControllerProvider.notifier).toggle('1');
       // Initial load + post-toggle reload.
-      verify(() => repository.toggleTodo('1')).called(1);
-      verify(() => repository.getTodos()).called(2);
+      verify(
+        () =>
+            repository.toggleTodo('1', cancelToken: any(named: 'cancelToken')),
+      ).called(1);
+      verify(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).called(2);
     });
 
     test('add re-fetches the list with the trimmed title', () async {
       await container.read(todoListControllerProvider.future);
       await container.read(todoListControllerProvider.notifier).add('  new  ');
-      verify(() => repository.createTodo('new')).called(1);
-      verify(() => repository.getTodos()).called(2);
+      verify(
+        () => repository.createTodo(
+          'new',
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).called(1);
+      verify(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).called(2);
     });
 
     test('delete re-fetches the list when successful', () async {
       await container.read(todoListControllerProvider.future);
       await container.read(todoListControllerProvider.notifier).delete('2');
-      verify(() => repository.deleteTodo('2')).called(1);
-      verify(() => repository.getTodos()).called(2);
+      verify(
+        () =>
+            repository.deleteTodo('2', cancelToken: any(named: 'cancelToken')),
+      ).called(1);
+      verify(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).called(2);
     });
 
     test('build propagates a Failure as TodoError', () async {
-      when(() => repository.getTodos()).thenAnswer(
+      when(
+        () => repository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer(
         (_) async => const Left<Failure, List<Todo>>(NetworkFailure()),
       );
       final container2 = ProviderContainer(
-        overrides: [
-          todoRepositoryProvider.overrideWithValue(repository),
-        ],
+        overrides: [todoRepositoryProvider.overrideWithValue(repository)],
       );
       addTearDown(container2.dispose);
 

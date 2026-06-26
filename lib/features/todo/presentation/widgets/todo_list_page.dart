@@ -51,13 +51,13 @@ class TodoListPage extends ConsumerWidget {
           data: (state) => switch (state) {
             TodoInitial() || TodoLoading() => const AppLoadingIndicator(),
             TodoError(:final failure) => AppErrorWidget(
-                failure: failure,
-                onRetry: () =>
-                    ref.read(todoListControllerProvider.notifier).refresh(),
-              ),
+              failure: failure,
+              onRetry: () =>
+                  ref.read(todoListControllerProvider.notifier).refresh(),
+            ),
             TodoLoaded(:final todos) when todos.isEmpty => _EmptyState(
-                message: l10n.todoListEmpty,
-              ),
+              message: l10n.todoListEmpty,
+            ),
             TodoLoaded(:final todos) => _TodoList(todos: todos),
           },
         ),
@@ -77,9 +77,7 @@ class TodoListPage extends ConsumerWidget {
           content: TextField(
             controller: controller,
             autofocus: true,
-            decoration: InputDecoration(
-              hintText: l10n.todoListNewDescription,
-            ),
+            decoration: InputDecoration(hintText: l10n.todoListNewDescription),
           ),
           actions: [
             TextButton(
@@ -87,8 +85,7 @@ class TodoListPage extends ConsumerWidget {
               child: Text(l10n.todoListCancel),
             ),
             ElevatedButton(
-              onPressed: () =>
-                  Navigator.of(dialogContext).pop(controller.text),
+              onPressed: () => Navigator.of(dialogContext).pop(controller.text),
               child: Text(l10n.todoListCreate),
             ),
           ],
@@ -123,16 +120,15 @@ class _TodoList extends ConsumerWidget {
             contentPadding: AppSize.cardPadding,
             leading: Checkbox(
               value: todo.completed,
-              onChanged: (_) => ref
-                  .read(todoListControllerProvider.notifier)
-                  .toggle(todo.id),
+              onChanged: (_) =>
+                  ref.read(todoListControllerProvider.notifier).toggle(todo.id),
             ),
             title: Text(
               todo.title,
               style: todo.completed
-                  ? Theme.of(context)
-                      .extension<AppCustomTextStyles>()
-                      ?.strikeThrough
+                  ? Theme.of(
+                      context,
+                    ).extension<AppCustomTextStyles>()?.strikeThrough
                   : null,
             ),
             trailing: IconButton(
@@ -189,10 +185,7 @@ class _EmptyState extends StatelessWidget {
       children: [
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
         Center(
-          child: Text(
-            message,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          child: Text(message, style: Theme.of(context).textTheme.bodyLarge),
         ),
       ],
     );

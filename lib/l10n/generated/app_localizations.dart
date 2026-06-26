@@ -260,6 +260,48 @@ abstract class AppLocalizations {
   /// **'Not found'**
   String get errorNotFound;
 
+  /// No description provided for @errorNoConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network.'**
+  String get errorNoConnection;
+
+  /// No description provided for @errorTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Please try again.'**
+  String get errorTimeout;
+
+  /// No description provided for @errorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error. Please try again later.'**
+  String get errorServer;
+
+  /// No description provided for @errorValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Validation failed. Please check your input.'**
+  String get errorValidation;
+
+  /// No description provided for @errorRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a moment.'**
+  String get errorRateLimit;
+
+  /// No description provided for @errorCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Request was cancelled.'**
+  String get errorCancelled;
+
+  /// No description provided for @errorSerialization.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to process response. Please try again.'**
+  String get errorSerialization;
+
   /// No description provided for @commonRetry.
   ///
   /// In en, this message translates to:

@@ -18,9 +18,9 @@ void main() {
     });
 
     test('delegates to repository.logout and returns its success', () async {
-      when(() => repository.logout()).thenAnswer(
-        (_) async => const Right<Failure, void>(null),
-      );
+      when(
+        () => repository.logout(),
+      ).thenAnswer((_) async => const Right<Failure, void>(null));
 
       final result = await useCase();
 
@@ -29,9 +29,9 @@ void main() {
     });
 
     test('propagates repository failures', () async {
-      when(() => repository.logout()).thenAnswer(
-        (_) async => const Left<Failure, void>(UnexpectedFailure()),
-      );
+      when(
+        () => repository.logout(),
+      ).thenAnswer((_) async => const Left<Failure, void>(UnexpectedFailure()));
 
       final result = await useCase();
 

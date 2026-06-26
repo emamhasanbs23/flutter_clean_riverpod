@@ -70,9 +70,9 @@ class _FakeDeepLinkService implements DeepLinkService {
     required Stream<Uri> incoming,
     required Uri? initial,
     Future<Uri?> Function()? onGetInitial,
-  })  : _incoming = incoming,
-        _initial = initial,
-        _onGetInitial = onGetInitial;
+  }) : _incoming = incoming,
+       _initial = initial,
+       _onGetInitial = onGetInitial;
 
   final Stream<Uri> _incoming;
   final Uri? _initial;

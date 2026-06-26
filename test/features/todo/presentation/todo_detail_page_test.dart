@@ -51,15 +51,15 @@ void main() {
 
   setUp(() {
     authRepository = _MockAuthRepository();
-    when(authRepository.logout).thenAnswer(
-      (_) async => const Right<Failure, void>(null),
-    );
+    when(
+      authRepository.logout,
+    ).thenAnswer((_) async => const Right<Failure, void>(null));
     when(authRepository.isAuthenticated).thenAnswer((_) async => true);
 
     todoRepository = _MockTodoRepository();
-    when(() => todoRepository.getTodos()).thenAnswer(
-      (_) async => const Right<Failure, List<Todo>>(_seed),
-    );
+    when(
+      () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
+    ).thenAnswer((_) async => const Right<Failure, List<Todo>>(_seed));
   });
 
   testWidgets('renders the matching todo with id and title', (tester) async {
@@ -106,14 +106,12 @@ void main() {
     expect(find.text(l10n.errorNotFound), findsOneWidget);
   });
 
-  testWidgets('accepts a `extra` map (used by push notifications)',
-      (tester) async {
+  testWidgets('accepts a `extra` map (used by push notifications)', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _wrap(
-        child: const TodoDetailPage(
-          id: '1',
-          extra: {'focus': 'title'},
-        ),
+        child: const TodoDetailPage(id: '1', extra: {'focus': 'title'}),
         authRepository: authRepository,
         todoRepository: todoRepository,
       ),

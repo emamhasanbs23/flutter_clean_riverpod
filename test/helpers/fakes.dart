@@ -9,18 +9,12 @@ extension EitherAssertions<L, R> on Either<L, R> {
   /// Asserts the value is [Right] and returns its inner value. Fails the test
   /// if the value is [Left].
   R expectRight() {
-    return fold(
-      (l) => fail('Expected Right, got Left: $l'),
-      (r) => r,
-    );
+    return fold((l) => fail('Expected Right, got Left: $l'), (r) => r);
   }
 
   /// Asserts the value is [Left] and returns its inner value. Fails the test
   /// if the value is [Right].
   L expectLeft() {
-    return fold(
-      (l) => l,
-      (r) => fail('Expected Left, got Right: $r'),
-    );
+    return fold((l) => l, (r) => fail('Expected Left, got Right: $r'));
   }
 }

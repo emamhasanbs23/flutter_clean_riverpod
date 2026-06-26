@@ -27,8 +27,8 @@ class ConnectivityBanner extends ConsumerWidget {
 
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final dangerColor = theme.extension<AppSemanticColors>()?.danger ??
-        theme.colorScheme.error;
+    final dangerColor =
+        theme.extension<AppSemanticColors>()?.danger ?? theme.colorScheme.error;
 
     return Material(
       color: dangerColor,
@@ -53,8 +53,7 @@ class ConnectivityBanner extends ConsumerWidget {
                 ),
               ),
               TextButton(
-                onPressed: () =>
-                    ref.invalidate(connectivityStreamProvider),
+                onPressed: () => ref.invalidate(connectivityStreamProvider),
                 style: TextButton.styleFrom(foregroundColor: Colors.white),
                 child: Text(l10n.connectivityRetry),
               ),

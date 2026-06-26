@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
+
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/api/todo_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_mock_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/repository_impl/todo_repository_impl.dart';
@@ -11,14 +14,20 @@ import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/usecases/toggle_todo_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Default data source. Wires [TodoRemoteDataSource] to [dioProvider] so the
-/// full Clean Architecture data flow runs end-to-end against a real HTTP API.
+/// Retrofit-generated `TodoApi` bound to the configured `Dio`. Shares the
+/// Dio's interceptors (auth + logging) with the rest of the app.
+final todoApiProvider = Provider<TodoApi>((ref) {
+  return TodoApi(ref.watch(dioProvider));
+});
+
+/// Default data source. Wires [TodoRemoteDataSource] to [todoApiProvider] so
+/// the full Clean Architecture data flow runs end-to-end against a real
+/// HTTP API.
 ///
 /// Tests and offline development override this provider with
 /// [todoMockDataSourceProvider].
 final todoDataSourceProvider = Provider<TodoDataSource>((ref) {
-  final dio = ref.watch(dioProvider);
-  return TodoRemoteDataSource(dio);
+  return TodoRemoteDataSource(ref.watch(todoApiProvider));
 });
 
 /// In-memory data source used by tests and as an offline fallback.
@@ -80,17 +89,30 @@ class TodoError extends TodoListState {
 /// optimistically re-fetch to keep the data source authoritative, which also
 /// keeps the implementation simple at the cost of an extra round-trip.
 class TodoListController extends AsyncNotifier<TodoListState> {
+  /// One [CancelToken] per controller build. We create it on first `build`
+  /// and cancel it in `ref.onDispose` so any in-flight request is aborted
+  /// when the consumer (typically the page widget) is torn down.
+  late final CancelToken _cancelToken;
+
   @override
   Future<TodoListState> build() async {
+    _cancelToken = CancelToken();
+    ref.onDispose(_cancelToken.cancel);
     return _load();
   }
 
   Future<TodoListState> _load() async {
-    final result = await ref.read(getTodosUseCaseProvider).call();
-    return result.fold(
-      TodoError.new,
-      TodoLoaded.new,
-    );
+    final result = await ref
+        .read(getTodosUseCaseProvider)
+        .call(cancelToken: _cancelToken);
+    // Cancellation arrives as a `DioExceptionType.cancel` which the data
+    // source maps through `guard`; the AsyncValue layer surfaces it as
+    // an error to the page. We swallow it here so a disposed controller
+    // does not flash an error before being torn down.
+    if (_cancelToken.isCancelled) {
+      return const TodoInitial();
+    }
+    return result.fold(TodoError.new, TodoLoaded.new);
   }
 
   Future<void> refresh() async {
@@ -99,7 +121,10 @@ class TodoListController extends AsyncNotifier<TodoListState> {
   }
 
   Future<void> add(String title) async {
-    final result = await ref.read(createTodoUseCaseProvider).call(title);
+    final result = await ref
+        .read(createTodoUseCaseProvider)
+        .call(title, cancelToken: _cancelToken);
+    if (_cancelToken.isCancelled) return;
     if (result.isRight()) {
       await refresh();
     } else {
@@ -110,14 +135,20 @@ class TodoListController extends AsyncNotifier<TodoListState> {
   }
 
   Future<void> toggle(String id) async {
-    final result = await ref.read(toggleTodoUseCaseProvider).call(id);
+    final result = await ref
+        .read(toggleTodoUseCaseProvider)
+        .call(id, cancelToken: _cancelToken);
+    if (_cancelToken.isCancelled) return;
     if (result.isRight()) {
       await refresh();
     }
   }
 
   Future<void> delete(String id) async {
-    final result = await ref.read(deleteTodoUseCaseProvider).call(id);
+    final result = await ref
+        .read(deleteTodoUseCaseProvider)
+        .call(id, cancelToken: _cancelToken);
+    if (_cancelToken.isCancelled) return;
     if (result.isRight()) {
       await refresh();
     }
@@ -126,5 +157,5 @@ class TodoListController extends AsyncNotifier<TodoListState> {
 
 final todoListControllerProvider =
     AsyncNotifierProvider<TodoListController, TodoListState>(
-  TodoListController.new,
-);
+      TodoListController.new,
+    );

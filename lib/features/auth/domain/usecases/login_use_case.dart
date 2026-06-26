@@ -19,14 +19,10 @@ class LoginUseCase {
     required String password,
   }) {
     if (email.isEmpty || !email.contains('@')) {
-      return Future.value(
-        const Left(InvalidCredentialsFailure()),
-      );
+      return Future.value(const Left(InvalidCredentialsFailure()));
     }
     if (password.length < 6) {
-      return Future.value(
-        const Left(InvalidCredentialsFailure()),
-      );
+      return Future.value(const Left(InvalidCredentialsFailure()));
     }
     return _repository.login(email: email, password: password);
   }

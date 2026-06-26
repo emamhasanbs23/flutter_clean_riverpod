@@ -13,7 +13,7 @@
 - **Repo**: `flutter_clean_riverpod_boilerplate`
   (`/Users/bs1101/Personal/1.projects/flutter_clean_riverpod_boilerplate`).
 - **Stack**: Flutter 3.41.8 (via FVM), Clean Architecture feature-first,
-  hand-written Riverpod, `fpdart` `Either<Failure, T>`, `go_router` with
+  Riverpod with Retrofit/codegen, `fpdart` `Either<Failure, T>`, `go_router` with
   typed route names, Dio REST, ARB l10n, Material 3.
 - **Flavors**: dev / staging / prod. Entrypoints: `lib/main_dev.dart`,
   `lib/main_staging.dart`, `lib/main_prod.dart`. `lib/main.dart` defaults
@@ -35,9 +35,10 @@
    `bootstrap.dart`, the Dio interceptor, and tests.
 3. **Sealed UI states**: every controller exposes a `sealed class` state;
    widgets render via exhaustive `switch`.
-4. **Hand-written Riverpod**: no `@riverpod` codegen, no
-   `riverpod_generator`, no `freezed`, no `json_serializable`, no
-   `build_runner` for tests or DTOs.
+4. **Retrofit + codegen for data layer**: Use `@RestApi` for API contracts,
+   `freezed` + `json_serializable` for DTOs, with `build_runner` generating
+   `*.g.dart` files. Riverpod providers remain hand-written (no `@riverpod`
+   codegen) to keep state management explicit and testable.
 5. **Typed routes**: navigate with `context.goNamed(TodoRoutes.detail,
    pathParameters: {'id': id})`. Never raw paths outside
    `app_router.dart`.
@@ -188,12 +189,14 @@ Base: `very_good_analysis`. Three rules are intentionally disabled (see
 
 ## State Management
 
-- **Hand-written Riverpod**. No `@riverpod` codegen, no
-  `riverpod_generator`, no `@Riverpod(keepAlive: ...)` annotations.
+- **Hand-written Riverpod for presentation layer**. No `@riverpod` codegen,
+  no `riverpod_generator`, no `@Riverpod(keepAlive: ...)` annotations.
+  Controllers are `Notifier` subclasses exposing a `sealed class` state.
+- **Data layer uses Retrofit + codegen**: API contracts via `@RestApi`,
+  DTOs via `freezed` + `json_serializable` with generated `*.g.dart` files.
 - **No** `ValueNotifier` / `ChangeNotifier` / `ListenableBuilder` from
   `flutter` -- those are out of scope for this project.
 - **No** `provider` package; we use `flutter_riverpod`.
-- Controllers are `Notifier` subclasses exposing a `sealed class` state.
 - Widgets read state via `ref.watch(...)` and render via exhaustive
   `switch`.
 
@@ -230,13 +233,16 @@ flowchart LR
 
 ## Data Handling & Serialization
 
-- **No `json_serializable` codegen** for DTOs. Hand-written `fromJson` /
-  `toJson` is the project norm.
+- **DTOs use `freezed` + `json_serializable` codegen** for immutable data
+  classes with `fromJson` / `toJson`. Run `build_runner` after changing
+  DTOs: `fvm dart run build_runner build --delete-conflicting-outputs`.
+- API contracts use **Retrofit** (`@RestApi`) with typed endpoints,
+  generating `*_api.g.dart` files.
 - DTOs are private to the data layer. Use snake_case JSON keys
   (`fieldRename: FieldRename.snake` is **not** used -- handle the rename
-  manually in the JSON methods).
+  manually in the JSON methods or via `@JsonKey` annotations).
 - Wire format -> entity translation lives in
-  `lib/features/<x>/data/models/<x>_mapper.dart`. Never import a DTO from
+  `lib/features/<x>/data/mapper/<x>_mapper.dart`. Never import a DTO from
   `domain/`.
 
 ## Logging
@@ -250,10 +256,15 @@ flowchart LR
 
 ## Code Generation
 
-- This project **does not** use `build_runner` for tests or for DTOs.
-- It **does** use `fvm flutter gen-l10n` (offline, no codegen) for
+- This project **uses `build_runner`** for:
+  - **Retrofit** API contracts (`*_api.g.dart`)
+  - **freezed** + **json_serializable** DTOs (`*.freezed.dart`, `*.g.dart`)
+- It **does not** use `build_runner` for tests (hand-written mocks with
+  `mocktail`) or Riverpod providers (hand-written).
+- It **does** use `fvm flutter gen-l10n` (offline, no build_runner) for
   `AppLocalizations`.
-- Do **not** add `build_runner` or `freezed` without maintainer sign-off.
+- Run codegen after changing DTOs or API contracts:
+  `fvm dart run build_runner build --delete-conflicting-outputs`.
 
 ## Testing
 
@@ -362,9 +373,10 @@ not introduce new `WidgetState` constants outside the existing theme.
 
 ## Cross-cutting "do not"s
 
-- :no_entry: Don't add `@riverpod` codegen.
-- :no_entry: Don't add `freezed` / `json_serializable` / `build_runner`
-  for tests or DTOs.
+- :no_entry: Don't add `@riverpod` codegen (Riverpod providers remain hand-written).
+- :white_check_mark: **Do** use `freezed` + `json_serializable` + `build_runner`
+  for DTOs and Retrofit API contracts.
+- :no_entry: Don't use `build_runner` for tests (use `mocktail` hand-written mocks).
 - :no_entry: Don't use `ValueNotifier` / `ChangeNotifier` / `provider`
   package.
 - :no_entry: Don't throw from repository / use case / controller.
@@ -384,7 +396,8 @@ not introduce new `WidgetState` constants outside the existing theme.
 
 - Flutter 3.41.8 via FVM -- always `fvm flutter ...` / `fvm dart ...`.
 - Clean Architecture, feature-first; **strict layering**, **Riverpod
-  hand-written**, **`Either<Failure, T>`** for errors.
+  hand-written**, **Retrofit + codegen for data layer**, **`Either<Failure, T>`**
+  for errors.
 - Sealed UI states with exhaustive `switch`. `AppSize` + theme extensions.
   Localize everything.
 - GoRouter with typed route names; single funnel for FCM + App Links via

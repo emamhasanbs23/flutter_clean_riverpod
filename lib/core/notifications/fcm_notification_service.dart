@@ -24,8 +24,8 @@ class FcmNotificationService implements NotificationService {
   FcmNotificationService({
     FirebaseMessaging? messaging,
     FirebaseOptions? options,
-  })  : _messaging = messaging,
-        _options = options;
+  }) : _messaging = messaging,
+       _options = options;
 
   final FirebaseMessaging? _messaging;
   final FirebaseOptions? _options;
@@ -79,11 +79,7 @@ class FcmNotificationService implements NotificationService {
       final settings = await _messagingInstance.requestPermission();
       return settings.authorizationStatus.name;
     } on Object catch (error, stack) {
-      AppLogger.w(
-        'requestPermission failed',
-        error: error,
-        stackTrace: stack,
-      );
+      AppLogger.w('requestPermission failed', error: error, stackTrace: stack);
       return null;
     }
   }

@@ -1,7 +1,9 @@
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart' show AuthInterceptor;
+import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart'
+    show AuthInterceptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/api/auth_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source_impl.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/repository_impl/auth_repository_impl.dart';
@@ -22,22 +24,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Default value is `null`, meaning no session has ever been invalidated.
 final sessionExpiredProvider = StateProvider<bool>((ref) => false);
 
-/// Dio-backed [AuthRemoteDataSource] driven by [dioProvider].
+/// Retrofit-generated `AuthApi` bound to the configured `Dio`.
+///
+/// Shares the same Dio instance (and therefore the same
+/// [AuthInterceptor]) with the rest of the app, so the 401 -> dedup ->
+/// refresh -> retry funnel keeps working unchanged.
+final authApiProvider = Provider<AuthApi>((ref) {
+  return AuthApi(ref.watch(dioProvider));
+});
+
+/// Dio-backed [AuthRemoteDataSource] driven by [authApiProvider].
 ///
 /// Tests can override this provider with a fake implementation.
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  final dio = ref.watch(dioProvider);
-  return AuthRemoteDataSourceImpl(dio);
+  return AuthRemoteDataSourceImpl(ref.watch(authApiProvider));
 });
 
 /// Singleton repository bound to the active storage implementation.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final storage = ref.watch(secureStorageServiceProvider);
   final remote = ref.watch(authRemoteDataSourceProvider);
-  return AuthRepositoryImpl(
-    remoteDataSource: remote,
-    storage: storage,
-  );
+  return AuthRepositoryImpl(remoteDataSource: remote, storage: storage);
 });
 
 /// Domain-layer use case wrapping the repository's login.
@@ -61,10 +68,7 @@ final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
 /// itself failed.
 final currentUserProvider = FutureProvider<AuthUser?>((ref) async {
   final result = await ref.watch(getCurrentUserUseCaseProvider).call();
-  return result.fold(
-    (failure) => throw failure,
-    (user) => user,
-  );
+  return result.fold((failure) => throw failure, (user) => user);
 });
 
 /// Synchronous view of whether the user is authenticated.
@@ -121,10 +125,9 @@ class LoginController extends Notifier<LoginState> {
   /// caller can decide whether to navigate.
   Future<bool> submit({required String email, required String password}) async {
     state = const LoginSubmitting();
-    final result = await ref.read(loginUseCaseProvider).call(
-          email: email,
-          password: password,
-        );
+    final result = await ref
+        .read(loginUseCaseProvider)
+        .call(email: email, password: password);
     return result.fold(
       (failure) {
         state = LoginError(failure);
@@ -140,8 +143,9 @@ class LoginController extends Notifier<LoginState> {
   }
 }
 
-final loginControllerProvider =
-    NotifierProvider<LoginController, LoginState>(LoginController.new);
+final loginControllerProvider = NotifierProvider<LoginController, LoginState>(
+  LoginController.new,
+);
 
 /// Triggers a logout and refreshes the auth provider so the router redirects
 /// back to the login screen.

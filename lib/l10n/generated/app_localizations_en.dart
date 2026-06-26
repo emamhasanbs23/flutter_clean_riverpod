@@ -90,5 +90,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorNotFound => 'Not found';
 
   @override
+  String get errorNoConnection =>
+      'No internet connection. Please check your network.';
+
+  @override
+  String get errorTimeout => 'Request timed out. Please try again.';
+
+  @override
+  String get errorServer => 'Server error. Please try again later.';
+
+  @override
+  String get errorValidation => 'Validation failed. Please check your input.';
+
+  @override
+  String get errorRateLimit => 'Too many requests. Please wait a moment.';
+
+  @override
+  String get errorCancelled => 'Request was cancelled.';
+
+  @override
+  String get errorSerialization =>
+      'Failed to process response. Please try again.';
+
+  @override
   String get commonRetry => 'Retry';
 }

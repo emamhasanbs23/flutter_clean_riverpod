@@ -1,5 +1,7 @@
-import 'package:flutter_clean_riverpod_boilerplate/core/notifications/fcm_notification_service.dart' show FcmNotificationService;
-import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart' show RouteDescriptor;
+import 'package:flutter_clean_riverpod_boilerplate/core/notifications/fcm_notification_service.dart'
+    show FcmNotificationService;
+import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart'
+    show RouteDescriptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 

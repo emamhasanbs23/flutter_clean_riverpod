@@ -51,32 +51,46 @@ void main() {
 
   setUp(() {
     authRepository = _MockAuthRepository();
-    when(authRepository.logout).thenAnswer(
-      (_) async => const Right<Failure, void>(null),
-    );
+    when(
+      authRepository.logout,
+    ).thenAnswer((_) async => const Right<Failure, void>(null));
     when(authRepository.isAuthenticated).thenAnswer((_) async => true);
 
     todoRepository = _MockTodoRepository();
-    when(() => todoRepository.getTodos()).thenAnswer(
-      (_) async => const Right<Failure, List<Todo>>(_seed),
-    );
-    when(() => todoRepository.toggleTodo(any())).thenAnswer(
+    when(
+      () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
+    ).thenAnswer((_) async => const Right<Failure, List<Todo>>(_seed));
+    when(
+      () => todoRepository.toggleTodo(
+        any(),
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).thenAnswer(
       (_) async => const Right<Failure, Todo>(
         Todo(id: '1', title: 'buy milk', completed: true),
       ),
     );
-    when(() => todoRepository.createTodo(any())).thenAnswer(
+    when(
+      () => todoRepository.createTodo(
+        any(),
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).thenAnswer(
       (_) async => const Right<Failure, Todo>(
         Todo(id: '3', title: 'new', completed: false),
       ),
     );
-    when(() => todoRepository.deleteTodo(any())).thenAnswer(
-      (_) async => const Right<Failure, void>(null),
-    );
+    when(
+      () => todoRepository.deleteTodo(
+        any(),
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).thenAnswer((_) async => const Right<Failure, void>(null));
   });
 
-  testWidgets('renders the seeded list with strikethrough on completed items',
-      (tester) async {
+  testWidgets('renders the seeded list with strikethrough on completed items', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _wrap(
         child: const TodoListPage(),
@@ -91,8 +105,9 @@ void main() {
     expect(find.byType(Checkbox), findsNWidgets(2));
   });
 
-  testWidgets('tapping a checkbox toggles the todo via the repository',
-      (tester) async {
+  testWidgets('tapping a checkbox toggles the todo via the repository', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _wrap(
         child: const TodoListPage(),
@@ -105,13 +120,20 @@ void main() {
     await tester.tap(find.byType(Checkbox).first);
     await tester.pumpAndSettle();
 
-    verify(() => todoRepository.toggleTodo('1')).called(1);
+    verify(
+      () => todoRepository.toggleTodo(
+        '1',
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).called(1);
   });
 
   testWidgets('shows an error widget when the repository fails', (
     tester,
   ) async {
-    when(() => todoRepository.getTodos()).thenAnswer(
+    when(
+      () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
+    ).thenAnswer(
       (_) async => const Left<Failure, List<Todo>>(NetworkFailure()),
     );
 
@@ -128,21 +150,23 @@ void main() {
     expect(find.text('Retry'), findsOneWidget);
   });
 
-  testWidgets('shows the empty state when the repository returns an empty list',
-      (tester) async {
-    when(() => todoRepository.getTodos()).thenAnswer(
-      (_) async => const Right<Failure, List<Todo>>(<Todo>[]),
-    );
+  testWidgets(
+    'shows the empty state when the repository returns an empty list',
+    (tester) async {
+      when(
+        () => todoRepository.getTodos(cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer((_) async => const Right<Failure, List<Todo>>(<Todo>[]));
 
-    await tester.pumpWidget(
-      _wrap(
-        child: const TodoListPage(),
-        authRepository: authRepository,
-        todoRepository: todoRepository,
-      ),
-    );
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        _wrap(
+          child: const TodoListPage(),
+          authRepository: authRepository,
+          todoRepository: todoRepository,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('No todos yet'), findsOneWidget);
-  });
+      expect(find.text('No todos yet'), findsOneWidget);
+    },
+  );
 }

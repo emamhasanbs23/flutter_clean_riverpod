@@ -20,27 +20,24 @@ void main() {
 
     test('returns the persisted user on success', () async {
       const user = AuthUser(id: 'usr_1', email: 'demo@example.com');
-      when(() => repository.getCurrentUser()).thenAnswer(
-        (_) async => const Right<Failure, AuthUser?>(user),
-      );
+      when(
+        () => repository.getCurrentUser(),
+      ).thenAnswer((_) async => const Right<Failure, AuthUser?>(user));
 
       final result = await useCase();
 
       expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected success'),
-        (loaded) {
-          expect(loaded, isNotNull);
-          expect(loaded!.id, 'usr_1');
-          expect(loaded.email, 'demo@example.com');
-        },
-      );
+      result.fold((_) => fail('Expected success'), (loaded) {
+        expect(loaded, isNotNull);
+        expect(loaded!.id, 'usr_1');
+        expect(loaded.email, 'demo@example.com');
+      });
     });
 
     test('returns Right(null) when no user is persisted', () async {
-      when(() => repository.getCurrentUser()).thenAnswer(
-        (_) async => const Right<Failure, AuthUser?>(null),
-      );
+      when(
+        () => repository.getCurrentUser(),
+      ).thenAnswer((_) async => const Right<Failure, AuthUser?>(null));
 
       final result = await useCase();
 

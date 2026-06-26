@@ -27,5 +27,12 @@
   "errorNetwork": "Error de red. Verifica tu conexión.",
   "errorUnauthorized": "La sesión expiró. Inicia sesión de nuevo.",
   "errorNotFound": "No encontrado",
+  "errorNoConnection": "Sin conexión a internet. Verifica tu red.",
+  "errorTimeout": "La solicitud tardó demasiado. Intenta de nuevo.",
+  "errorServer": "Error del servidor. Intenta más tarde.",
+  "errorValidation": "Validación fallida. Verifica tus datos.",
+  "errorRateLimit": "Demasiadas solicitudes. Espera un momento.",
+  "errorCancelled": "La solicitud fue cancelada.",
+  "errorSerialization": "Error al procesar la respuesta. Intenta de nuevo.",
   "commonRetry": "Reintentar"
 }

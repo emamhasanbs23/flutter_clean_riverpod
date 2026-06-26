@@ -27,5 +27,12 @@
   "errorNetwork": "Network error. Please check your connection.",
   "errorUnauthorized": "Session expired. Please sign in again.",
   "errorNotFound": "Not found",
+  "errorNoConnection": "No internet connection. Please check your network.",
+  "errorTimeout": "Request timed out. Please try again.",
+  "errorServer": "Server error. Please try again later.",
+  "errorValidation": "Validation failed. Please check your input.",
+  "errorRateLimit": "Too many requests. Please wait a moment.",
+  "errorCancelled": "Request was cancelled.",
+  "errorSerialization": "Failed to process response. Please try again.",
   "commonRetry": "Retry"
 }

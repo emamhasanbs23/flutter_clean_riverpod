@@ -44,8 +44,9 @@ void main() {
       container
           .read(pendingNavigationProvider.notifier)
           .enqueue(const RouteDescriptor(path: '/todos/7'));
-      final consumed =
-          container.read(pendingNavigationProvider.notifier).consume();
+      final consumed = container
+          .read(pendingNavigationProvider.notifier)
+          .consume();
       expect(consumed, const RouteDescriptor(path: '/todos/7'));
       expect(container.read(pendingNavigationProvider), isNull);
     });

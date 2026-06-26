@@ -1,103 +1,50 @@
 import 'package:dio/dio.dart';
 
-import 'package:flutter_clean_riverpod_boilerplate/core/error/dio_failure_mapper.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/network/network_guard.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/api/auth_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_response.dart';
 
-/// Dio-backed [AuthRemoteDataSource].
+/// Retrofit-backed `AuthRemoteDataSource`.
 ///
-/// Targets a configurable `/auth/*` endpoint, defaulting to placeholder
-/// paths so the wiring is visible without requiring a live backend.
+/// Targets the configured `/auth/*` endpoints through `AuthApi`. Network /
+/// transport errors are translated into domain failures by `guard` so the
+/// repository can simply re-throw and let its catch block build the `Either`.
 ///
-/// The default endpoint shape is intentionally minimal — a real backend
-/// can override the path by passing `loginPath` / `refreshPath` to the
-/// constructor. The response is expected to be
-/// `{"access_token": "...", "refresh_token": "...", "user": {"id": "...",
-/// "email": "..."}}`.
+/// Methods accept an optional [CancelToken] so a Riverpod controller can
+/// abort the request when its widget is disposed mid-flight.
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  AuthRemoteDataSourceImpl(
-    this._dio, {
-    String loginPath = '/auth/login',
-    String refreshPath = '/auth/refresh',
-  })  : _loginPath = loginPath,
-        _refreshPath = refreshPath;
+  AuthRemoteDataSourceImpl(this._api);
 
-  final Dio _dio;
-  final String _loginPath;
-  final String _refreshPath;
+  final AuthApi _api;
 
   @override
-  Future<LoginResponse> login({required LoginRequest request}) async {
-    try {
-      final response = await _dio.post<Map<String, dynamic>>(
-        _loginPath,
-        data: request.toJson(),
-      );
-      return _parseLoginResponse(response.data);
-    } on DioException catch (error, stackTrace) {
-      AppLogger.e(
-        'AuthRemoteDataSource.login failed',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      throw mapDioExceptionToFailure(error);
-    }
-  }
+  Future<LoginResponse> login({
+    required LoginRequest request,
+    CancelToken? cancelToken,
+  }) => guard(
+    'AuthRemoteDataSource.login',
+    () => _api.login(request, cancelToken: cancelToken),
+  );
 
   @override
   Future<RefreshTokenResponse> refresh({
     required RefreshTokenRequest request,
-  }) async {
-    try {
-      final response = await _dio.post<Map<String, dynamic>>(
-        _refreshPath,
-        data: request.toJson(),
-      );
-      return _parseRefreshResponse(response.data);
-    } on DioException catch (error, stackTrace) {
-      AppLogger.e(
-        'AuthRemoteDataSource.refresh failed',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      throw mapDioExceptionToFailure(error);
-    }
-  }
-
-  LoginResponse _parseLoginResponse(Map<String, dynamic>? body) {
-    if (body == null) {
-      throw const UnexpectedFailure('Empty auth response');
-    }
-    try {
-      return LoginResponse.fromJson(body);
-    } on Object catch (error, stackTrace) {
-      AppLogger.e(
-        'AuthRemoteDataSource._parseLoginResponse failed',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      throw const UnexpectedFailure('Malformed login response');
-    }
-  }
-
-  RefreshTokenResponse _parseRefreshResponse(Map<String, dynamic>? body) {
-    if (body == null) {
-      throw const UnexpectedFailure('Empty refresh response');
-    }
-    try {
-      return RefreshTokenResponse.fromJson(body);
-    } on Object catch (error, stackTrace) {
-      AppLogger.e(
-        'AuthRemoteDataSource._parseRefreshResponse failed',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      throw const UnexpectedFailure('Malformed refresh response');
-    }
-  }
+    CancelToken? cancelToken,
+  }) => guard(
+    'AuthRemoteDataSource.refresh',
+    () => _api.refresh(
+      request,
+      cancelToken: cancelToken,
+      // Mark this request to skip auth header attachment so the
+      // interceptor doesn't attach the expired access token.
+      options: Options(
+        extra: <String, dynamic>{AuthInterceptor.skipAuthKey: true},
+      ),
+    ),
+  );
 }

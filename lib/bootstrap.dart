@@ -137,9 +137,11 @@ Future<void> bootstrap(Flavor flavor) async {
         // cold-start tap (if any) be replayed on the very next stream
         // tick. Failures are swallowed because the FCM service itself
         // already catches init errors.
-        unawaited(notificationService.initialize().catchError((Object e) {
-          AppLogger.w('FCM initialize failed', error: e);
-        }));
+        unawaited(
+          notificationService.initialize().catchError((Object e) {
+            AppLogger.w('FCM initialize failed', error: e);
+          }),
+        );
       });
 
       runApp(

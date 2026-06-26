@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
+
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/data_source/todo_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/model/todo_dto.dart';
@@ -7,12 +9,17 @@ import 'package:flutter_clean_riverpod_boilerplate/features/todo/data/model/todo
 /// In-memory data source used to demonstrate the full Clean Architecture
 /// flow without depending on a real backend.
 ///
-/// Simulates network latency via [Future.delayed] so loading states and error
+/// Simulates network latency via `Future.delayed` so loading states and error
 /// paths can be exercised realistically. The list lives in memory only;
 /// mutations are visible for the app's lifetime.
+///
+/// The optional `CancelToken` mirrors the contract of `TodoRemoteDataSource`
+/// so callers can wire lifecycle cancellation uniformly. The mock does not
+/// check the token — a real data source cancels the in-flight request,
+/// which is the behavior we want to simulate in widget-level smoke tests.
 class TodoMockDataSource implements TodoDataSource {
   TodoMockDataSource({Duration? latency})
-      : _latency = latency ?? const Duration(milliseconds: 300) {
+    : _latency = latency ?? const Duration(milliseconds: 300) {
     _seed();
   }
 
@@ -20,14 +27,14 @@ class TodoMockDataSource implements TodoDataSource {
   final List<TodoDto> _todos = [];
 
   @override
-  Future<List<TodoDto>> fetchAll() async {
+  Future<List<TodoDto>> fetchAll({CancelToken? cancelToken}) async {
     await Future<void>.delayed(_latency);
     // Return a copy so callers cannot mutate the source of truth.
     return List.unmodifiable(_todos.map((t) => t));
   }
 
   @override
-  Future<TodoDto> create(String title) async {
+  Future<TodoDto> create(String title, {CancelToken? cancelToken}) async {
     await Future<void>.delayed(_latency);
     final dto = TodoDto(
       id: _generateId(),
@@ -39,7 +46,7 @@ class TodoMockDataSource implements TodoDataSource {
   }
 
   @override
-  Future<TodoDto> toggle(String id) async {
+  Future<TodoDto> toggle(String id, {CancelToken? cancelToken}) async {
     await Future<void>.delayed(_latency);
     final index = _todos.indexWhere((t) => t.id == id);
     if (index < 0) {
@@ -51,7 +58,7 @@ class TodoMockDataSource implements TodoDataSource {
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> delete(String id, {CancelToken? cancelToken}) async {
     await Future<void>.delayed(_latency);
     _todos.removeWhere((t) => t.id == id);
   }

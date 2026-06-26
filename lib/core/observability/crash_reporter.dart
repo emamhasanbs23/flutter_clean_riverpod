@@ -35,9 +35,7 @@ class NoOpCrashReporter implements CrashReporter {
     String? reason,
     Map<String, Object?>? context,
   }) {
-    debugPrint(
-      'NoOpCrashReporter: ${reason ?? 'uncaught error'} — $error',
-    );
+    debugPrint('NoOpCrashReporter: ${reason ?? 'uncaught error'} — $error');
     if (stackTrace != null) debugPrint(stackTrace.toString());
   }
 

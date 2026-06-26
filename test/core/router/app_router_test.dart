@@ -7,42 +7,27 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('authRedirect', () {
     test('unauthenticated user on / is redirected to /login', () {
-      final next = authRedirect(
-        '/',
-        const AsyncValue.data(false),
-      );
+      final next = authRedirect('/', const AsyncValue.data(false));
       expect(next, '/login');
     });
 
     test('authenticated user on / stays on /', () {
-      final next = authRedirect(
-        '/',
-        const AsyncValue.data(true),
-      );
+      final next = authRedirect('/', const AsyncValue.data(true));
       expect(next, isNull);
     });
 
     test('authenticated user on /login is sent back to /', () {
-      final next = authRedirect(
-        '/login',
-        const AsyncValue.data(true),
-      );
+      final next = authRedirect('/login', const AsyncValue.data(true));
       expect(next, '/');
     });
 
     test('unauthenticated user on /login stays on /login', () {
-      final next = authRedirect(
-        '/login',
-        const AsyncValue.data(false),
-      );
+      final next = authRedirect('/login', const AsyncValue.data(false));
       expect(next, isNull);
     });
 
     test('loading state does not redirect (lets the splash handle it)', () {
-      final next = authRedirect(
-        '/',
-        const AsyncValue.loading(),
-      );
+      final next = authRedirect('/', const AsyncValue.loading());
       expect(next, isNull);
     });
   });
@@ -60,18 +45,15 @@ void main() {
       },
     );
 
-    test(
-      'unauthenticated user with pending destination falls through to '
-      'authRedirect → /login (pending preserved for replay)',
-      () {
-        final next = pendingNavigationAwareRedirect(
-          matchedLocation: '/todos/42',
-          auth: const AsyncValue.data(false),
-          pending: const RouteDescriptor(path: '/todos/42'),
-        );
-        expect(next, '/login');
-      },
-    );
+    test('unauthenticated user with pending destination falls through to '
+        'authRedirect → /login (pending preserved for replay)', () {
+      final next = pendingNavigationAwareRedirect(
+        matchedLocation: '/todos/42',
+        auth: const AsyncValue.data(false),
+        pending: const RouteDescriptor(path: '/todos/42'),
+      );
+      expect(next, '/login');
+    });
 
     test(
       'authenticated user with no pending destination follows authRedirect',
@@ -108,12 +90,9 @@ void main() {
   });
 
   group('appRouterProvider', () {
-    test('exposes a GoRouter bound to the overridable auth provider',
-        () async {
+    test('exposes a GoRouter bound to the overridable auth provider', () async {
       final container = ProviderContainer(
-        overrides: [
-          isAuthenticatedProvider.overrideWith((ref) async => false),
-        ],
+        overrides: [isAuthenticatedProvider.overrideWith((ref) async => false)],
       );
       addTearDown(container.dispose);
 

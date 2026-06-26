@@ -1,6 +1,7 @@
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart' show AuthInterceptor;
+import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart'
+    show AuthInterceptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/mapper/auth_mapper.dart';
@@ -20,8 +21,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthRemoteDataSource remoteDataSource,
     required SecureStorageService storage,
-  })  : _remote = remoteDataSource,
-        _storage = storage;
+  }) : _remote = remoteDataSource,
+       _storage = storage;
 
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
@@ -44,7 +45,8 @@ class AuthRepositoryImpl implements AuthRepository {
       // Prefer the user object embedded in the response; fall back to a
       // deterministic id derived from the email for legacy backends that
       // don't return a nested user object yet.
-      final user = response.toDomainOrNull() ??
+      final user =
+          response.toDomainOrNull() ??
           AuthUser(id: _fakeUserId(email), email: email);
 
       await _storage.write(_accessTokenKey, response.accessToken);

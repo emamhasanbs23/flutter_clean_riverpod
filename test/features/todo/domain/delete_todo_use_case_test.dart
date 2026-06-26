@@ -17,22 +17,28 @@ void main() {
       useCase = DeleteTodoUseCase(repository);
     });
 
-    test('forwards the id to the repository and returns its success',
-        () async {
-      when(() => repository.deleteTodo('42')).thenAnswer(
-        (_) async => const Right<Failure, void>(null),
-      );
+    test('forwards the id to the repository and returns its success', () async {
+      when(
+        () =>
+            repository.deleteTodo('42', cancelToken: any(named: 'cancelToken')),
+      ).thenAnswer((_) async => const Right<Failure, void>(null));
 
       final result = await useCase('42');
 
       expect(result.isRight(), isTrue);
-      verify(() => repository.deleteTodo('42')).called(1);
+      verify(
+        () =>
+            repository.deleteTodo('42', cancelToken: any(named: 'cancelToken')),
+      ).called(1);
     });
 
     test('propagates repository failures', () async {
-      when(() => repository.deleteTodo('missing')).thenAnswer(
-        (_) async => const Left<Failure, void>(NotFoundFailure()),
-      );
+      when(
+        () => repository.deleteTodo(
+          'missing',
+          cancelToken: any(named: 'cancelToken'),
+        ),
+      ).thenAnswer((_) async => const Left<Failure, void>(NotFoundFailure()));
 
       final result = await useCase('missing');
 

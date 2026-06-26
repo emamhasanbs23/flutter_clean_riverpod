@@ -13,14 +13,9 @@ import 'package:mocktail/mocktail.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository {}
 
-Widget _wrap({
-  required Widget child,
-  required _MockAuthRepository repository,
-}) {
+Widget _wrap({required Widget child, required _MockAuthRepository repository}) {
   return ProviderScope(
-    overrides: [
-      authRepositoryProvider.overrideWithValue(repository),
-    ],
+    overrides: [authRepositoryProvider.overrideWithValue(repository)],
     child: ScreenUtilInit(
       designSize: const Size(390, 844),
       minTextAdapt: true,
@@ -43,8 +38,7 @@ void main() {
     when(repository.isAuthenticated).thenAnswer((_) async => false);
   });
 
-  testWidgets('shows validation errors when fields are empty',
-      (tester) async {
+  testWidgets('shows validation errors when fields are empty', (tester) async {
     await tester.pumpWidget(
       _wrap(child: const LoginPage(), repository: repository),
     );
@@ -59,8 +53,9 @@ void main() {
     expect(find.text('Please enter your password'), findsOneWidget);
   });
 
-  testWidgets('rejects a short password before calling the repository',
-      (tester) async {
+  testWidgets('rejects a short password before calling the repository', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _wrap(child: const LoginPage(), repository: repository),
     );
@@ -71,21 +66,25 @@ void main() {
     await tester.pump();
 
     expect(find.text('Password must be at least 6 characters'), findsOneWidget);
-    verifyNever(() => repository.login(
-          email: any(named: 'email'),
-          password: any(named: 'password'),
-        ));
+    verifyNever(
+      () => repository.login(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
+      ),
+    );
   });
 
-  testWidgets('successful login calls repository and shows no error',
-      (tester) async {
-    when(() => repository.login(
-          email: any(named: 'email'),
-          password: any(named: 'password'),
-        )).thenAnswer(
-      (_) async => const Right<Failure, AuthUser>(
-        AuthUser(id: '1', email: 'a@b.com'),
+  testWidgets('successful login calls repository and shows no error', (
+    tester,
+  ) async {
+    when(
+      () => repository.login(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
       ),
+    ).thenAnswer(
+      (_) async =>
+          const Right<Failure, AuthUser>(AuthUser(id: '1', email: 'a@b.com')),
     );
 
     await tester.pumpWidget(
@@ -97,18 +96,20 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    verify(() => repository.login(
-          email: 'demo@example.com',
-          password: 'password',
-        )).called(1);
+    verify(
+      () => repository.login(email: 'demo@example.com', password: 'password'),
+    ).called(1);
   });
 
-  testWidgets('failed login shows a snackbar with a localized message',
-      (tester) async {
-    when(() => repository.login(
-          email: any(named: 'email'),
-          password: any(named: 'password'),
-        )).thenAnswer(
+  testWidgets('failed login shows a snackbar with a localized message', (
+    tester,
+  ) async {
+    when(
+      () => repository.login(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
+      ),
+    ).thenAnswer(
       (_) async => const Left<Failure, AuthUser>(UnauthorizedFailure()),
     );
 
@@ -121,9 +122,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 750));
 
     expect(find.byType(SnackBar), findsOneWidget);
-    expect(
-      find.textContaining('Session expired'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('Session expired'), findsOneWidget);
   });
 }

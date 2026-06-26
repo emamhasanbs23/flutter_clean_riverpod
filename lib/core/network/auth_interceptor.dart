@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart' show DioClient;
+import 'package:flutter_clean_riverpod_boilerplate/core/network/dio_client.dart'
+    show DioClient;
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 
 /// Attaches the access token to every outgoing request and recovers from
@@ -26,12 +27,17 @@ class AuthInterceptor extends Interceptor {
     this._storage, {
     required Object Function() authRepositoryBuilder,
     void Function()? onSessionExpired,
-  })  : _authRepositoryBuilder = authRepositoryBuilder,
-        _onSessionExpired = onSessionExpired;
+  }) : _authRepositoryBuilder = authRepositoryBuilder,
+       _onSessionExpired = onSessionExpired;
 
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
   static const _retryFlagKey = '_auth_retried';
+
+  /// Extra flag that requests can set to skip automatic Authorization header
+  /// attachment. Used by the refresh token endpoint so it doesn't send the
+  /// (likely expired) access token to the refresh endpoint.
+  static const String skipAuthKey = '_skip_auth';
 
   /// Dio this interceptor is attached to. The retry path re-uses it so any
   /// test fakes / logging interceptors / etc. attached by the test or by
@@ -48,7 +54,11 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    if (options.headers['Authorization'] == null) {
+    // Skip auth header attachment when the request explicitly opts out
+    // (e.g., the refresh token endpoint must not send the expired access
+    // token).
+    final skipAuth = options.extra[skipAuthKey] == true;
+    if (!skipAuth && options.headers['Authorization'] == null) {
       final token = await _storage.read(_accessTokenKey);
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
@@ -72,8 +82,10 @@ class AuthInterceptor extends Interceptor {
 
     final refreshToken = await _storage.read(_refreshTokenKey);
     if (refreshToken == null || refreshToken.isEmpty) {
-      AppLogger.w('401 received but no refresh token is stored; '
-          'forwarding as Unauthorized.');
+      AppLogger.w(
+        '401 received but no refresh token is stored; '
+        'forwarding as Unauthorized.',
+      );
       _notifySessionExpired();
       return handler.next(err);
     }
@@ -99,6 +111,16 @@ class AuthInterceptor extends Interceptor {
       final response = await _dio.fetch<dynamic>(retried);
       return handler.resolve(response);
     } on DioException catch (retryError) {
+      // If the retried request still returns 401, the refresh token is
+      // likely revoked or the user's session has been terminated server-side.
+      // Clear auth state and notify so the app redirects to login.
+      if (retryError.response?.statusCode == 401) {
+        AppLogger.w(
+          'Retry after refresh still returned 401; clearing auth state',
+        );
+        await _clearAuthState();
+        _notifySessionExpired();
+      }
       return handler.next(retryError);
     }
   }
@@ -120,13 +142,10 @@ class AuthInterceptor extends Interceptor {
       final dynamic authRepo = repository;
       final dynamic result = await authRepo.refreshAccessToken();
       // result is `Either<Failure, String>` — inspect via dynamic dispatch.
-      final dynamic value = result.fold(
-        (Object? failure) {
-          AppLogger.w('Refresh returned ${failure.runtimeType}');
-          return null;
-        },
-        (Object? token) => token,
-      );
+      final dynamic value = result.fold((Object? failure) {
+        AppLogger.w('Refresh returned ${failure.runtimeType}');
+        return null;
+      }, (Object? token) => token);
       // Persist the new access token so subsequent requests pick it up
       // via the onRequest hook without having to wait for another 401.
       if (value is String && value.isNotEmpty) {

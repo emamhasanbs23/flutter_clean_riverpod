@@ -11,15 +11,11 @@ import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 /// [message] wins so callers can override the localized string with a more
 /// specific one.
 class AppErrorWidget extends StatelessWidget {
-  const AppErrorWidget({
-    super.key,
-    this.message,
-    this.failure,
-    this.onRetry,
-  }) : assert(
-          message != null || failure != null || onRetry != null,
-          'Provide message, failure, or onRetry',
-        );
+  const AppErrorWidget({super.key, this.message, this.failure, this.onRetry})
+    : assert(
+        message != null || failure != null || onRetry != null,
+        'Provide message, failure, or onRetry',
+      );
 
   /// Pre-localized error message. Takes precedence over [failure].
   final String? message;
@@ -34,9 +30,7 @@ class AppErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final text = message ??
-        failure?.toMessage(context) ??
-        l10n.errorUnexpected;
+    final text = message ?? failure?.toMessage(context) ?? l10n.errorUnexpected;
 
     return Center(
       child: Padding(
@@ -57,10 +51,7 @@ class AppErrorWidget extends StatelessWidget {
             ),
             if (onRetry != null) ...[
               SizedBox(height: AppSize.spaceLg),
-              ElevatedButton(
-                onPressed: onRetry,
-                child: Text(l10n.commonRetry),
-              ),
+              ElevatedButton(onPressed: onRetry, child: Text(l10n.commonRetry)),
             ],
           ],
         ),

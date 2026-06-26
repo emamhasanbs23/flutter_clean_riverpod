@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/config/flavor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart' show AuthRepository;
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/repositories/auth_repository.dart'
+    show AuthRepository;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -48,11 +49,7 @@ class DioClient {
     );
 
     if (config.enableDioLogging) {
-      dio.interceptors.add(
-        PrettyDioLogger(
-          requestBody: true,
-        ),
-      );
+      dio.interceptors.add(PrettyDioLogger(requestBody: true));
     }
 
     return dio;
@@ -74,8 +71,9 @@ typedef DioAuthRepositoryBuilder = Object Function();
 /// Implementations return whatever the interceptor needs (typically the
 /// `AuthRepository` instance). The default throws so a misconfigured app
 /// fails fast instead of silently skipping refresh.
-final dioAuthRepositoryBuilderProvider =
-    Provider<DioAuthRepositoryBuilder>((ref) {
+final dioAuthRepositoryBuilderProvider = Provider<DioAuthRepositoryBuilder>((
+  ref,
+) {
   throw UnimplementedError(
     'dioAuthRepositoryBuilderProvider must be overridden in ProviderScope.',
   );
