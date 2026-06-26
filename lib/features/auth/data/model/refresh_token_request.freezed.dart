@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,193 +9,272 @@ part of 'refresh_token_request.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-RefreshTokenRequest _$RefreshTokenRequestFromJson(Map<String, dynamic> json) {
-  return _RefreshTokenRequest.fromJson(json);
-}
 
 /// @nodoc
 mixin _$RefreshTokenRequest {
-  @JsonKey(name: 'refreshToken')
-  String get refreshToken => throw _privateConstructorUsedError;
-  int? get expiresInMins => throw _privateConstructorUsedError;
+
+@JsonKey(name: 'refreshToken') String get refreshToken; int? get expiresInMins;
+/// Create a copy of RefreshTokenRequest
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RefreshTokenRequestCopyWith<RefreshTokenRequest> get copyWith => _$RefreshTokenRequestCopyWithImpl<RefreshTokenRequest>(this as RefreshTokenRequest, _$identity);
 
   /// Serializes this RefreshTokenRequest to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of RefreshTokenRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $RefreshTokenRequestCopyWith<RefreshTokenRequest> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RefreshTokenRequest&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.expiresInMins, expiresInMins) || other.expiresInMins == expiresInMins));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,refreshToken,expiresInMins);
+
+@override
+String toString() {
+  return 'RefreshTokenRequest(refreshToken: $refreshToken, expiresInMins: $expiresInMins)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $RefreshTokenRequestCopyWith<$Res> {
-  factory $RefreshTokenRequestCopyWith(
-    RefreshTokenRequest value,
-    $Res Function(RefreshTokenRequest) then,
-  ) = _$RefreshTokenRequestCopyWithImpl<$Res, RefreshTokenRequest>;
-  @useResult
-  $Res call({
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    int? expiresInMins,
-  });
-}
+abstract mixin class $RefreshTokenRequestCopyWith<$Res>  {
+  factory $RefreshTokenRequestCopyWith(RefreshTokenRequest value, $Res Function(RefreshTokenRequest) _then) = _$RefreshTokenRequestCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'refreshToken') String refreshToken, int? expiresInMins
+});
 
+
+
+
+}
 /// @nodoc
-class _$RefreshTokenRequestCopyWithImpl<$Res, $Val extends RefreshTokenRequest>
+class _$RefreshTokenRequestCopyWithImpl<$Res>
     implements $RefreshTokenRequestCopyWith<$Res> {
-  _$RefreshTokenRequestCopyWithImpl(this._value, this._then);
+  _$RefreshTokenRequestCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final RefreshTokenRequest _self;
+  final $Res Function(RefreshTokenRequest) _then;
 
-  /// Create a copy of RefreshTokenRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? refreshToken = null, Object? expiresInMins = freezed}) {
-    return _then(
-      _value.copyWith(
-            refreshToken: null == refreshToken
-                ? _value.refreshToken
-                : refreshToken // ignore: cast_nullable_to_non_nullable
-                      as String,
-            expiresInMins: freezed == expiresInMins
-                ? _value.expiresInMins
-                : expiresInMins // ignore: cast_nullable_to_non_nullable
-                      as int?,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of RefreshTokenRequest
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? refreshToken = null,Object? expiresInMins = freezed,}) {
+  return _then(_self.copyWith(
+refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
+as String,expiresInMins: freezed == expiresInMins ? _self.expiresInMins : expiresInMins // ignore: cast_nullable_to_non_nullable
+as int?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$RefreshTokenRequestImplCopyWith<$Res>
-    implements $RefreshTokenRequestCopyWith<$Res> {
-  factory _$$RefreshTokenRequestImplCopyWith(
-    _$RefreshTokenRequestImpl value,
-    $Res Function(_$RefreshTokenRequestImpl) then,
-  ) = __$$RefreshTokenRequestImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({
-    @JsonKey(name: 'refreshToken') String refreshToken,
-    int? expiresInMins,
-  });
 }
 
-/// @nodoc
-class __$$RefreshTokenRequestImplCopyWithImpl<$Res>
-    extends _$RefreshTokenRequestCopyWithImpl<$Res, _$RefreshTokenRequestImpl>
-    implements _$$RefreshTokenRequestImplCopyWith<$Res> {
-  __$$RefreshTokenRequestImplCopyWithImpl(
-    _$RefreshTokenRequestImpl _value,
-    $Res Function(_$RefreshTokenRequestImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of RefreshTokenRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? refreshToken = null, Object? expiresInMins = freezed}) {
-    return _then(
-      _$RefreshTokenRequestImpl(
-        refreshToken: null == refreshToken
-            ? _value.refreshToken
-            : refreshToken // ignore: cast_nullable_to_non_nullable
-                  as String,
-        expiresInMins: freezed == expiresInMins
-            ? _value.expiresInMins
-            : expiresInMins // ignore: cast_nullable_to_non_nullable
-                  as int?,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [RefreshTokenRequest].
+extension RefreshTokenRequestPatterns on RefreshTokenRequest {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _RefreshTokenRequest value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _RefreshTokenRequest() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _RefreshTokenRequest value)  $default,){
+final _that = this;
+switch (_that) {
+case _RefreshTokenRequest():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _RefreshTokenRequest value)?  $default,){
+final _that = this;
+switch (_that) {
+case _RefreshTokenRequest() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'refreshToken')  String refreshToken,  int? expiresInMins)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _RefreshTokenRequest() when $default != null:
+return $default(_that.refreshToken,_that.expiresInMins);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'refreshToken')  String refreshToken,  int? expiresInMins)  $default,) {final _that = this;
+switch (_that) {
+case _RefreshTokenRequest():
+return $default(_that.refreshToken,_that.expiresInMins);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'refreshToken')  String refreshToken,  int? expiresInMins)?  $default,) {final _that = this;
+switch (_that) {
+case _RefreshTokenRequest() when $default != null:
+return $default(_that.refreshToken,_that.expiresInMins);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$RefreshTokenRequestImpl implements _RefreshTokenRequest {
-  const _$RefreshTokenRequestImpl({
-    @JsonKey(name: 'refreshToken') required this.refreshToken,
-    this.expiresInMins,
-  });
 
-  factory _$RefreshTokenRequestImpl.fromJson(Map<String, dynamic> json) =>
-      _$$RefreshTokenRequestImplFromJson(json);
+class _RefreshTokenRequest implements RefreshTokenRequest {
+  const _RefreshTokenRequest({@JsonKey(name: 'refreshToken') required this.refreshToken, this.expiresInMins});
+  factory _RefreshTokenRequest.fromJson(Map<String, dynamic> json) => _$RefreshTokenRequestFromJson(json);
 
-  @override
-  @JsonKey(name: 'refreshToken')
-  final String refreshToken;
-  @override
-  final int? expiresInMins;
+@override@JsonKey(name: 'refreshToken') final  String refreshToken;
+@override final  int? expiresInMins;
 
-  @override
-  String toString() {
-    return 'RefreshTokenRequest(refreshToken: $refreshToken, expiresInMins: $expiresInMins)';
-  }
+/// Create a copy of RefreshTokenRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RefreshTokenRequestCopyWith<_RefreshTokenRequest> get copyWith => __$RefreshTokenRequestCopyWithImpl<_RefreshTokenRequest>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$RefreshTokenRequestImpl &&
-            (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken) &&
-            (identical(other.expiresInMins, expiresInMins) ||
-                other.expiresInMins == expiresInMins));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, refreshToken, expiresInMins);
-
-  /// Create a copy of RefreshTokenRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$RefreshTokenRequestImplCopyWith<_$RefreshTokenRequestImpl> get copyWith =>
-      __$$RefreshTokenRequestImplCopyWithImpl<_$RefreshTokenRequestImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$RefreshTokenRequestImplToJson(this);
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$RefreshTokenRequestToJson(this, );
 }
 
-abstract class _RefreshTokenRequest implements RefreshTokenRequest {
-  const factory _RefreshTokenRequest({
-    @JsonKey(name: 'refreshToken') required final String refreshToken,
-    final int? expiresInMins,
-  }) = _$RefreshTokenRequestImpl;
-
-  factory _RefreshTokenRequest.fromJson(Map<String, dynamic> json) =
-      _$RefreshTokenRequestImpl.fromJson;
-
-  @override
-  @JsonKey(name: 'refreshToken')
-  String get refreshToken;
-  @override
-  int? get expiresInMins;
-
-  /// Create a copy of RefreshTokenRequest
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RefreshTokenRequestImplCopyWith<_$RefreshTokenRequestImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RefreshTokenRequest&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.expiresInMins, expiresInMins) || other.expiresInMins == expiresInMins));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,refreshToken,expiresInMins);
+
+@override
+String toString() {
+  return 'RefreshTokenRequest(refreshToken: $refreshToken, expiresInMins: $expiresInMins)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RefreshTokenRequestCopyWith<$Res> implements $RefreshTokenRequestCopyWith<$Res> {
+  factory _$RefreshTokenRequestCopyWith(_RefreshTokenRequest value, $Res Function(_RefreshTokenRequest) _then) = __$RefreshTokenRequestCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'refreshToken') String refreshToken, int? expiresInMins
+});
+
+
+
+
+}
+/// @nodoc
+class __$RefreshTokenRequestCopyWithImpl<$Res>
+    implements _$RefreshTokenRequestCopyWith<$Res> {
+  __$RefreshTokenRequestCopyWithImpl(this._self, this._then);
+
+  final _RefreshTokenRequest _self;
+  final $Res Function(_RefreshTokenRequest) _then;
+
+/// Create a copy of RefreshTokenRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? refreshToken = null,Object? expiresInMins = freezed,}) {
+  return _then(_RefreshTokenRequest(
+refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
+as String,expiresInMins: freezed == expiresInMins ? _self.expiresInMins : expiresInMins // ignore: cast_nullable_to_non_nullable
+as int?,
+  ));
+}
+
+
+}
+
+// dart format on

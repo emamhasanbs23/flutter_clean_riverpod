@@ -10,7 +10,7 @@ part 'todo.freezed.dart';
 /// data layer translates between `TodoDto` (wire format) and this
 /// entity via `todo_mapper.dart`.
 @freezed
-class Todo with _$Todo {
+abstract class Todo with _$Todo {
   const factory Todo({
     required String id,
     required String title,

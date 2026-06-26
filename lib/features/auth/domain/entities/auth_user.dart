@@ -10,7 +10,7 @@ part 'auth_user.freezed.dart';
 /// data layer translates between wire DTOs and this entity via
 /// `AuthMapper`.
 @freezed
-class AuthUser with _$AuthUser {
+abstract class AuthUser with _$AuthUser {
   const factory AuthUser({required String id, required String email}) =
       _AuthUser;
 }

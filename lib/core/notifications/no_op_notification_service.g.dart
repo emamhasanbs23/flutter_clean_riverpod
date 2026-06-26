@@ -6,27 +6,63 @@ part of 'no_op_notification_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notificationServiceHash() =>
-    r'b65bbde8f33e881455df7b2759a187a09c48ee67';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Provider entry point for [NotificationService]. Default is the
+/// [NoOpNotificationService]; the FCM-backed implementation overrides
+/// this in production.
+
+@ProviderFor(notificationService)
+final notificationServiceProvider = NotificationServiceProvider._();
 
 /// Provider entry point for [NotificationService]. Default is the
 /// [NoOpNotificationService]; the FCM-backed implementation overrides
 /// this in production.
-///
-/// Copied from [notificationService].
-@ProviderFor(notificationService)
-final notificationServiceProvider = Provider<NotificationService>.internal(
-  notificationService,
-  name: r'notificationServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$notificationServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef NotificationServiceRef = ProviderRef<NotificationService>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class NotificationServiceProvider
+    extends
+        $FunctionalProvider<
+          NotificationService,
+          NotificationService,
+          NotificationService
+        >
+    with $Provider<NotificationService> {
+  /// Provider entry point for [NotificationService]. Default is the
+  /// [NoOpNotificationService]; the FCM-backed implementation overrides
+  /// this in production.
+  NotificationServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notificationServiceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$notificationServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<NotificationService> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  NotificationService create(Ref ref) {
+    return notificationService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NotificationService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<NotificationService>(value),
+    );
+  }
+}
+
+String _$notificationServiceHash() =>
+    r'b65bbde8f33e881455df7b2759a187a09c48ee67';

@@ -6,8 +6,8 @@ part of 'auth_me_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AuthMeResponseImpl _$$AuthMeResponseImplFromJson(Map<String, dynamic> json) =>
-    _$AuthMeResponseImpl(
+_AuthMeResponse _$AuthMeResponseFromJson(Map<String, dynamic> json) =>
+    _AuthMeResponse(
       id: (json['id'] as num).toInt(),
       email: json['email'] as String,
       username: json['username'] as String?,
@@ -16,13 +16,12 @@ _$AuthMeResponseImpl _$$AuthMeResponseImplFromJson(Map<String, dynamic> json) =>
       image: json['image'] as String?,
     );
 
-Map<String, dynamic> _$$AuthMeResponseImplToJson(
-  _$AuthMeResponseImpl instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'email': instance.email,
-  'username': instance.username,
-  'firstName': instance.firstName,
-  'lastName': instance.lastName,
-  'image': instance.image,
-};
+Map<String, dynamic> _$AuthMeResponseToJson(_AuthMeResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'email': instance.email,
+      'username': instance.username,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'image': instance.image,
+    };

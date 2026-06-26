@@ -8,7 +8,7 @@ part 'login_request.g.dart';
 /// Mirrors the JSON DummyJSON expects:
 /// `{ "username": "...", "password": "...", "expiresInMins": 60 }`.
 @freezed
-class LoginRequest with _$LoginRequest {
+abstract class LoginRequest with _$LoginRequest {
   const factory LoginRequest({
     required String username,
     required String password,

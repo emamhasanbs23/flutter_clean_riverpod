@@ -6,7 +6,7 @@ part 'todos_response_dto.g.dart';
 
 /// Paginated list envelope returned by `GET /todos`.
 @freezed
-class TodosResponseDto with _$TodosResponseDto {
+abstract class TodosResponseDto with _$TodosResponseDto {
   const factory TodosResponseDto({
     @Default(<TodoDto>[]) List<TodoDto> todos,
     @Default(0) int total,
