@@ -1,0 +1,84 @@
+{
+  // Cursor / VS Code launch configurations for flutter_clean_riverpod_boilerplate.
+  // Requires the Dart-Code.flutter extension and FVM initialised locally:
+  //   fvm install && fvm use 3.44.0
+  "version": "0.2.0",
+  "configurations": [
+    // ─── DEV ──────────────────────────────────────────────────────────────────
+    {
+      "name": "Dev (debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": [
+        "--flavor",
+        "dev",
+        "--dart-define-from-file=env.dev.json"
+      ]
+    },
+    {
+      "name": "Dev (profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "flutterMode": "profile",
+      "args": [
+        "--flavor",
+        "dev",
+        "--dart-define-from-file=env.dev.json"
+      ]
+    },
+    // ─── STAGING ──────────────────────────────────────────────────────────────
+    {
+      "name": "Staging (debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": [
+        "--flavor",
+        "staging",
+        "--dart-define-from-file=env.staging.json"
+      ]
+    },
+    {
+      "name": "Staging (profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "flutterMode": "profile",
+      "args": [
+        "--flavor",
+        "staging",
+        "--dart-define-from-file=env.staging.json"
+      ]
+    },
+    // ─── PROD ─────────────────────────────────────────────────────────────────
+    {
+      "name": "Prod (profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "flutterMode": "profile",
+      "args": [
+        "--flavor",
+        "prod",
+        "--dart-define-from-file=env.prod.json"
+      ]
+    },
+    {
+      "name": "Prod (release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+       
+      "flutterMode": "release",
+      "args": [
+        "--flavor",
+        "prod",
+        "--dart-define-from-file=env.prod.json"
+      ]
+    }
+  ],
+  // ─── COMPOUNDS ──────────────────────────────────────────────────────────────
+  "compounds": []
+}

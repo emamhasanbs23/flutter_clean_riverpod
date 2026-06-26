@@ -72,7 +72,9 @@ app.*.map.json
 /ios/Runner/*/GoogleService-Info.plist
 !/ios/Runner/*/GoogleService-Info.plist.example
 
-
 /flutter_template_momshad_bhai
 .puku/
 .puku-cli/.github/workflows/
+
+# FVM Version Cache
+.fvm/

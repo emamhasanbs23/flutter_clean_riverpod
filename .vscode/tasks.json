@@ -1,0 +1,188 @@
+{
+  // Cursor / VS Code task definitions for flutter_clean_riverpod_boilerplate.
+  // All commands go through FVM — never call `flutter` or `dart` directly.
+  // Run via: Terminal → Run Task… (or bind to a keyboard shortcut).
+  "version": "2.0.0",
+  "tasks": [
+    // ─── CODE GENERATION ──────────────────────────────────────────────────────
+    {
+      "label": "codegen: build",
+      "detail": "Run build_runner once (Retrofit, freezed, Riverpod codegen)",
+      "type": "shell",
+      "command": "fvm dart run build_runner build --delete-conflicting-outputs",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "codegen: watch",
+      "detail": "Watch mode — re-runs build_runner on file changes",
+      "type": "shell",
+      "command": "fvm dart run build_runner watch --delete-conflicting-outputs",
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    // ─── LOCALISATION ─────────────────────────────────────────────────────────
+    {
+      "label": "l10n: generate",
+      "detail": "Regenerate AppLocalizations from ARB files (flutter gen-l10n)",
+      "type": "shell",
+      "command": "fvm flutter gen-l10n",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    // ─── ANALYSIS & LINTING ───────────────────────────────────────────────────
+    {
+      "label": "analyze",
+      "detail": "Run flutter analyze (very_good_analysis base)",
+      "type": "shell",
+      "command": "fvm flutter analyze",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "fix: apply",
+      "detail": "Apply dart fix suggestions automatically",
+      "type": "shell",
+      "command": "fvm dart fix --apply",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    // ─── FORMATTING ───────────────────────────────────────────────────────────
+    {
+      "label": "format: check",
+      "detail": "Check formatting without modifying files (exits non-zero on diff)",
+      "type": "shell",
+      "command": "fvm dart format --set-exit-if-changed .",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "format: fix",
+      "detail": "Format all Dart files in-place",
+      "type": "shell",
+      "command": "fvm dart format .",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    // ─── TESTING ──────────────────────────────────────────────────────────────
+    {
+      "label": "test: all",
+      "detail": "Run the full test suite",
+      "type": "shell",
+      "command": "fvm flutter test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "test: coverage",
+      "detail": "Run tests and generate LCOV coverage report",
+      "type": "shell",
+      "command": "fvm flutter test --coverage",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    // ─── PRE-PR GATE ──────────────────────────────────────────────────────────
+    {
+      "label": "gate: pre-PR",
+      "detail": "Full pre-PR gate: format check → analyze → test (all must pass)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "format: check",
+        "analyze",
+        "test: all"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    // ─── DEPENDENCIES ─────────────────────────────────────────────────────────
+    {
+      "label": "pub: get",
+      "detail": "Install / sync pub dependencies",
+      "type": "shell",
+      "command": "fvm flutter pub get",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "pub: upgrade",
+      "detail": "Upgrade all dependencies to latest compatible versions",
+      "type": "shell",
+      "command": "fvm flutter pub upgrade",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
