@@ -307,6 +307,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get commonRetry;
+
+  /// No description provided for @themeToggleLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to light mode'**
+  String get themeToggleLight;
+
+  /// No description provided for @themeToggleDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to dark mode'**
+  String get themeToggleDark;
+
+  /// No description provided for @themeToggleSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Use system theme'**
+  String get themeToggleSystem;
 }
 
 class _AppLocalizationsDelegate

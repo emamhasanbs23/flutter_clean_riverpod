@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/connectivity/connectivity_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_theme.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Top-of-screen banner shown when the device has no connectivity.
@@ -26,9 +26,7 @@ class ConnectivityBanner extends ConsumerWidget {
     }
 
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final dangerColor =
-        theme.extension<AppSemanticColors>()?.danger ?? theme.colorScheme.error;
+    final dangerColor = context.semantic.danger;
 
     return Material(
       color: dangerColor,
@@ -46,7 +44,7 @@ class ConnectivityBanner extends ConsumerWidget {
               Expanded(
                 child: Text(
                   l10n.connectivityOffline,
-                  style: theme.textTheme.bodySmall?.copyWith(
+                  style: context.textTheme.bodySmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),

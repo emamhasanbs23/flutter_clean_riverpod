@@ -14,6 +14,16 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     required this.info,
   });
 
+  /// Derived defaults when the extension is missing (e.g. bare [ThemeData] in
+  /// tests). Mirrors the `?? colorScheme.error` intent for [danger].
+  factory AppSemanticColors.fallback(ColorScheme colorScheme) =>
+      AppSemanticColors(
+        success: colorScheme.tertiary,
+        warning: colorScheme.secondary,
+        danger: colorScheme.error,
+        info: colorScheme.primary,
+      );
+
   final Color success;
   final Color warning;
   final Color danger;
@@ -55,6 +65,25 @@ class AppCustomTextStyles extends ThemeExtension<AppCustomTextStyles> {
     required this.link,
     required this.strikeThrough,
   });
+
+  /// Derived defaults when the extension is missing (e.g. bare [ThemeData] in
+  /// tests).
+  factory AppCustomTextStyles.fallback(
+    ColorScheme colorScheme,
+    TextTheme textTheme,
+  ) => AppCustomTextStyles(
+    button: (textTheme.labelLarge ?? const TextStyle()).copyWith(
+      color: colorScheme.onPrimary,
+    ),
+    link: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+      color: colorScheme.primary,
+      decoration: TextDecoration.underline,
+    ),
+    strikeThrough: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+      color: colorScheme.onSurfaceVariant,
+      decoration: TextDecoration.lineThrough,
+    ),
+  );
 
   final TextStyle button;
   final TextStyle link;

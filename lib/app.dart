@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/router/app_router.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_theme.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_mode_controller.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/connectivity_banner.dart';
 import 'package:flutter_clean_riverpod_boilerplate/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
+    final themeMode = ref.watch(themeModeControllerProvider);
 
     return ScreenUtilInit(
       designSize: const Size(390, 844),
@@ -24,6 +26,7 @@ class App extends ConsumerWidget {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
+          themeMode: themeMode,
           routerConfig: router,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

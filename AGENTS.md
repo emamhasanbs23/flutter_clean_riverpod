@@ -44,9 +44,9 @@
 5. **Typed routes**: navigate with `context.goNamed(TodoRoutes.detail,
    pathParameters: {'id': id})`. Never raw paths outside
    `app_router.dart`.
-6. **Styling**: `AppSize.*` for sizes, `ColorScheme` / `AppSemanticColors`
-   for colors, `AppCustomTextStyles` / `textTheme` for type. No inline
-   literals, no `Colors.blue`.
+6. **Styling**: `AppSize.*` for sizes; theme via `context.colors` /
+   `context.semantic` / `context.textStyles` / `context.textTheme` (see
+   `theme_context_extension.dart`). No inline literals, no `Colors.blue`.
 7. **Auth refresh** is centralized in the Dio interceptor (401 -> dedup ->
    retry once -> `onSessionExpired`). Don't re-implement in widgets.
 8. **CI** runs on `release*` tags. **CODEOWNERS** gates `core/network/`,
@@ -88,7 +88,7 @@
 | [flavors.md](./docs/agents/flavors.md) | `env.{dev,staging,prod}.json`, entrypoint wiring, native splash / launcher icons. |
 | [localization.md](./docs/agents/localization.md) | ARB workflow, `flutter gen-l10n`, `AppLocalizations`. |
 | [logger.md](./docs/agents/logger.md) | `AppLogger` (wraps the `logger` package), tag conventions. |
-| [styling.md](./docs/agents/styling.md) | `AppSize`, `ThemeExtension`s, `AppSemanticColors`, `AppCustomTextStyles`. |
+| [styling.md](./docs/agents/styling.md) | `AppSize`, `ThemeExtension`s, `ThemeContextX` (`context.colors` / `context.semantic` / `context.textStyles`). |
 | [commands.md](./docs/agents/commands.md) | The `fvm` prefix, `dart format`, `flutter analyze`, `flutter test`, CI. |
 | [ci.md](./docs/agents/ci.md) | Tag-driven CI, `release*` triggers, build matrix. |
 | [code-ownership.md](./docs/agents/code-ownership.md) | CODEOWNERS-gated paths, how to add a new owner. |
@@ -130,6 +130,7 @@ change. Each is independent.
 | A linter rule is in the way. | [analyzer-overrides.md](./docs/agents/analyzer-overrides.md) |
 | I want to add a dependency. | [commands.md](./docs/agents/commands.md) |
 | I want to cut a release. | [ci.md](./docs/agents/ci.md) + [release-tag.md](./docs/tasks/release-tag.md) |
+| I want to change colors or the theme toggle. | [styling.md](./docs/agents/styling.md) + [change-theme-or-colors.md](./docs/tasks/change-theme-or-colors.md) |
 | I'm touching a sensitive path. | [code-ownership.md](./docs/agents/code-ownership.md) |
 
 ## Package Management
@@ -308,28 +309,41 @@ flowchart LR
 ### UI Theming and Styling Code
 
 - **No inline literal paddings/sizes** -- use `AppSize.*`.
-- **No hard-coded colors** -- use `ColorScheme` or `AppSemanticColors`.
-- Text styles come from `Theme.of(context).textTheme` or
-  `AppCustomTextStyles` extension.
+- **No hard-coded colors or `TextStyle`s** -- use the namespaced
+  `BuildContext` extension in `lib/core/theme/theme_context_extension.dart`:
+  ```dart
+  context.colors.primary          // ColorScheme role
+  context.semantic.danger         // AppSemanticColors (non-null)
+  context.textStyles.strikeThrough // AppCustomTextStyles (non-null)
+  context.textTheme.bodyMedium    // Material TextTheme
+  if (context.isDarkMode) { ... }
+  ```
+  Import the extension file in widgets that need theme access. Do **not**
+  call `Theme.of(context).extension<...>()` at call sites — fallbacks
+  live inside the extension getters.
 - Text fields: always set `textCapitalization` and `keyboardType` for
   intent-specific input.
 
 ### Material Theming Best Practices
 
 - `ColorScheme.fromSeed()` for the palette.
-- Light + dark via `theme` + `darkTheme` in `MaterialApp.router`.
+- Light + dark via `theme` + `darkTheme` + `themeMode:` in
+  `MaterialApp.router` (`lib/app.dart`).
 - Customize component themes (`elevatedButtonTheme`, `appBarTheme`, ...)
-  inside the single `ThemeData` definition.
-- `ThemeMode.system` by default; toggle is a `ChangeNotifier`-free
-  Riverpod provider (a `StateProvider<ThemeMode>`).
+  inside the single `ThemeData` definition in `app_theme.dart`.
+- User preference defaults to `ThemeMode.system`; the toggle is
+  `themeModeControllerProvider` — a codegen `@Riverpod` `Notifier` in
+  `lib/core/theme/theme_mode_controller.dart` (in-memory for now).
 
 #### Design Tokens via `ThemeExtension`
 
 - `AppSemanticColors` and `AppCustomTextStyles` are the project's
-  canonical extensions.
-- They implement `copyWith` and `lerp`.
-- They're registered in the single `ThemeData` and accessed via
-  `Theme.of(context).extension<AppSemanticColors>()`.
+  canonical extensions (defined in `app_theme.dart`).
+- They implement `copyWith`, `lerp`, and `*.fallback(...)` factories for
+  bare/test themes.
+- They're registered in the single `ThemeData` and accessed in widgets
+  via `context.semantic` and `context.textStyles` — not raw
+  `Theme.of(context).extension<...>()`.
 
 #### Styling with `WidgetStateProperty`
 
@@ -385,6 +399,9 @@ not introduce new `WidgetState` constants outside the existing theme.
 - :no_entry: Don't throw from repository / use case / controller.
 - :no_entry: Don't use inline `EdgeInsets.all(16)` or
   `BorderRadius.circular(8)`.
+- :no_entry: Don't use raw `Theme.of(context).extension<...>()` or
+  hard-coded `Color` / `TextStyle` in widgets — use `context.colors`,
+  `context.semantic`, `context.textStyles`, `context.textTheme`.
 - :no_entry: Don't navigate by raw path string outside `app_router.dart`.
 - :no_entry: Don't use `print` / `debugPrint` in production code.
 - :no_entry: Don't run a Flutter command without `fvm`.
@@ -401,8 +418,9 @@ not introduce new `WidgetState` constants outside the existing theme.
 - Clean Architecture, feature-first; **strict layering**, **Riverpod +
   codegen**, **Retrofit + freezed codegen for data layer**, **`Either<Failure, T>`**
   for errors.
-- Sealed UI states with exhaustive `switch`. `AppSize` + theme extensions.
-  Localize everything.
+- Sealed UI states with exhaustive `switch`. `AppSize` +
+  `ThemeContextX` (`context.colors` / `context.semantic` /
+  `context.textStyles`). Localize everything.
 - GoRouter with typed route names; single funnel for FCM + App Links via
   `pendingNavigationProvider`.
 - Auth refresh is centralized in the Dio interceptor (401 -> dedup ->

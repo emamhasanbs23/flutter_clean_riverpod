@@ -34,5 +34,8 @@
   "errorRateLimit": "Too many requests. Please wait a moment.",
   "errorCancelled": "Request was cancelled.",
   "errorSerialization": "Failed to process response. Please try again.",
-  "commonRetry": "Retry"
+  "commonRetry": "Retry",
+  "themeToggleLight": "Switch to light mode",
+  "themeToggleDark": "Switch to dark mode",
+  "themeToggleSystem": "Use system theme"
 }

@@ -3,6 +3,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/pending_navigation_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/widgets/login_page.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_detail_page.dart';
@@ -169,13 +170,13 @@ class UnknownRoutePage extends StatelessWidget {
               Icon(
                 Icons.help_outline,
                 size: AppSize.iconLg,
-                color: Theme.of(context).colorScheme.outline,
+                color: context.colors.outline,
               ),
               SizedBox(height: AppSize.spaceLg),
               Text(
                 l10n.errorNotFound,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: context.textTheme.bodyLarge,
               ),
               SizedBox(height: AppSize.spaceLg),
               ElevatedButton(

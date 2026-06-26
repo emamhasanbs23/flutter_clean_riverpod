@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_theme.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_mode_controller.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_error_widget.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indicator.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
@@ -19,11 +20,29 @@ class TodoListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final asyncState = ref.watch(todoListControllerProvider);
+    final themeMode = ref.watch(themeModeControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.todoListTitle),
         actions: [
+          IconButton(
+            tooltip: switch (themeMode) {
+              ThemeMode.dark => l10n.themeToggleLight,
+              ThemeMode.light => l10n.themeToggleDark,
+              ThemeMode.system => l10n.themeToggleSystem,
+            },
+            icon: Icon(switch (themeMode) {
+              ThemeMode.dark => Icons.light_mode_outlined,
+              ThemeMode.light => Icons.dark_mode_outlined,
+              ThemeMode.system => Icons.brightness_auto_outlined,
+            }),
+            onPressed: () => ref
+                .read(themeModeControllerProvider.notifier)
+                .toggle(
+                  platformBrightness: MediaQuery.platformBrightnessOf(context),
+                ),
+          ),
           IconButton(
             tooltip: l10n.logout,
             icon: const Icon(Icons.logout),
@@ -125,11 +144,7 @@ class _TodoList extends ConsumerWidget {
             ),
             title: Text(
               todo.title,
-              style: todo.completed
-                  ? Theme.of(
-                      context,
-                    ).extension<AppCustomTextStyles>()?.strikeThrough
-                  : null,
+              style: todo.completed ? context.textStyles.strikeThrough : null,
             ),
             trailing: IconButton(
               icon: const Icon(Icons.delete_outline),
@@ -184,9 +199,7 @@ class _EmptyState extends StatelessWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
-        Center(
-          child: Text(message, style: Theme.of(context).textTheme.bodyLarge),
-        ),
+        Center(child: Text(message, style: context.textTheme.bodyLarge)),
       ],
     );
   }

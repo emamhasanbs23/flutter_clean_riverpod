@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
 
 /// Generic full-bleed error placeholder with an optional retry action.
 ///
@@ -29,7 +30,6 @@ class AppErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
     final text = message ?? failure?.toMessage(context) ?? l10n.errorUnexpected;
 
     return Center(
@@ -41,13 +41,13 @@ class AppErrorWidget extends StatelessWidget {
             Icon(
               Icons.error_outline,
               size: AppSize.iconLg,
-              color: theme.colorScheme.error,
+              color: context.colors.error,
             ),
             SizedBox(height: AppSize.spaceLg),
             Text(
               text,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
+              style: context.textTheme.bodyMedium,
             ),
             if (onRetry != null) ...[
               SizedBox(height: AppSize.spaceLg),

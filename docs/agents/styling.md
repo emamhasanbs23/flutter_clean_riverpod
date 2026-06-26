@@ -9,12 +9,12 @@ A single seed color drives the whole Material 3 palette via `ColorScheme.fromSee
 
 ## AppSize constants
 
-All spacing, radius, and component dimensions come from `lib/core/constants/app_size.dart`. Widgets reference constants — never inline literals:
+All spacing, radius, and component dimensions come from `lib/core/theme/app_size.dart`. Widgets reference constants — never inline literals:
 
 ```dart
 // ✅
-padding: const EdgeInsets.all(AppSize.paddingM),
-borderRadius: BorderRadius.circular(AppSize.radiusS),
+padding: const EdgeInsets.all(AppSize.spaceLg),
+borderRadius: BorderRadius.circular(AppSize.radiusMd),
 
 // ❌
 padding: const EdgeInsets.all(16),
@@ -25,12 +25,30 @@ For one-offs in a single widget, use a **named local** at the top of `build()` �
 
 ## ThemeExtensions
 
-Two extensions live in `lib/core/theme/`:
+Two extensions live in `lib/core/theme/app_theme.dart`:
 
-- `AppSemanticColors` — semantic colors that aren't in `ColorScheme` (success, warning, info).
-- `AppCustomTextStyles` — display/heading/body text styles tuned for the brand.
+- `AppSemanticColors` — semantic colors that aren't in `ColorScheme` (success, warning, danger, info).
+- `AppCustomTextStyles` — button, link, and strike-through text styles tuned for the brand.
 
-Access via `Theme.of(context).extension<AppSemanticColors>()` or the convenience extension on `BuildContext`.
+Both register `*.fallback(...)` factories so widgets stay safe when a bare `ThemeData()` is used in tests.
+
+## BuildContext convenience extension
+
+Import `lib/core/theme/theme_context_extension.dart` for namespaced theme access (mirrors the `context.l10n` pattern):
+
+```dart
+context.colors.primary          // ColorScheme role
+context.semantic.danger         // AppSemanticColors (non-null)
+context.textStyles.button       // AppCustomTextStyles (non-null)
+context.textTheme.bodySmall     // Material TextTheme
+if (context.isDarkMode) { ... }
+```
+
+Each getter subscribes to theme changes the same way `Theme.of(context)` does.
+
+## Theme mode toggle
+
+User-controlled light/dark/system preference is held in `themeModeControllerProvider` (`lib/core/theme/theme_mode_controller.dart`) and wired into `MaterialApp.themeMode` in `lib/app.dart`. In-memory only for now — persistence is a follow-up.
 
 ## Localization + styling together
 
@@ -41,6 +59,7 @@ User-facing copy is **always** localized via `context.l10n.*`. Styling decisions
 - No inline `16`, `8`, `0xFF...` in widgets.
 - No `Colors.blue`, `Colors.red`, etc. in production code — go through `ColorScheme` or `AppSemanticColors`.
 - No overriding `TextStyle` per-widget unless there's a named constant for it.
+- No raw `Theme.of(context).extension<...>()` in widgets — use `context.semantic` / `context.textStyles`.
 
 ## Related
 

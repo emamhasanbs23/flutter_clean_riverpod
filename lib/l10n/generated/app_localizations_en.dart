@@ -114,4 +114,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonRetry => 'Retry';
+
+  @override
+  String get themeToggleLight => 'Switch to light mode';
+
+  @override
+  String get themeToggleDark => 'Switch to dark mode';
+
+  @override
+  String get themeToggleSystem => 'Use system theme';
 }

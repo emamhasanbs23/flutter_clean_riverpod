@@ -34,5 +34,8 @@
   "errorRateLimit": "Demasiadas solicitudes. Espera un momento.",
   "errorCancelled": "La solicitud fue cancelada.",
   "errorSerialization": "Error al procesar la respuesta. Intenta de nuevo.",
-  "commonRetry": "Reintentar"
+  "commonRetry": "Reintentar",
+  "themeToggleLight": "Cambiar a modo claro",
+  "themeToggleDark": "Cambiar a modo oscuro",
+  "themeToggleSystem": "Usar tema del sistema"
 }

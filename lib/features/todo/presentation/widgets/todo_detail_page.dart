@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_theme.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_error_widget.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indicator.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/todo/domain/entities/todo.dart';
@@ -34,7 +34,6 @@ class TodoDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final asyncState = ref.watch(todoListControllerProvider);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.todoListTitle)),
@@ -61,7 +60,6 @@ class TodoDetailPage extends ConsumerWidget {
           return _Detail(
             todo: match,
             highlightTitle: extra?['focus'] == _focusTitleKey,
-            theme: theme,
           );
         },
       ),
@@ -77,21 +75,16 @@ class TodoDetailPage extends ConsumerWidget {
 }
 
 class _Detail extends StatelessWidget {
-  const _Detail({
-    required this.todo,
-    required this.highlightTitle,
-    required this.theme,
-  });
+  const _Detail({required this.todo, required this.highlightTitle});
 
   final Todo todo;
   final bool highlightTitle;
-  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
-    final baseTitle = theme.textTheme.headlineSmall;
+    final baseTitle = context.textTheme.headlineSmall;
     final titleStyle = baseTitle?.copyWith(
-      color: highlightTitle ? theme.colorScheme.primary : null,
+      color: highlightTitle ? context.colors.primary : null,
       fontWeight: highlightTitle ? FontWeight.bold : baseTitle.fontWeight,
     );
 
@@ -109,15 +102,15 @@ class _Detail extends StatelessWidget {
                 children: [
                   Text(
                     'Todo #${todo.id}',
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.outline,
+                    style: context.textTheme.labelMedium?.copyWith(
+                      color: context.colors.outline,
                     ),
                   ),
                   SizedBox(height: AppSize.spaceSm),
                   Text(
                     todo.title,
                     style: todo.completed
-                        ? theme.extension<AppCustomTextStyles>()?.strikeThrough
+                        ? context.textStyles.strikeThrough
                         : titleStyle,
                   ),
                   SizedBox(height: AppSize.spaceLg),
@@ -129,13 +122,13 @@ class _Detail extends StatelessWidget {
                             : Icons.radio_button_unchecked,
                         size: AppSize.iconMd,
                         color: todo.completed
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.outline,
+                            ? context.colors.primary
+                            : context.colors.outline,
                       ),
                       SizedBox(width: AppSize.spaceSm),
                       Text(
                         todo.completed ? 'Completed' : 'Pending',
-                        style: theme.textTheme.bodyMedium,
+                        style: context.textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -143,8 +136,8 @@ class _Detail extends StatelessWidget {
                     SizedBox(height: AppSize.spaceMd),
                     Text(
                       'Created ${todo.createdAt!.toLocal()}',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.outline,
+                      style: context.textTheme.bodySmall?.copyWith(
+                        color: context.colors.outline,
                       ),
                     ),
                   ],
