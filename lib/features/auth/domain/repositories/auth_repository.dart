@@ -9,7 +9,7 @@ import 'package:fpdart/fpdart.dart';
 abstract interface class AuthRepository {
   /// Exchanges credentials for tokens and persists them in secure storage.
   Future<Either<Failure, AuthUser>> login({
-    required String email,
+    required String username,
     required String password,
   });
 

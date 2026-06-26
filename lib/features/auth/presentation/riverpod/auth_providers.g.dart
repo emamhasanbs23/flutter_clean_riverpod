@@ -215,7 +215,7 @@ final sessionExpiredProvider = NotifierProvider<SessionExpired, bool>.internal(
 );
 
 typedef _$SessionExpired = Notifier<bool>;
-String _$loginControllerHash() => r'cfb2b8283676ba8c2d93142e3fb8157715605da0';
+String _$loginControllerHash() => r'9056fb8e390ca62c6e18543a73f009db8830cb65';
 
 /// Holds the current submission state plus simple form controllers.
 ///

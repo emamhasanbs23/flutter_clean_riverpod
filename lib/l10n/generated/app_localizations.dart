@@ -110,11 +110,11 @@ abstract class AppLocalizations {
   /// **'Sign in'**
   String get loginTitle;
 
-  /// No description provided for @loginEmailLabel.
+  /// No description provided for @loginUsernameLabel.
   ///
   /// In en, this message translates to:
-  /// **'Email'**
-  String get loginEmailLabel;
+  /// **'Username'**
+  String get loginUsernameLabel;
 
   /// No description provided for @loginPasswordLabel.
   ///
@@ -131,20 +131,14 @@ abstract class AppLocalizations {
   /// No description provided for @loginInvalidCredentials.
   ///
   /// In en, this message translates to:
-  /// **'Invalid email or password'**
+  /// **'Invalid username or password'**
   String get loginInvalidCredentials;
 
-  /// No description provided for @loginEmailRequired.
+  /// No description provided for @loginUsernameRequired.
   ///
   /// In en, this message translates to:
-  /// **'Please enter your email'**
-  String get loginEmailRequired;
-
-  /// No description provided for @loginEmailInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email address'**
-  String get loginEmailInvalid;
+  /// **'Please enter your username'**
+  String get loginUsernameRequired;
 
   /// No description provided for @loginPasswordRequired.
   ///
@@ -161,7 +155,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginDemoHint.
   ///
   /// In en, this message translates to:
-  /// **'Demo: any email and a password of 6+ characters'**
+  /// **'Demo: emilys / emilyspass'**
   String get loginDemoHint;
 
   /// No description provided for @logout.

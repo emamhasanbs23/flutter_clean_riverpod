@@ -4,6 +4,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor
 import 'package:flutter_clean_riverpod_boilerplate/core/network/network_guard.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/api/auth_api.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/auth_me_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
@@ -46,5 +47,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         extra: <String, dynamic>{AuthInterceptor.skipAuthKey: true},
       ),
     ),
+  );
+
+  @override
+  Future<AuthMeResponse> getMe({CancelToken? cancelToken}) => guard(
+    'AuthRemoteDataSource.getMe',
+    () => _api.getMe(cancelToken: cancelToken),
   );
 }

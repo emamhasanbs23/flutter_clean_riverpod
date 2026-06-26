@@ -1,6 +1,7 @@
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/auth_me_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
@@ -16,8 +17,7 @@ class _MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 void main() {
   setUpAll(() {
-    // mocktail needs fallback values for non-primitive named arguments.
-    registerFallbackValue(const LoginRequest(email: '', password: ''));
+    registerFallbackValue(const LoginRequest(username: '', password: ''));
     registerFallbackValue(const RefreshTokenRequest(refreshToken: ''));
   });
 
@@ -61,8 +61,8 @@ void main() {
       );
 
       final result = await repository.login(
-        email: 'demo@example.com',
-        password: 'password123',
+        username: 'emilys',
+        password: 'emilyspass',
       );
 
       expect(result.isRight(), isTrue);
@@ -74,7 +74,6 @@ void main() {
         },
       );
 
-      // Token + user metadata should be persisted.
       verify(
         () => storage.write(key: 'access_token', value: 'fake.access'),
       ).called(1);
@@ -86,40 +85,42 @@ void main() {
       ).called(1);
     });
 
-    test('login falls back to deterministic id when server omits the nested '
-        'user object', () async {
-      when(() => remote.login(request: any(named: 'request'))).thenAnswer(
-        (_) async => const LoginResponse(accessToken: 'fake.access'),
-      );
+    test(
+      'login falls back to deterministic id when server omits user fields',
+      () async {
+        when(() => remote.login(request: any(named: 'request'))).thenAnswer(
+          (_) async => const LoginResponse(accessToken: 'fake.access'),
+        );
 
-      final result = await repository.login(
-        email: 'demo@example.com',
-        password: 'password123',
-      );
+        final result = await repository.login(
+          username: 'emilys',
+          password: 'emilyspass',
+        );
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected success, got ${failure.message}'),
-        (user) {
-          expect(user.email, 'demo@example.com');
-          expect(user.id, startsWith('usr_'));
-        },
-      );
-    });
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) => fail('Expected success, got ${failure.message}'),
+          (user) {
+            expect(user.email, 'emilys');
+            expect(user.id, startsWith('usr_'));
+          },
+        );
+      },
+    );
 
-    test('login returns UnauthorizedFailure when remote rejects', () async {
+    test('login maps ValidationFailure to InvalidCredentialsFailure', () async {
       when(
         () => remote.login(request: any(named: 'request')),
-      ).thenThrow(const UnauthorizedFailure());
+      ).thenThrow(const ValidationFailure());
 
       final result = await repository.login(
-        email: 'demo@example.com',
-        password: 'password123',
+        username: 'emilys',
+        password: 'wrongpass',
       );
 
       expect(result.isLeft(), isTrue);
       result.fold(
-        (failure) => expect(failure, isA<UnauthorizedFailure>()),
+        (failure) => expect(failure, isA<InvalidCredentialsFailure>()),
         (_) => fail('Expected failure'),
       );
       verifyNever(
@@ -129,6 +130,26 @@ void main() {
         ),
       );
     });
+
+    test(
+      'login maps UnauthorizedFailure to InvalidCredentialsFailure',
+      () async {
+        when(
+          () => remote.login(request: any(named: 'request')),
+        ).thenThrow(const UnauthorizedFailure());
+
+        final result = await repository.login(
+          username: 'emilys',
+          password: 'wrongpass',
+        );
+
+        expect(result.isLeft(), isTrue);
+        result.fold(
+          (failure) => expect(failure, isA<InvalidCredentialsFailure>()),
+          (_) => fail('Expected failure'),
+        );
+      },
+    );
 
     test('logout deletes all persisted auth keys', () async {
       when(
@@ -198,28 +219,7 @@ void main() {
     });
 
     group('getCurrentUser', () {
-      test(
-        'returns Right(user) when both id and email are persisted',
-        () async {
-          when(
-            () => storage.read(key: 'user_id'),
-          ).thenAnswer((_) async => 'usr_42');
-          when(
-            () => storage.read(key: 'user_email'),
-          ).thenAnswer((_) async => 'demo@example.com');
-
-          final result = await repository.getCurrentUser();
-
-          expect(result.isRight(), isTrue);
-          result.fold((_) => fail('Expected success'), (user) {
-            expect(user, isNotNull);
-            expect(user!.id, 'usr_42');
-            expect(user.email, 'demo@example.com');
-          });
-        },
-      );
-
-      test('returns Right(null) when no user is persisted', () async {
+      test('returns Right(null) when no access token is stored', () async {
         final result = await repository.getCurrentUser();
 
         expect(result.isRight(), isTrue);
@@ -227,30 +227,79 @@ void main() {
           (_) => fail('Expected success'),
           (user) => expect(user, isNull),
         );
+        verifyNever(() => remote.getMe());
+      });
+
+      test('fetches user from network when access token is present', () async {
+        when(
+          () => storage.read(key: 'access_token'),
+        ).thenAnswer((_) async => 'fake.access');
+        when(() => remote.getMe()).thenAnswer(
+          (_) async => const AuthMeResponse(
+            id: 1,
+            email: 'emily.johnson@x.dummyjson.com',
+            username: 'emilys',
+          ),
+        );
+
+        final result = await repository.getCurrentUser();
+
+        expect(result.isRight(), isTrue);
+        result.fold((_) => fail('Expected success'), (user) {
+          expect(user, isNotNull);
+          expect(user!.id, '1');
+          expect(user.email, 'emily.johnson@x.dummyjson.com');
+        });
+        verify(() => remote.getMe()).called(1);
+        verify(
+          () => storage.write(
+            key: 'user_email',
+            value: 'emily.johnson@x.dummyjson.com',
+          ),
+        ).called(1);
+      });
+
+      test('falls back to cached user when network fails', () async {
+        when(
+          () => storage.read(key: 'access_token'),
+        ).thenAnswer((_) async => 'fake.access');
+        when(() => remote.getMe()).thenThrow(const NetworkFailure());
+        when(
+          () => storage.read(key: 'user_id'),
+        ).thenAnswer((_) async => 'usr_42');
+        when(
+          () => storage.read(key: 'user_email'),
+        ).thenAnswer((_) async => 'demo@example.com');
+
+        final result = await repository.getCurrentUser();
+
+        expect(result.isRight(), isTrue);
+        result.fold((_) => fail('Expected success'), (user) {
+          expect(user, isNotNull);
+          expect(user!.id, 'usr_42');
+          expect(user.email, 'demo@example.com');
+        });
       });
 
       test(
-        'returns Right(null) when only one of id/email is persisted',
+        'returns Left when network fails and no cached user exists',
         () async {
           when(
-            () => storage.read(key: 'user_id'),
-          ).thenAnswer((_) async => 'usr_42');
-          when(
-            () => storage.read(key: 'user_email'),
-          ).thenAnswer((_) async => null);
+            () => storage.read(key: 'access_token'),
+          ).thenAnswer((_) async => 'fake.access');
+          when(() => remote.getMe()).thenThrow(const NetworkFailure());
 
           final result = await repository.getCurrentUser();
 
-          expect(result.isRight(), isTrue);
+          expect(result.isLeft(), isTrue);
           result.fold(
-            (_) => fail('Expected success'),
-            (user) => expect(user, isNull),
+            (failure) => expect(failure, isA<NetworkFailure>()),
+            (_) => fail('Expected failure'),
           );
         },
       );
 
       test('InvalidCredentialsFailure is a Failure', () {
-        // Smoke test ensuring the auth failure subtype satisfies the domain.
         expect(const InvalidCredentialsFailure(), isA<Failure>());
       });
     });

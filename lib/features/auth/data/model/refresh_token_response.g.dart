@@ -9,13 +9,13 @@ part of 'refresh_token_response.dart';
 _$RefreshTokenResponseImpl _$$RefreshTokenResponseImplFromJson(
   Map<String, dynamic> json,
 ) => _$RefreshTokenResponseImpl(
-  accessToken: json['access_token'] as String,
-  refreshToken: json['refresh_token'] as String?,
+  accessToken: json['accessToken'] as String,
+  refreshToken: json['refreshToken'] as String?,
 );
 
 Map<String, dynamic> _$$RefreshTokenResponseImplToJson(
   _$RefreshTokenResponseImpl instance,
 ) => <String, dynamic>{
-  'access_token': instance.accessToken,
-  'refresh_token': instance.refreshToken,
+  'accessToken': instance.accessToken,
+  'refreshToken': instance.refreshToken,
 };

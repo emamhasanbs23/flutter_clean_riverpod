@@ -21,8 +21,9 @@ RefreshTokenRequest _$RefreshTokenRequestFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RefreshTokenRequest {
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   String get refreshToken => throw _privateConstructorUsedError;
+  int? get expiresInMins => throw _privateConstructorUsedError;
 
   /// Serializes this RefreshTokenRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +42,10 @@ abstract class $RefreshTokenRequestCopyWith<$Res> {
     $Res Function(RefreshTokenRequest) then,
   ) = _$RefreshTokenRequestCopyWithImpl<$Res, RefreshTokenRequest>;
   @useResult
-  $Res call({@JsonKey(name: 'refresh_token') String refreshToken});
+  $Res call({
+    @JsonKey(name: 'refreshToken') String refreshToken,
+    int? expiresInMins,
+  });
 }
 
 /// @nodoc
@@ -58,13 +62,17 @@ class _$RefreshTokenRequestCopyWithImpl<$Res, $Val extends RefreshTokenRequest>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? refreshToken = null}) {
+  $Res call({Object? refreshToken = null, Object? expiresInMins = freezed}) {
     return _then(
       _value.copyWith(
             refreshToken: null == refreshToken
                 ? _value.refreshToken
                 : refreshToken // ignore: cast_nullable_to_non_nullable
                       as String,
+            expiresInMins: freezed == expiresInMins
+                ? _value.expiresInMins
+                : expiresInMins // ignore: cast_nullable_to_non_nullable
+                      as int?,
           )
           as $Val,
     );
@@ -80,7 +88,10 @@ abstract class _$$RefreshTokenRequestImplCopyWith<$Res>
   ) = __$$RefreshTokenRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(name: 'refresh_token') String refreshToken});
+  $Res call({
+    @JsonKey(name: 'refreshToken') String refreshToken,
+    int? expiresInMins,
+  });
 }
 
 /// @nodoc
@@ -96,13 +107,17 @@ class __$$RefreshTokenRequestImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? refreshToken = null}) {
+  $Res call({Object? refreshToken = null, Object? expiresInMins = freezed}) {
     return _then(
       _$RefreshTokenRequestImpl(
         refreshToken: null == refreshToken
             ? _value.refreshToken
             : refreshToken // ignore: cast_nullable_to_non_nullable
                   as String,
+        expiresInMins: freezed == expiresInMins
+            ? _value.expiresInMins
+            : expiresInMins // ignore: cast_nullable_to_non_nullable
+                  as int?,
       ),
     );
   }
@@ -112,19 +127,22 @@ class __$$RefreshTokenRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RefreshTokenRequestImpl implements _RefreshTokenRequest {
   const _$RefreshTokenRequestImpl({
-    @JsonKey(name: 'refresh_token') required this.refreshToken,
+    @JsonKey(name: 'refreshToken') required this.refreshToken,
+    this.expiresInMins,
   });
 
   factory _$RefreshTokenRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$RefreshTokenRequestImplFromJson(json);
 
   @override
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   final String refreshToken;
+  @override
+  final int? expiresInMins;
 
   @override
   String toString() {
-    return 'RefreshTokenRequest(refreshToken: $refreshToken)';
+    return 'RefreshTokenRequest(refreshToken: $refreshToken, expiresInMins: $expiresInMins)';
   }
 
   @override
@@ -133,12 +151,14 @@ class _$RefreshTokenRequestImpl implements _RefreshTokenRequest {
         (other.runtimeType == runtimeType &&
             other is _$RefreshTokenRequestImpl &&
             (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken));
+                other.refreshToken == refreshToken) &&
+            (identical(other.expiresInMins, expiresInMins) ||
+                other.expiresInMins == expiresInMins));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, refreshToken);
+  int get hashCode => Object.hash(runtimeType, refreshToken, expiresInMins);
 
   /// Create a copy of RefreshTokenRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -159,15 +179,18 @@ class _$RefreshTokenRequestImpl implements _RefreshTokenRequest {
 
 abstract class _RefreshTokenRequest implements RefreshTokenRequest {
   const factory _RefreshTokenRequest({
-    @JsonKey(name: 'refresh_token') required final String refreshToken,
+    @JsonKey(name: 'refreshToken') required final String refreshToken,
+    final int? expiresInMins,
   }) = _$RefreshTokenRequestImpl;
 
   factory _RefreshTokenRequest.fromJson(Map<String, dynamic> json) =
       _$RefreshTokenRequestImpl.fromJson;
 
   @override
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   String get refreshToken;
+  @override
+  int? get expiresInMins;
 
   /// Create a copy of RefreshTokenRequest
   /// with the given fields replaced by the non-null parameter values.

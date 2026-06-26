@@ -8,8 +8,14 @@ part of 'refresh_token_request.dart';
 
 _$RefreshTokenRequestImpl _$$RefreshTokenRequestImplFromJson(
   Map<String, dynamic> json,
-) => _$RefreshTokenRequestImpl(refreshToken: json['refresh_token'] as String);
+) => _$RefreshTokenRequestImpl(
+  refreshToken: json['refreshToken'] as String,
+  expiresInMins: (json['expiresInMins'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$$RefreshTokenRequestImplToJson(
   _$RefreshTokenRequestImpl instance,
-) => <String, dynamic>{'refresh_token': instance.refreshToken};
+) => <String, dynamic>{
+  'refreshToken': instance.refreshToken,
+  'expiresInMins': instance.expiresInMins,
+};

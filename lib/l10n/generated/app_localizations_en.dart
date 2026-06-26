@@ -15,7 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'Sign in';
 
   @override
-  String get loginEmailLabel => 'Email';
+  String get loginUsernameLabel => 'Username';
 
   @override
   String get loginPasswordLabel => 'Password';
@@ -24,13 +24,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginSubmit => 'Sign in';
 
   @override
-  String get loginInvalidCredentials => 'Invalid email or password';
+  String get loginInvalidCredentials => 'Invalid username or password';
 
   @override
-  String get loginEmailRequired => 'Please enter your email';
-
-  @override
-  String get loginEmailInvalid => 'Please enter a valid email address';
+  String get loginUsernameRequired => 'Please enter your username';
 
   @override
   String get loginPasswordRequired => 'Please enter your password';
@@ -39,7 +36,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPasswordTooShort => 'Password must be at least 6 characters';
 
   @override
-  String get loginDemoHint => 'Demo: any email and a password of 6+ characters';
+  String get loginDemoHint => 'Demo: emilys / emilyspass';
 
   @override
   String get logout => 'Sign out';

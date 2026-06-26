@@ -34,7 +34,6 @@ void main() {
 
   setUp(() {
     repository = _MockAuthRepository();
-    // Default: no auth needed for these tests.
     when(repository.isAuthenticated).thenAnswer((_) async => false);
   });
 
@@ -43,13 +42,12 @@ void main() {
       _wrap(child: const LoginPage(), repository: repository),
     );
 
-    // Clear the pre-filled fields.
     await tester.enterText(find.byType(TextFormField).at(0), '');
     await tester.enterText(find.byType(TextFormField).at(1), '');
     await tester.tap(find.byType(ElevatedButton));
     await tester.pump();
 
-    expect(find.text('Please enter your email'), findsOneWidget);
+    expect(find.text('Please enter your username'), findsOneWidget);
     expect(find.text('Please enter your password'), findsOneWidget);
   });
 
@@ -60,7 +58,7 @@ void main() {
       _wrap(child: const LoginPage(), repository: repository),
     );
 
-    await tester.enterText(find.byType(TextFormField).at(0), 'a@b.com');
+    await tester.enterText(find.byType(TextFormField).at(0), 'emilys');
     await tester.enterText(find.byType(TextFormField).at(1), 'short');
     await tester.tap(find.byType(ElevatedButton));
     await tester.pump();
@@ -68,7 +66,7 @@ void main() {
     expect(find.text('Password must be at least 6 characters'), findsOneWidget);
     verifyNever(
       () => repository.login(
-        email: any(named: 'email'),
+        username: any(named: 'username'),
         password: any(named: 'password'),
       ),
     );
@@ -79,25 +77,25 @@ void main() {
   ) async {
     when(
       () => repository.login(
-        email: any(named: 'email'),
+        username: any(named: 'username'),
         password: any(named: 'password'),
       ),
     ).thenAnswer(
-      (_) async =>
-          const Right<Failure, AuthUser>(AuthUser(id: '1', email: 'a@b.com')),
+      (_) async => const Right<Failure, AuthUser>(
+        AuthUser(id: '1', email: 'emily.johnson@x.dummyjson.com'),
+      ),
     );
 
     await tester.pumpWidget(
       _wrap(child: const LoginPage(), repository: repository),
     );
 
-    // The page pre-fills the demo email + password, so just submit.
     await tester.tap(find.byType(ElevatedButton));
     await tester.pump();
     await tester.pump();
 
     verify(
-      () => repository.login(email: 'demo@example.com', password: 'password'),
+      () => repository.login(username: 'emilys', password: 'emilyspass'),
     ).called(1);
   });
 
@@ -106,7 +104,7 @@ void main() {
   ) async {
     when(
       () => repository.login(
-        email: any(named: 'email'),
+        username: any(named: 'username'),
         password: any(named: 'password'),
       ),
     ).thenAnswer(

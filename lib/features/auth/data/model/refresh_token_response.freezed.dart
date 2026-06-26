@@ -21,9 +21,9 @@ RefreshTokenResponse _$RefreshTokenResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RefreshTokenResponse {
-  @JsonKey(name: 'access_token')
+  @JsonKey(name: 'accessToken')
   String get accessToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   String? get refreshToken => throw _privateConstructorUsedError;
 
   /// Serializes this RefreshTokenResponse to a JSON map.
@@ -44,8 +44,8 @@ abstract class $RefreshTokenResponseCopyWith<$Res> {
   ) = _$RefreshTokenResponseCopyWithImpl<$Res, RefreshTokenResponse>;
   @useResult
   $Res call({
-    @JsonKey(name: 'access_token') String accessToken,
-    @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'accessToken') String accessToken,
+    @JsonKey(name: 'refreshToken') String? refreshToken,
   });
 }
 
@@ -93,8 +93,8 @@ abstract class _$$RefreshTokenResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'access_token') String accessToken,
-    @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'accessToken') String accessToken,
+    @JsonKey(name: 'refreshToken') String? refreshToken,
   });
 }
 
@@ -131,18 +131,18 @@ class __$$RefreshTokenResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RefreshTokenResponseImpl implements _RefreshTokenResponse {
   const _$RefreshTokenResponseImpl({
-    @JsonKey(name: 'access_token') required this.accessToken,
-    @JsonKey(name: 'refresh_token') this.refreshToken,
+    @JsonKey(name: 'accessToken') required this.accessToken,
+    @JsonKey(name: 'refreshToken') this.refreshToken,
   });
 
   factory _$RefreshTokenResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$RefreshTokenResponseImplFromJson(json);
 
   @override
-  @JsonKey(name: 'access_token')
+  @JsonKey(name: 'accessToken')
   final String accessToken;
   @override
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   final String? refreshToken;
 
   @override
@@ -185,18 +185,18 @@ class _$RefreshTokenResponseImpl implements _RefreshTokenResponse {
 
 abstract class _RefreshTokenResponse implements RefreshTokenResponse {
   const factory _RefreshTokenResponse({
-    @JsonKey(name: 'access_token') required final String accessToken,
-    @JsonKey(name: 'refresh_token') final String? refreshToken,
+    @JsonKey(name: 'accessToken') required final String accessToken,
+    @JsonKey(name: 'refreshToken') final String? refreshToken,
   }) = _$RefreshTokenResponseImpl;
 
   factory _RefreshTokenResponse.fromJson(Map<String, dynamic> json) =
       _$RefreshTokenResponseImpl.fromJson;
 
   @override
-  @JsonKey(name: 'access_token')
+  @JsonKey(name: 'accessToken')
   String get accessToken;
   @override
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   String? get refreshToken;
 
   /// Create a copy of RefreshTokenResponse

@@ -5,18 +5,16 @@ part 'login_response.g.dart';
 
 /// Wire-format response body for `POST /auth/login`.
 ///
-/// Mirrors the JSON the API returns:
-/// `{ "access_token": "...", "refresh_token": "...", "user": { "id": "...",
-/// "email": "..." } }`.
+/// DummyJSON returns a flat user object with camelCase token keys:
+/// `{ "id": 1, "email": "...", "accessToken": "...", "refreshToken": "..." }`.
 ///
-/// The mapper in `auth_mapper.dart` flattens the nested `user` object into
-/// [userId] / [userEmail] so the repository can treat the response uniformly.
-/// The domain layer never sees this class directly.
+/// The mapper in `auth_mapper.dart` flattens user fields into [userId] /
+/// [userEmail] so the repository can treat the response uniformly.
 @freezed
 class LoginResponse with _$LoginResponse {
   const factory LoginResponse({
-    @JsonKey(name: 'access_token') required String accessToken,
-    @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'accessToken') required String accessToken,
+    @JsonKey(name: 'refreshToken') String? refreshToken,
     @JsonKey(readValue: _readUserId) String? userId,
     @JsonKey(readValue: _readUserEmail) String? userEmail,
   }) = _LoginResponse;
@@ -25,16 +23,18 @@ class LoginResponse with _$LoginResponse {
       _$LoginResponseFromJson(json);
 }
 
-/// Reads `user.id` from the nested `user` object. Falls back to a top-level
-/// `user_id` key for backends that flatten the response.
+/// Reads `user.id` from a nested `user` object, or top-level `id` /
+/// `user_id`. Coerces numeric ids to [String] (DummyJSON returns an int).
 Object? _readUserId(Map<dynamic, dynamic> json, String key) {
   final nested = json['user'];
-  if (nested is Map && nested['id'] != null) return nested['id'];
-  return json['user_id'];
+  final raw =
+      (nested is Map ? nested['id'] : null) ?? json['id'] ?? json['user_id'];
+  return raw?.toString();
 }
 
 Object? _readUserEmail(Map<dynamic, dynamic> json, String key) {
   final nested = json['user'];
-  if (nested is Map && nested['email'] != null) return nested['email'];
-  return json['user_email'];
+  return (nested is Map ? nested['email'] : null) ??
+      json['email'] ??
+      json['user_email'];
 }

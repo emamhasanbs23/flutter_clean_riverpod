@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/constants/api_endpoints.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/auth_me_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_request.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/login_response.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/model/refresh_token_request.dart';
@@ -43,4 +44,9 @@ abstract class AuthApi {
     @DioOptions() Options? options,
     CancelToken? cancelToken,
   });
+
+  /// Returns the currently authenticated user. Requires a valid access token
+  /// attached by the auth interceptor.
+  @GET(AuthEndpoints.me)
+  Future<AuthMeResponse> getMe({CancelToken? cancelToken});
 }

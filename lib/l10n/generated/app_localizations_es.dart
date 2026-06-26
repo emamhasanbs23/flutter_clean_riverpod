@@ -15,7 +15,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginTitle => 'Iniciar sesión';
 
   @override
-  String get loginEmailLabel => 'Correo';
+  String get loginUsernameLabel => 'Usuario';
 
   @override
   String get loginPasswordLabel => 'Contraseña';
@@ -24,13 +24,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginSubmit => 'Entrar';
 
   @override
-  String get loginInvalidCredentials => 'Correo o contraseña inválidos';
+  String get loginInvalidCredentials => 'Usuario o contraseña inválidos';
 
   @override
-  String get loginEmailRequired => 'Ingresa tu correo';
-
-  @override
-  String get loginEmailInvalid => 'Ingresa un correo válido';
+  String get loginUsernameRequired => 'Ingresa tu usuario';
 
   @override
   String get loginPasswordRequired => 'Ingresa tu contraseña';
@@ -40,8 +37,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'La contraseña debe tener al menos 6 caracteres';
 
   @override
-  String get loginDemoHint =>
-      'Demo: cualquier correo y contraseña de 6+ caracteres';
+  String get loginDemoHint => 'Demo: emilys / emilyspass';
 
   @override
   String get logout => 'Cerrar sesión';

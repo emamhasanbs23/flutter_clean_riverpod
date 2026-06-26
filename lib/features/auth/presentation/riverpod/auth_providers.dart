@@ -140,11 +140,14 @@ class LoginController extends _$LoginController {
 
   /// Attempts to log in. Returns the success value or null on failure so the
   /// caller can decide whether to navigate.
-  Future<bool> submit({required String email, required String password}) async {
+  Future<bool> submit({
+    required String username,
+    required String password,
+  }) async {
     state = const LoginSubmitting();
     final result = await ref
         .read(loginUseCaseProvider)
-        .call(email: email, password: password);
+        .call(username: username, password: password);
     return result.fold(
       (failure) {
         state = LoginError(failure);

@@ -34,7 +34,7 @@ void main() {
     test('submit flips to LoginSuccess on a successful login', () async {
       when(
         () => repository.login(
-          email: any(named: 'email'),
+          username: any(named: 'username'),
           password: any(named: 'password'),
         ),
       ).thenAnswer((_) async => const Right<Failure, AuthUser>(_stubUser));
@@ -42,7 +42,7 @@ void main() {
 
       final success = await container
           .read(loginControllerProvider.notifier)
-          .submit(email: 'a@b.com', password: 'password');
+          .submit(username: 'emilys', password: 'emilyspass');
 
       expect(success, isTrue);
       expect(container.read(loginControllerProvider), isA<LoginSuccess>());
@@ -53,7 +53,7 @@ void main() {
       () async {
         when(
           () => repository.login(
-            email: any(named: 'email'),
+            username: any(named: 'username'),
             password: any(named: 'password'),
           ),
         ).thenAnswer(
@@ -63,7 +63,7 @@ void main() {
 
         final success = await container
             .read(loginControllerProvider.notifier)
-            .submit(email: 'a@b.com', password: 'password');
+            .submit(username: 'emilys', password: 'wrongpass');
 
         expect(success, isFalse);
         final state = container.read(loginControllerProvider);

@@ -112,7 +112,7 @@ final class SerializationFailure extends Failure {
 /// Auth-specific failure subtype. Lives in the core library because
 /// [Failure] is sealed and cannot be extended from other libraries.
 final class InvalidCredentialsFailure extends Failure {
-  const InvalidCredentialsFailure() : super('Invalid email or password');
+  const InvalidCredentialsFailure() : super('Invalid username or password');
 }
 
 // ============================================================================

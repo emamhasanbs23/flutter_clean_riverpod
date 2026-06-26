@@ -21,9 +21,9 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LoginResponse {
-  @JsonKey(name: 'access_token')
+  @JsonKey(name: 'accessToken')
   String get accessToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   String? get refreshToken => throw _privateConstructorUsedError;
   @JsonKey(readValue: _readUserId)
   String? get userId => throw _privateConstructorUsedError;
@@ -48,8 +48,8 @@ abstract class $LoginResponseCopyWith<$Res> {
   ) = _$LoginResponseCopyWithImpl<$Res, LoginResponse>;
   @useResult
   $Res call({
-    @JsonKey(name: 'access_token') String accessToken,
-    @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'accessToken') String accessToken,
+    @JsonKey(name: 'refreshToken') String? refreshToken,
     @JsonKey(readValue: _readUserId) String? userId,
     @JsonKey(readValue: _readUserEmail) String? userEmail,
   });
@@ -109,8 +109,8 @@ abstract class _$$LoginResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'access_token') String accessToken,
-    @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'accessToken') String accessToken,
+    @JsonKey(name: 'refreshToken') String? refreshToken,
     @JsonKey(readValue: _readUserId) String? userId,
     @JsonKey(readValue: _readUserEmail) String? userEmail,
   });
@@ -162,8 +162,8 @@ class __$$LoginResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LoginResponseImpl implements _LoginResponse {
   const _$LoginResponseImpl({
-    @JsonKey(name: 'access_token') required this.accessToken,
-    @JsonKey(name: 'refresh_token') this.refreshToken,
+    @JsonKey(name: 'accessToken') required this.accessToken,
+    @JsonKey(name: 'refreshToken') this.refreshToken,
     @JsonKey(readValue: _readUserId) this.userId,
     @JsonKey(readValue: _readUserEmail) this.userEmail,
   });
@@ -172,10 +172,10 @@ class _$LoginResponseImpl implements _LoginResponse {
       _$$LoginResponseImplFromJson(json);
 
   @override
-  @JsonKey(name: 'access_token')
+  @JsonKey(name: 'accessToken')
   final String accessToken;
   @override
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   final String? refreshToken;
   @override
   @JsonKey(readValue: _readUserId)
@@ -224,8 +224,8 @@ class _$LoginResponseImpl implements _LoginResponse {
 
 abstract class _LoginResponse implements LoginResponse {
   const factory _LoginResponse({
-    @JsonKey(name: 'access_token') required final String accessToken,
-    @JsonKey(name: 'refresh_token') final String? refreshToken,
+    @JsonKey(name: 'accessToken') required final String accessToken,
+    @JsonKey(name: 'refreshToken') final String? refreshToken,
     @JsonKey(readValue: _readUserId) final String? userId,
     @JsonKey(readValue: _readUserEmail) final String? userEmail,
   }) = _$LoginResponseImpl;
@@ -234,10 +234,10 @@ abstract class _LoginResponse implements LoginResponse {
       _$LoginResponseImpl.fromJson;
 
   @override
-  @JsonKey(name: 'access_token')
+  @JsonKey(name: 'accessToken')
   String get accessToken;
   @override
-  @JsonKey(name: 'refresh_token')
+  @JsonKey(name: 'refreshToken')
   String? get refreshToken;
   @override
   @JsonKey(readValue: _readUserId)

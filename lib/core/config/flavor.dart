@@ -95,7 +95,7 @@ class FlavorConfig {
 
   static const FlavorConfig _devDefaults = FlavorConfig._forFlavor(
     flavor: Flavor.dev,
-    baseUrl: 'https://dev.api.example.com',
+    baseUrl: 'https://dummyjson.com',
     appName: 'Boilerplate (Dev)',
     enableDioLogging: true,
   );

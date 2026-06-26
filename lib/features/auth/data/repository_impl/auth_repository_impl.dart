@@ -1,7 +1,5 @@
 import 'package:flutter_clean_riverpod_boilerplate/core/error/failures.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
-import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor.dart'
-    show AuthInterceptor;
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:flutter_clean_riverpod_boilerplate/features/auth/data/mapper/auth_mapper.dart';
@@ -12,11 +10,6 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/domain/reposito
 import 'package:fpdart/fpdart.dart';
 
 /// Real [AuthRepository] backed by [AuthRemoteDataSource] and secure storage.
-///
-/// Tokens persist across launches; the [AuthInterceptor] reads the access
-/// token on every request. The refresh token is held so the interceptor can
-/// recover from a 401 by trading it for a new pair via
-/// [AuthRemoteDataSource.refresh].
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthRemoteDataSource remoteDataSource,
@@ -34,20 +27,20 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, AuthUser>> login({
-    required String email,
+    required String username,
     required String password,
   }) async {
     try {
       final response = await _remote.login(
-        request: LoginRequest(email: email, password: password),
+        request: LoginRequest(username: username, password: password),
       );
 
-      // Prefer the user object embedded in the response; fall back to a
-      // deterministic id derived from the email for legacy backends that
-      // don't return a nested user object yet.
       final user =
           response.toDomainOrNull() ??
-          AuthUser(id: _fakeUserId(email), email: email);
+          AuthUser(
+            id: _fakeUserId(username),
+            email: response.userEmail ?? username,
+          );
 
       await _storage.write(_accessTokenKey, response.accessToken);
       if (response.refreshToken != null) {
@@ -60,6 +53,9 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(user);
     } on Failure catch (failure) {
       AppLogger.w('AuthRepository.login rejected: ${failure.message}');
+      if (failure is ValidationFailure || failure is UnauthorizedFailure) {
+        return const Left(InvalidCredentialsFailure());
+      }
       return Left(failure);
     } on Object catch (error, stackTrace) {
       AppLogger.e(
@@ -98,12 +94,24 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, AuthUser?>> getCurrentUser() async {
     try {
-      final id = await _storage.read(_userIdKey);
-      final email = await _storage.read(_userEmailKey);
-      if (id == null || id.isEmpty || email == null || email.isEmpty) {
+      final accessToken = await _storage.read(_accessTokenKey);
+      if (accessToken == null || accessToken.isEmpty) {
         return const Right(null);
       }
-      return Right(AuthUser(id: id, email: email));
+
+      try {
+        final response = await _remote.getMe();
+        final user = response.toDomain();
+        await _storage.write(_userIdKey, user.id);
+        await _storage.write(_userEmailKey, user.email);
+        return Right(user);
+      } on Failure catch (failure) {
+        final cached = await _readCachedUser();
+        if (cached != null) {
+          return Right(cached);
+        }
+        return Left(failure);
+      }
     } on Object catch (error, stackTrace) {
       AppLogger.e(
         'AuthRepository.getCurrentUser failed',
@@ -141,10 +149,16 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  String _fakeUserId(String email) {
-    // Simple deterministic id — a real backend will return a UUID in the
-    // auth response and the repository will pick it up from there via the
-    // mapper.
-    return 'usr_${email.hashCode.toUnsigned(32)}';
+  Future<AuthUser?> _readCachedUser() async {
+    final id = await _storage.read(_userIdKey);
+    final email = await _storage.read(_userEmailKey);
+    if (id == null || id.isEmpty || email == null || email.isEmpty) {
+      return null;
+    }
+    return AuthUser(id: id, email: email);
+  }
+
+  String _fakeUserId(String username) {
+    return 'usr_${username.hashCode.toUnsigned(32)}';
   }
 }

@@ -6,12 +6,11 @@ part 'refresh_token_response.g.dart';
 /// Wire-format response body for `POST /auth/refresh`.
 ///
 /// Returns a fresh access token (and optionally a rotated refresh token).
-/// Domain layer consumes this only via the repository helpers.
 @freezed
 class RefreshTokenResponse with _$RefreshTokenResponse {
   const factory RefreshTokenResponse({
-    @JsonKey(name: 'access_token') required String accessToken,
-    @JsonKey(name: 'refresh_token') String? refreshToken,
+    @JsonKey(name: 'accessToken') required String accessToken,
+    @JsonKey(name: 'refreshToken') String? refreshToken,
   }) = _RefreshTokenResponse;
 
   factory RefreshTokenResponse.fromJson(Map<String, dynamic> json) =>

@@ -7,10 +7,7 @@ import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/ri
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Email/password sign-in page.
-///
-/// All state lives in [loginControllerProvider]; this widget is intentionally
-/// thin and free of business logic.
+/// Username/password sign-in page.
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
@@ -20,12 +17,12 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'demo@example.com');
-  final _passwordController = TextEditingController(text: 'password');
+  final _usernameController = TextEditingController(text: 'emilys');
+  final _passwordController = TextEditingController(text: 'emilyspass');
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -37,14 +34,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final success = await ref
         .read(loginControllerProvider.notifier)
         .submit(
-          email: _emailController.text.trim(),
+          username: _usernameController.text.trim(),
           password: _passwordController.text,
         );
     if (!success) {
       if (!mounted) return;
-      // Read the failure (if any) from the controller state and localize
-      // it via the Failure.toMessage pipeline. Falls back to the generic
-      // invalid-credentials string if the state has changed.
       final state = ref.read(loginControllerProvider);
       final text = state is LoginError
           ? state.failure.toMessage(context)
@@ -54,13 +48,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ..showSnackBar(SnackBar(content: Text(text)));
       return;
     }
-    // Login succeeded. If the user got here via a deep link or push
-    // notification, replay that destination instead of letting the
-    // auth-guard redirect them to /. We only touch the router when
-    // there's actually a pending destination — the no-pending case
-    // continues to rely on the router's auth-guard redirect so the
-    // existing test setup (which pumps LoginPage without a GoRouter
-    // ancestor) keeps working.
     if (!mounted) return;
     final pending = ref.read(pendingNavigationProvider.notifier).consume();
     if (pending != null) {
@@ -92,19 +79,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                     SizedBox(height: AppSize.space2xl),
                     TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
+                      controller: _usernameController,
+                      keyboardType: TextInputType.text,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        labelText: l10n.loginEmailLabel,
-                        prefixIcon: const Icon(Icons.alternate_email),
+                        labelText: l10n.loginUsernameLabel,
+                        prefixIcon: const Icon(Icons.person_outline),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return l10n.loginEmailRequired;
-                        }
-                        if (!value.contains('@')) {
-                          return l10n.loginEmailInvalid;
+                          return l10n.loginUsernameRequired;
                         }
                         return null;
                       },
