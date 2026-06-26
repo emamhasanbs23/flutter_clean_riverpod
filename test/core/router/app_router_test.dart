@@ -26,9 +26,24 @@ void main() {
       expect(next, isNull);
     });
 
-    test('loading state does not redirect (lets the splash handle it)', () {
+    test('loading state redirects protected routes to /splash', () {
       final next = authRedirect('/', const AsyncValue.loading());
+      expect(next, '/splash');
+    });
+
+    test('loading state stays on /splash', () {
+      final next = authRedirect('/splash', const AsyncValue.loading());
       expect(next, isNull);
+    });
+
+    test('resolved auth on /splash sends unauthenticated users to /login', () {
+      final next = authRedirect('/splash', const AsyncValue.data(false));
+      expect(next, '/login');
+    });
+
+    test('resolved auth on /splash sends authenticated users to /', () {
+      final next = authRedirect('/splash', const AsyncValue.data(true));
+      expect(next, '/');
     });
   });
 
@@ -67,9 +82,21 @@ void main() {
       },
     );
 
-    test('loading auth stays put even if a destination is queued', () {
+    test(
+      'loading auth redirects to /splash even if a destination is queued',
+      () {
+        final next = pendingNavigationAwareRedirect(
+          matchedLocation: '/',
+          auth: const AsyncValue.loading(),
+          pending: const RouteDescriptor(path: '/todos/42'),
+        );
+        expect(next, '/splash');
+      },
+    );
+
+    test('loading auth stays on /splash when already there', () {
       final next = pendingNavigationAwareRedirect(
-        matchedLocation: '/',
+        matchedLocation: '/splash',
         auth: const AsyncValue.loading(),
         pending: const RouteDescriptor(path: '/todos/42'),
       );
