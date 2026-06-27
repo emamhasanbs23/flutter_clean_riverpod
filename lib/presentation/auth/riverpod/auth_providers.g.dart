@@ -144,64 +144,108 @@ final class AuthApiProvider
 
 String _$authApiHash() => r'fe97432bc17461ebde4a232f1f399cd20c5aa5e4';
 
-/// Dio-backed [AuthRemoteDataSource] driven by [authApiProvider].
+/// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
 ///
 /// Tests can override this provider with a fake implementation.
 
-@ProviderFor(authRemoteDataSource)
-final authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
+@ProviderFor(authRemoteSource)
+final authRemoteSourceProvider = AuthRemoteSourceProvider._();
 
-/// Dio-backed [AuthRemoteDataSource] driven by [authApiProvider].
+/// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
 ///
 /// Tests can override this provider with a fake implementation.
 
-final class AuthRemoteDataSourceProvider
+final class AuthRemoteSourceProvider
     extends
         $FunctionalProvider<
-          AuthRemoteDataSource,
-          AuthRemoteDataSource,
-          AuthRemoteDataSource
+          AuthRemoteSource,
+          AuthRemoteSource,
+          AuthRemoteSource
         >
-    with $Provider<AuthRemoteDataSource> {
-  /// Dio-backed [AuthRemoteDataSource] driven by [authApiProvider].
+    with $Provider<AuthRemoteSource> {
+  /// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
   ///
   /// Tests can override this provider with a fake implementation.
-  AuthRemoteDataSourceProvider._()
+  AuthRemoteSourceProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'authRemoteDataSourceProvider',
+        name: r'authRemoteSourceProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$authRemoteDataSourceHash();
+  String debugGetCreateSourceHash() => _$authRemoteSourceHash();
 
   @$internal
   @override
-  $ProviderElement<AuthRemoteDataSource> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  $ProviderElement<AuthRemoteSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  AuthRemoteDataSource create(Ref ref) {
-    return authRemoteDataSource(ref);
+  AuthRemoteSource create(Ref ref) {
+    return authRemoteSource(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AuthRemoteDataSource value) {
+  Override overrideWithValue(AuthRemoteSource value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<AuthRemoteDataSource>(value),
+      providerOverride: $SyncValueProvider<AuthRemoteSource>(value),
     );
   }
 }
 
-String _$authRemoteDataSourceHash() =>
-    r'08908677f752fe5d6953f18f935c6de558ffdf24';
+String _$authRemoteSourceHash() => r'38d71db3eac60c41a044aaaf501390e6b700a099';
+
+/// Aggregate auth data source — facade over [authRemoteSourceProvider].
+
+@ProviderFor(authDataSource)
+final authDataSourceProvider = AuthDataSourceProvider._();
+
+/// Aggregate auth data source — facade over [authRemoteSourceProvider].
+
+final class AuthDataSourceProvider
+    extends $FunctionalProvider<AuthDataSource, AuthDataSource, AuthDataSource>
+    with $Provider<AuthDataSource> {
+  /// Aggregate auth data source — facade over [authRemoteSourceProvider].
+  AuthDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authDataSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AuthDataSource create(Ref ref) {
+    return authDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthDataSource>(value),
+    );
+  }
+}
+
+String _$authDataSourceHash() => r'901954b2767acd5dcc1475865b6e5904ef61db91';
 
 /// Singleton repository bound to the active storage implementation.
 
@@ -247,7 +291,7 @@ final class AuthRepositoryProvider
   }
 }
 
-String _$authRepositoryHash() => r'd0288d4114cfa1654735dbd917a95cb8a563c0f8';
+String _$authRepositoryHash() => r'9f9acb499bfe3571831f47b6b5554f7bcd31a42a';
 
 /// Domain-layer use case wrapping the repository's login.
 

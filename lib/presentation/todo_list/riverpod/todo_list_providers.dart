@@ -102,7 +102,7 @@ class TodoListController extends _$TodoListController
   }
 
   Future<void> loadMore() async {
-    final current = state.valueOrNull;
+    final current = state.value;
     if (current is! TodoLoaded || !current.hasMore || current.isLoadingMore) {
       return;
     }
@@ -136,7 +136,7 @@ class TodoListController extends _$TodoListController
     result.fold((failure) => state = AsyncValue.data(TodoError(failure)), (
       todo,
     ) {
-      final current = state.valueOrNull;
+      final current = state.value;
       switch (current) {
         case TodoLoaded(:final todos, :final hasMore):
           state = AsyncValue.data(
@@ -149,7 +149,7 @@ class TodoListController extends _$TodoListController
   }
 
   Future<void> toggle(String id) async {
-    final current = state.valueOrNull;
+    final current = state.value;
     if (current is! TodoLoaded) return;
 
     final index = current.todos.indexWhere((t) => t.id == id);
@@ -176,7 +176,7 @@ class TodoListController extends _$TodoListController
         .call(id, cancelToken: cancelToken);
     if (isCancelled) return;
     if (result.isRight()) {
-      final current = state.valueOrNull;
+      final current = state.value;
       if (current is TodoLoaded) {
         final todos = current.todos.where((t) => t.id != id).toList();
         state = AsyncValue.data(

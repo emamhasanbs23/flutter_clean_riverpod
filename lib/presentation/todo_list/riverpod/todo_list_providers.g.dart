@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todo_providers.dart';
+part of 'todo_list_providers.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -57,32 +57,83 @@ final class TodoApiProvider
 
 String _$todoApiHash() => r'1fdeb4cc519bd6c1dcca9a0755a92f46fe7826ec';
 
-/// Default data source. Wires [TodoRemoteDataSource] to [todoApiProvider] so
-/// the full Clean Architecture data flow runs end-to-end against a real
-/// HTTP API.
+/// Dio-backed [TodoRemoteSource] driven by [todoApiProvider].
+
+@ProviderFor(todoRemoteSource)
+final todoRemoteSourceProvider = TodoRemoteSourceProvider._();
+
+/// Dio-backed [TodoRemoteSource] driven by [todoApiProvider].
+
+final class TodoRemoteSourceProvider
+    extends
+        $FunctionalProvider<
+          TodoRemoteSource,
+          TodoRemoteSource,
+          TodoRemoteSource
+        >
+    with $Provider<TodoRemoteSource> {
+  /// Dio-backed [TodoRemoteSource] driven by [todoApiProvider].
+  TodoRemoteSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'todoRemoteSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$todoRemoteSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<TodoRemoteSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TodoRemoteSource create(Ref ref) {
+    return todoRemoteSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TodoRemoteSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TodoRemoteSource>(value),
+    );
+  }
+}
+
+String _$todoRemoteSourceHash() => r'5eea68aa9e8ca94c350906de27fdd9266da8f278';
+
+/// Default aggregate data source. Wires [TodoDataSourceImpl] to
+/// [todoRemoteSourceProvider] so the full Clean Architecture data flow runs
+/// end-to-end against a real HTTP API.
 ///
 /// Tests and offline development override this provider with
-/// [todoMockDataSourceProvider].
+/// [todoMockSourceProvider].
 
 @ProviderFor(todoDataSource)
 final todoDataSourceProvider = TodoDataSourceProvider._();
 
-/// Default data source. Wires [TodoRemoteDataSource] to [todoApiProvider] so
-/// the full Clean Architecture data flow runs end-to-end against a real
-/// HTTP API.
+/// Default aggregate data source. Wires [TodoDataSourceImpl] to
+/// [todoRemoteSourceProvider] so the full Clean Architecture data flow runs
+/// end-to-end against a real HTTP API.
 ///
 /// Tests and offline development override this provider with
-/// [todoMockDataSourceProvider].
+/// [todoMockSourceProvider].
 
 final class TodoDataSourceProvider
     extends $FunctionalProvider<TodoDataSource, TodoDataSource, TodoDataSource>
     with $Provider<TodoDataSource> {
-  /// Default data source. Wires [TodoRemoteDataSource] to [todoApiProvider] so
-  /// the full Clean Architecture data flow runs end-to-end against a real
-  /// HTTP API.
+  /// Default aggregate data source. Wires [TodoDataSourceImpl] to
+  /// [todoRemoteSourceProvider] so the full Clean Architecture data flow runs
+  /// end-to-end against a real HTTP API.
   ///
   /// Tests and offline development override this provider with
-  /// [todoMockDataSourceProvider].
+  /// [todoMockSourceProvider].
   TodoDataSourceProvider._()
     : super(
         from: null,
@@ -116,44 +167,32 @@ final class TodoDataSourceProvider
   }
 }
 
-String _$todoDataSourceHash() => r'3e95ad1c0a6139c29be199e4622366ad03683244';
+String _$todoDataSourceHash() => r'ac33e1424b4d13e4a5716ffc19afbe5230ad6832';
 
 /// In-memory data source used by tests and as an offline fallback.
-///
-/// Lives behind its own provider so test setup can inject a zero-latency
-/// instance and production can swap in the remote source without code
-/// changes.
 
-@ProviderFor(todoMockDataSource)
-final todoMockDataSourceProvider = TodoMockDataSourceProvider._();
+@ProviderFor(todoMockSource)
+final todoMockSourceProvider = TodoMockSourceProvider._();
 
 /// In-memory data source used by tests and as an offline fallback.
-///
-/// Lives behind its own provider so test setup can inject a zero-latency
-/// instance and production can swap in the remote source without code
-/// changes.
 
-final class TodoMockDataSourceProvider
+final class TodoMockSourceProvider
     extends $FunctionalProvider<TodoDataSource, TodoDataSource, TodoDataSource>
     with $Provider<TodoDataSource> {
   /// In-memory data source used by tests and as an offline fallback.
-  ///
-  /// Lives behind its own provider so test setup can inject a zero-latency
-  /// instance and production can swap in the remote source without code
-  /// changes.
-  TodoMockDataSourceProvider._()
+  TodoMockSourceProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'todoMockDataSourceProvider',
+        name: r'todoMockSourceProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$todoMockDataSourceHash();
+  String debugGetCreateSourceHash() => _$todoMockSourceHash();
 
   @$internal
   @override
@@ -162,7 +201,7 @@ final class TodoMockDataSourceProvider
 
   @override
   TodoDataSource create(Ref ref) {
-    return todoMockDataSource(ref);
+    return todoMockSource(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -174,8 +213,7 @@ final class TodoMockDataSourceProvider
   }
 }
 
-String _$todoMockDataSourceHash() =>
-    r'9ce9d6860f77a707cd0dd4f3884c9812e6212143';
+String _$todoMockSourceHash() => r'6e89ea0192c8a8c86f67178dce9568af0a42794d';
 
 @ProviderFor(todoRepository)
 final todoRepositoryProvider = TodoRepositoryProvider._();
@@ -436,7 +474,7 @@ final class TodoListControllerProvider
 }
 
 String _$todoListControllerHash() =>
-    r'428bdd1da76ca33fbb4b4e47f94fed06a205fb62';
+    r'aaf5dc98a83b9ae36db687daa6e1edbe641e3e72';
 
 /// Manages the list state and exposes mutating methods. Mutations
 /// optimistically re-fetch to keep the data source authoritative, which also

@@ -73,7 +73,7 @@ class _TodoApi implements TodoApi {
     try {
       _value = TodoDto.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
     return _value;
