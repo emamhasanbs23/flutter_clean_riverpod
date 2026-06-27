@@ -6,211 +6,59 @@ part of 'auth_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authApiHash() => r'fe97432bc17461ebde4a232f1f399cd20c5aa5e4';
-
-/// Retrofit-generated `AuthApi` bound to the configured `Dio`.
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Broadcast stream of "session expired" events.
 ///
-/// Shares the same Dio instance (and therefore the same
-/// [AuthInterceptor]) with the rest of the app, so the 401 -> dedup ->
-/// refresh -> retry funnel keeps working unchanged.
+/// Emitted by the auth layer (e.g. when the [AuthInterceptor] exhausts its
+/// refresh retry) so the router can react: invalidate
+/// [isAuthenticatedProvider] and the redirect will fire on the next
+/// navigation.
+
+@ProviderFor(SessionExpired)
+final sessionExpiredProvider = SessionExpiredProvider._();
+
+/// Broadcast stream of "session expired" events.
 ///
-/// Copied from [authApi].
-@ProviderFor(authApi)
-final authApiProvider = Provider<AuthApi>.internal(
-  authApi,
-  name: r'authApiProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authApiHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+/// Emitted by the auth layer (e.g. when the [AuthInterceptor] exhausts its
+/// refresh retry) so the router can react: invalidate
+/// [isAuthenticatedProvider] and the redirect will fire on the next
+/// navigation.
+final class SessionExpiredProvider
+    extends $NotifierProvider<SessionExpired, bool> {
+  /// Broadcast stream of "session expired" events.
+  ///
+  /// Emitted by the auth layer (e.g. when the [AuthInterceptor] exhausts its
+  /// refresh retry) so the router can react: invalidate
+  /// [isAuthenticatedProvider] and the redirect will fire on the next
+  /// navigation.
+  SessionExpiredProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionExpiredProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AuthApiRef = ProviderRef<AuthApi>;
-String _$authRemoteSourceHash() => r'38d71db3eac60c41a044aaaf501390e6b700a099';
+  @override
+  String debugGetCreateSourceHash() => _$sessionExpiredHash();
 
-/// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
-///
-/// Tests can override this provider with a fake implementation.
-///
-/// Copied from [authRemoteSource].
-@ProviderFor(authRemoteSource)
-final authRemoteSourceProvider = Provider<AuthRemoteSource>.internal(
-  authRemoteSource,
-  name: r'authRemoteSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authRemoteSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+  @$internal
+  @override
+  SessionExpired create() => SessionExpired();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AuthRemoteSourceRef = ProviderRef<AuthRemoteSource>;
-String _$authDataSourceHash() => r'901954b2767acd5dcc1475865b6e5904ef61db91';
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
 
-/// Aggregate auth data source — facade over [authRemoteSourceProvider].
-///
-/// Copied from [authDataSource].
-@ProviderFor(authDataSource)
-final authDataSourceProvider = Provider<AuthDataSource>.internal(
-  authDataSource,
-  name: r'authDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AuthDataSourceRef = ProviderRef<AuthDataSource>;
-String _$authRepositoryHash() => r'9f9acb499bfe3571831f47b6b5554f7bcd31a42a';
-
-/// Singleton repository bound to the active storage implementation.
-///
-/// Copied from [authRepository].
-@ProviderFor(authRepository)
-final authRepositoryProvider = Provider<AuthRepository>.internal(
-  authRepository,
-  name: r'authRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$loginUseCaseHash() => r'24ad3f2ba64f0eabe574926ed647b61cd5651291';
-
-/// Domain-layer use case wrapping the repository's login.
-///
-/// Copied from [loginUseCase].
-@ProviderFor(loginUseCase)
-final loginUseCaseProvider = Provider<LoginUseCase>.internal(
-  loginUseCase,
-  name: r'loginUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$loginUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef LoginUseCaseRef = ProviderRef<LoginUseCase>;
-String _$getCurrentUserUseCaseHash() =>
-    r'5cd5426118c793aa603d1d80a0567f9ed1313557';
-
-/// Reads the persisted user from secure storage. Returns `null` when no user
-/// is logged in. Invalidated whenever [logoutControllerProvider] runs.
-///
-/// Copied from [getCurrentUserUseCase].
-@ProviderFor(getCurrentUserUseCase)
-final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>.internal(
-  getCurrentUserUseCase,
-  name: r'getCurrentUserUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getCurrentUserUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetCurrentUserUseCaseRef = ProviderRef<GetCurrentUserUseCase>;
-String _$logoutUseCaseHash() => r'9caaf0cb8d2a39bd5b99e8fae9e36c716e1fd83a';
-
-/// Domain-layer use case wrapping the repository's logout.
-///
-/// Copied from [logoutUseCase].
-@ProviderFor(logoutUseCase)
-final logoutUseCaseProvider = Provider<LogoutUseCase>.internal(
-  logoutUseCase,
-  name: r'logoutUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$logoutUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef LogoutUseCaseRef = ProviderRef<LogoutUseCase>;
-String _$currentUserHash() => r'fa244603a7d92aef91ded8a57b73a28d3f078e57';
-
-/// Async snapshot of the currently logged-in user. `null` inside the data
-/// means "no user" (logged-out) — `AsyncValue.error` means the storage read
-/// itself failed.
-///
-/// Copied from [currentUser].
-@ProviderFor(currentUser)
-final currentUserProvider = FutureProvider<AuthUser?>.internal(
-  currentUser,
-  name: r'currentUserProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentUserHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentUserRef = FutureProviderRef<AuthUser?>;
-String _$isAuthenticatedHash() => r'81ccbcf1d92ea9f131ede4ce1680fb65062c3d21';
-
-/// Synchronous view of whether the user is authenticated.
-///
-/// The router reads this provider on every redirect, so we keep it cheap:
-/// a single secure storage read at construction time, then it stays in
-/// memory for the lifetime of the provider.
-///
-/// Copied from [isAuthenticated].
-@ProviderFor(isAuthenticated)
-final isAuthenticatedProvider = FutureProvider<bool>.internal(
-  isAuthenticated,
-  name: r'isAuthenticatedProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$isAuthenticatedHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef IsAuthenticatedRef = FutureProviderRef<bool>;
-String _$logoutControllerHash() => r'31ef253825043153af3f7505ff5e6a13c5e9bce8';
-
-/// Triggers a logout and refreshes the auth provider so the router redirects
-/// back to the login screen.
-///
-/// Copied from [logoutController].
-@ProviderFor(logoutController)
-final logoutControllerProvider = Provider<Future<void> Function()>.internal(
-  logoutController,
-  name: r'logoutControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$logoutControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef LogoutControllerRef = ProviderRef<Future<void> Function()>;
 String _$sessionExpiredHash() => r'946fa6deb10a32ffadd3d4fd17160e34b7a78ed0';
 
 /// Broadcast stream of "session expired" events.
@@ -219,37 +67,588 @@ String _$sessionExpiredHash() => r'946fa6deb10a32ffadd3d4fd17160e34b7a78ed0';
 /// refresh retry) so the router can react: invalidate
 /// [isAuthenticatedProvider] and the redirect will fire on the next
 /// navigation.
-///
-/// Copied from [SessionExpired].
-@ProviderFor(SessionExpired)
-final sessionExpiredProvider = NotifierProvider<SessionExpired, bool>.internal(
-  SessionExpired.new,
-  name: r'sessionExpiredProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$sessionExpiredHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
 
-typedef _$SessionExpired = Notifier<bool>;
+abstract class _$SessionExpired extends $Notifier<bool> {
+  bool build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+/// Retrofit-generated `AuthApi` bound to the configured `Dio`.
+///
+/// Shares the same Dio instance (and therefore the same
+/// [AuthInterceptor]) with the rest of the app, so the 401 -> dedup ->
+/// refresh -> retry funnel keeps working unchanged.
+
+@ProviderFor(authApi)
+final authApiProvider = AuthApiProvider._();
+
+/// Retrofit-generated `AuthApi` bound to the configured `Dio`.
+///
+/// Shares the same Dio instance (and therefore the same
+/// [AuthInterceptor]) with the rest of the app, so the 401 -> dedup ->
+/// refresh -> retry funnel keeps working unchanged.
+
+final class AuthApiProvider
+    extends $FunctionalProvider<AuthApi, AuthApi, AuthApi>
+    with $Provider<AuthApi> {
+  /// Retrofit-generated `AuthApi` bound to the configured `Dio`.
+  ///
+  /// Shares the same Dio instance (and therefore the same
+  /// [AuthInterceptor]) with the rest of the app, so the 401 -> dedup ->
+  /// refresh -> retry funnel keeps working unchanged.
+  AuthApiProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authApiProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authApiHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthApi> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AuthApi create(Ref ref) {
+    return authApi(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthApi value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthApi>(value),
+    );
+  }
+}
+
+String _$authApiHash() => r'fe97432bc17461ebde4a232f1f399cd20c5aa5e4';
+
+/// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
+///
+/// Tests can override this provider with a fake implementation.
+
+@ProviderFor(authRemoteSource)
+final authRemoteSourceProvider = AuthRemoteSourceProvider._();
+
+/// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
+///
+/// Tests can override this provider with a fake implementation.
+
+final class AuthRemoteSourceProvider
+    extends
+        $FunctionalProvider<
+          AuthRemoteSource,
+          AuthRemoteSource,
+          AuthRemoteSource
+        >
+    with $Provider<AuthRemoteSource> {
+  /// Dio-backed [AuthRemoteSource] driven by [authApiProvider].
+  ///
+  /// Tests can override this provider with a fake implementation.
+  AuthRemoteSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRemoteSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authRemoteSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthRemoteSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AuthRemoteSource create(Ref ref) {
+    return authRemoteSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthRemoteSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthRemoteSource>(value),
+    );
+  }
+}
+
+String _$authRemoteSourceHash() => r'38d71db3eac60c41a044aaaf501390e6b700a099';
+
+/// Aggregate auth data source — facade over [authRemoteSourceProvider].
+
+@ProviderFor(authDataSource)
+final authDataSourceProvider = AuthDataSourceProvider._();
+
+/// Aggregate auth data source — facade over [authRemoteSourceProvider].
+
+final class AuthDataSourceProvider
+    extends $FunctionalProvider<AuthDataSource, AuthDataSource, AuthDataSource>
+    with $Provider<AuthDataSource> {
+  /// Aggregate auth data source — facade over [authRemoteSourceProvider].
+  AuthDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authDataSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AuthDataSource create(Ref ref) {
+    return authDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthDataSource>(value),
+    );
+  }
+}
+
+String _$authDataSourceHash() => r'901954b2767acd5dcc1475865b6e5904ef61db91';
+
+/// Singleton repository bound to the active storage implementation.
+
+@ProviderFor(authRepository)
+final authRepositoryProvider = AuthRepositoryProvider._();
+
+/// Singleton repository bound to the active storage implementation.
+
+final class AuthRepositoryProvider
+    extends $FunctionalProvider<AuthRepository, AuthRepository, AuthRepository>
+    with $Provider<AuthRepository> {
+  /// Singleton repository bound to the active storage implementation.
+  AuthRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AuthRepository create(Ref ref) {
+    return authRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthRepository>(value),
+    );
+  }
+}
+
+String _$authRepositoryHash() => r'9f9acb499bfe3571831f47b6b5554f7bcd31a42a';
+
+/// Domain-layer use case wrapping the repository's login.
+
+@ProviderFor(loginUseCase)
+final loginUseCaseProvider = LoginUseCaseProvider._();
+
+/// Domain-layer use case wrapping the repository's login.
+
+final class LoginUseCaseProvider
+    extends $FunctionalProvider<LoginUseCase, LoginUseCase, LoginUseCase>
+    with $Provider<LoginUseCase> {
+  /// Domain-layer use case wrapping the repository's login.
+  LoginUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'loginUseCaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$loginUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<LoginUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LoginUseCase create(Ref ref) {
+    return loginUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LoginUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LoginUseCase>(value),
+    );
+  }
+}
+
+String _$loginUseCaseHash() => r'24ad3f2ba64f0eabe574926ed647b61cd5651291';
+
+/// Reads the persisted user from secure storage. Returns `null` when no user
+/// is logged in. Invalidated whenever [logoutControllerProvider] runs.
+
+@ProviderFor(getCurrentUserUseCase)
+final getCurrentUserUseCaseProvider = GetCurrentUserUseCaseProvider._();
+
+/// Reads the persisted user from secure storage. Returns `null` when no user
+/// is logged in. Invalidated whenever [logoutControllerProvider] runs.
+
+final class GetCurrentUserUseCaseProvider
+    extends
+        $FunctionalProvider<
+          GetCurrentUserUseCase,
+          GetCurrentUserUseCase,
+          GetCurrentUserUseCase
+        >
+    with $Provider<GetCurrentUserUseCase> {
+  /// Reads the persisted user from secure storage. Returns `null` when no user
+  /// is logged in. Invalidated whenever [logoutControllerProvider] runs.
+  GetCurrentUserUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getCurrentUserUseCaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getCurrentUserUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetCurrentUserUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  GetCurrentUserUseCase create(Ref ref) {
+    return getCurrentUserUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetCurrentUserUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetCurrentUserUseCase>(value),
+    );
+  }
+}
+
+String _$getCurrentUserUseCaseHash() =>
+    r'5cd5426118c793aa603d1d80a0567f9ed1313557';
+
+/// Domain-layer use case wrapping the repository's logout.
+
+@ProviderFor(logoutUseCase)
+final logoutUseCaseProvider = LogoutUseCaseProvider._();
+
+/// Domain-layer use case wrapping the repository's logout.
+
+final class LogoutUseCaseProvider
+    extends $FunctionalProvider<LogoutUseCase, LogoutUseCase, LogoutUseCase>
+    with $Provider<LogoutUseCase> {
+  /// Domain-layer use case wrapping the repository's logout.
+  LogoutUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'logoutUseCaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$logoutUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<LogoutUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LogoutUseCase create(Ref ref) {
+    return logoutUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LogoutUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LogoutUseCase>(value),
+    );
+  }
+}
+
+String _$logoutUseCaseHash() => r'9caaf0cb8d2a39bd5b99e8fae9e36c716e1fd83a';
+
+/// Async snapshot of the currently logged-in user. `null` inside the data
+/// means "no user" (logged-out) — `AsyncValue.error` means the storage read
+/// itself failed.
+
+@ProviderFor(currentUser)
+final currentUserProvider = CurrentUserProvider._();
+
+/// Async snapshot of the currently logged-in user. `null` inside the data
+/// means "no user" (logged-out) — `AsyncValue.error` means the storage read
+/// itself failed.
+
+final class CurrentUserProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<AuthUser?>,
+          AuthUser?,
+          FutureOr<AuthUser?>
+        >
+    with $FutureModifier<AuthUser?>, $FutureProvider<AuthUser?> {
+  /// Async snapshot of the currently logged-in user. `null` inside the data
+  /// means "no user" (logged-out) — `AsyncValue.error` means the storage read
+  /// itself failed.
+  CurrentUserProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'currentUserProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$currentUserHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<AuthUser?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<AuthUser?> create(Ref ref) {
+    return currentUser(ref);
+  }
+}
+
+String _$currentUserHash() => r'fa244603a7d92aef91ded8a57b73a28d3f078e57';
+
+/// Synchronous view of whether the user is authenticated.
+///
+/// The router reads this provider on every redirect, so we keep it cheap:
+/// a single secure storage read at construction time, then it stays in
+/// memory for the lifetime of the provider.
+
+@ProviderFor(isAuthenticated)
+final isAuthenticatedProvider = IsAuthenticatedProvider._();
+
+/// Synchronous view of whether the user is authenticated.
+///
+/// The router reads this provider on every redirect, so we keep it cheap:
+/// a single secure storage read at construction time, then it stays in
+/// memory for the lifetime of the provider.
+
+final class IsAuthenticatedProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  /// Synchronous view of whether the user is authenticated.
+  ///
+  /// The router reads this provider on every redirect, so we keep it cheap:
+  /// a single secure storage read at construction time, then it stays in
+  /// memory for the lifetime of the provider.
+  IsAuthenticatedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'isAuthenticatedProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$isAuthenticatedHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return isAuthenticated(ref);
+  }
+}
+
+String _$isAuthenticatedHash() => r'81ccbcf1d92ea9f131ede4ce1680fb65062c3d21';
+
+/// Holds the current submission state plus simple form controllers.
+
+@ProviderFor(LoginController)
+final loginControllerProvider = LoginControllerProvider._();
+
+/// Holds the current submission state plus simple form controllers.
+final class LoginControllerProvider
+    extends $NotifierProvider<LoginController, LoginState> {
+  /// Holds the current submission state plus simple form controllers.
+  LoginControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'loginControllerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$loginControllerHash();
+
+  @$internal
+  @override
+  LoginController create() => LoginController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LoginState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LoginState>(value),
+    );
+  }
+}
+
 String _$loginControllerHash() => r'9056fb8e390ca62c6e18543a73f009db8830cb65';
 
 /// Holds the current submission state plus simple form controllers.
-///
-/// Copied from [LoginController].
-@ProviderFor(LoginController)
-final loginControllerProvider =
-    NotifierProvider<LoginController, LoginState>.internal(
-      LoginController.new,
-      name: r'loginControllerProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$loginControllerHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
 
-typedef _$LoginController = Notifier<LoginState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$LoginController extends $Notifier<LoginState> {
+  LoginState build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<LoginState, LoginState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<LoginState, LoginState>,
+              LoginState,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+/// Triggers a logout and refreshes the auth provider so the router redirects
+/// back to the login screen.
+
+@ProviderFor(logoutController)
+final logoutControllerProvider = LogoutControllerProvider._();
+
+/// Triggers a logout and refreshes the auth provider so the router redirects
+/// back to the login screen.
+
+final class LogoutControllerProvider
+    extends
+        $FunctionalProvider<
+          Future<void> Function(),
+          Future<void> Function(),
+          Future<void> Function()
+        >
+    with $Provider<Future<void> Function()> {
+  /// Triggers a logout and refreshes the auth provider so the router redirects
+  /// back to the login screen.
+  LogoutControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'logoutControllerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$logoutControllerHash();
+
+  @$internal
+  @override
+  $ProviderElement<Future<void> Function()> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  Future<void> Function() create(Ref ref) {
+    return logoutController(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Future<void> Function() value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Future<void> Function()>(value),
+    );
+  }
+}
+
+String _$logoutControllerHash() => r'31ef253825043153af3f7505ff5e6a13c5e9bce8';

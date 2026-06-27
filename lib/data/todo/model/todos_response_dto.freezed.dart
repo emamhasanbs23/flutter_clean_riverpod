@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,240 +9,284 @@ part of 'todos_response_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-TodosResponseDto _$TodosResponseDtoFromJson(Map<String, dynamic> json) {
-  return _TodosResponseDto.fromJson(json);
-}
 
 /// @nodoc
 mixin _$TodosResponseDto {
-  List<TodoDto> get todos => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
-  int get skip => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
+
+ List<TodoDto> get todos; int get total; int get skip; int get limit;
+/// Create a copy of TodosResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TodosResponseDtoCopyWith<TodosResponseDto> get copyWith => _$TodosResponseDtoCopyWithImpl<TodosResponseDto>(this as TodosResponseDto, _$identity);
 
   /// Serializes this TodosResponseDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of TodosResponseDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $TodosResponseDtoCopyWith<TodosResponseDto> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodosResponseDto&&const DeepCollectionEquality().equals(other.todos, todos)&&(identical(other.total, total) || other.total == total)&&(identical(other.skip, skip) || other.skip == skip)&&(identical(other.limit, limit) || other.limit == limit));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(todos),total,skip,limit);
+
+@override
+String toString() {
+  return 'TodosResponseDto(todos: $todos, total: $total, skip: $skip, limit: $limit)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $TodosResponseDtoCopyWith<$Res> {
-  factory $TodosResponseDtoCopyWith(
-    TodosResponseDto value,
-    $Res Function(TodosResponseDto) then,
-  ) = _$TodosResponseDtoCopyWithImpl<$Res, TodosResponseDto>;
-  @useResult
-  $Res call({List<TodoDto> todos, int total, int skip, int limit});
-}
+abstract mixin class $TodosResponseDtoCopyWith<$Res>  {
+  factory $TodosResponseDtoCopyWith(TodosResponseDto value, $Res Function(TodosResponseDto) _then) = _$TodosResponseDtoCopyWithImpl;
+@useResult
+$Res call({
+ List<TodoDto> todos, int total, int skip, int limit
+});
 
+
+
+
+}
 /// @nodoc
-class _$TodosResponseDtoCopyWithImpl<$Res, $Val extends TodosResponseDto>
+class _$TodosResponseDtoCopyWithImpl<$Res>
     implements $TodosResponseDtoCopyWith<$Res> {
-  _$TodosResponseDtoCopyWithImpl(this._value, this._then);
+  _$TodosResponseDtoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final TodosResponseDto _self;
+  final $Res Function(TodosResponseDto) _then;
 
-  /// Create a copy of TodosResponseDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? todos = null,
-    Object? total = null,
-    Object? skip = null,
-    Object? limit = null,
-  }) {
-    return _then(
-      _value.copyWith(
-            todos: null == todos
-                ? _value.todos
-                : todos // ignore: cast_nullable_to_non_nullable
-                      as List<TodoDto>,
-            total: null == total
-                ? _value.total
-                : total // ignore: cast_nullable_to_non_nullable
-                      as int,
-            skip: null == skip
-                ? _value.skip
-                : skip // ignore: cast_nullable_to_non_nullable
-                      as int,
-            limit: null == limit
-                ? _value.limit
-                : limit // ignore: cast_nullable_to_non_nullable
-                      as int,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of TodosResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? todos = null,Object? total = null,Object? skip = null,Object? limit = null,}) {
+  return _then(_self.copyWith(
+todos: null == todos ? _self.todos : todos // ignore: cast_nullable_to_non_nullable
+as List<TodoDto>,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int,skip: null == skip ? _self.skip : skip // ignore: cast_nullable_to_non_nullable
+as int,limit: null == limit ? _self.limit : limit // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
 }
 
-/// @nodoc
-abstract class _$$TodosResponseDtoImplCopyWith<$Res>
-    implements $TodosResponseDtoCopyWith<$Res> {
-  factory _$$TodosResponseDtoImplCopyWith(
-    _$TodosResponseDtoImpl value,
-    $Res Function(_$TodosResponseDtoImpl) then,
-  ) = __$$TodosResponseDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({List<TodoDto> todos, int total, int skip, int limit});
 }
 
-/// @nodoc
-class __$$TodosResponseDtoImplCopyWithImpl<$Res>
-    extends _$TodosResponseDtoCopyWithImpl<$Res, _$TodosResponseDtoImpl>
-    implements _$$TodosResponseDtoImplCopyWith<$Res> {
-  __$$TodosResponseDtoImplCopyWithImpl(
-    _$TodosResponseDtoImpl _value,
-    $Res Function(_$TodosResponseDtoImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of TodosResponseDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? todos = null,
-    Object? total = null,
-    Object? skip = null,
-    Object? limit = null,
-  }) {
-    return _then(
-      _$TodosResponseDtoImpl(
-        todos: null == todos
-            ? _value._todos
-            : todos // ignore: cast_nullable_to_non_nullable
-                  as List<TodoDto>,
-        total: null == total
-            ? _value.total
-            : total // ignore: cast_nullable_to_non_nullable
-                  as int,
-        skip: null == skip
-            ? _value.skip
-            : skip // ignore: cast_nullable_to_non_nullable
-                  as int,
-        limit: null == limit
-            ? _value.limit
-            : limit // ignore: cast_nullable_to_non_nullable
-                  as int,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [TodosResponseDto].
+extension TodosResponseDtoPatterns on TodosResponseDto {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TodosResponseDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TodosResponseDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TodosResponseDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _TodosResponseDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TodosResponseDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TodosResponseDto() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TodoDto> todos,  int total,  int skip,  int limit)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TodosResponseDto() when $default != null:
+return $default(_that.todos,_that.total,_that.skip,_that.limit);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TodoDto> todos,  int total,  int skip,  int limit)  $default,) {final _that = this;
+switch (_that) {
+case _TodosResponseDto():
+return $default(_that.todos,_that.total,_that.skip,_that.limit);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TodoDto> todos,  int total,  int skip,  int limit)?  $default,) {final _that = this;
+switch (_that) {
+case _TodosResponseDto() when $default != null:
+return $default(_that.todos,_that.total,_that.skip,_that.limit);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$TodosResponseDtoImpl implements _TodosResponseDto {
-  const _$TodosResponseDtoImpl({
-    final List<TodoDto> todos = const <TodoDto>[],
-    this.total = 0,
-    this.skip = 0,
-    this.limit = 0,
-  }) : _todos = todos;
 
-  factory _$TodosResponseDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TodosResponseDtoImplFromJson(json);
+class _TodosResponseDto implements TodosResponseDto {
+  const _TodosResponseDto({final  List<TodoDto> todos = const <TodoDto>[], this.total = 0, this.skip = 0, this.limit = 0}): _todos = todos;
+  factory _TodosResponseDto.fromJson(Map<String, dynamic> json) => _$TodosResponseDtoFromJson(json);
 
-  final List<TodoDto> _todos;
-  @override
-  @JsonKey()
-  List<TodoDto> get todos {
-    if (_todos is EqualUnmodifiableListView) return _todos;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_todos);
-  }
-
-  @override
-  @JsonKey()
-  final int total;
-  @override
-  @JsonKey()
-  final int skip;
-  @override
-  @JsonKey()
-  final int limit;
-
-  @override
-  String toString() {
-    return 'TodosResponseDto(todos: $todos, total: $total, skip: $skip, limit: $limit)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TodosResponseDtoImpl &&
-            const DeepCollectionEquality().equals(other._todos, _todos) &&
-            (identical(other.total, total) || other.total == total) &&
-            (identical(other.skip, skip) || other.skip == skip) &&
-            (identical(other.limit, limit) || other.limit == limit));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(_todos),
-    total,
-    skip,
-    limit,
-  );
-
-  /// Create a copy of TodosResponseDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$TodosResponseDtoImplCopyWith<_$TodosResponseDtoImpl> get copyWith =>
-      __$$TodosResponseDtoImplCopyWithImpl<_$TodosResponseDtoImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$TodosResponseDtoImplToJson(this);
-  }
+ final  List<TodoDto> _todos;
+@override@JsonKey() List<TodoDto> get todos {
+  if (_todos is EqualUnmodifiableListView) return _todos;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_todos);
 }
 
-abstract class _TodosResponseDto implements TodosResponseDto {
-  const factory _TodosResponseDto({
-    final List<TodoDto> todos,
-    final int total,
-    final int skip,
-    final int limit,
-  }) = _$TodosResponseDtoImpl;
+@override@JsonKey() final  int total;
+@override@JsonKey() final  int skip;
+@override@JsonKey() final  int limit;
 
-  factory _TodosResponseDto.fromJson(Map<String, dynamic> json) =
-      _$TodosResponseDtoImpl.fromJson;
+/// Create a copy of TodosResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TodosResponseDtoCopyWith<_TodosResponseDto> get copyWith => __$TodosResponseDtoCopyWithImpl<_TodosResponseDto>(this, _$identity);
 
-  @override
-  List<TodoDto> get todos;
-  @override
-  int get total;
-  @override
-  int get skip;
-  @override
-  int get limit;
-
-  /// Create a copy of TodosResponseDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TodosResponseDtoImplCopyWith<_$TodosResponseDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+Map<String, dynamic> toJson() {
+  return _$TodosResponseDtoToJson(this, );
 }
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TodosResponseDto&&const DeepCollectionEquality().equals(other._todos, _todos)&&(identical(other.total, total) || other.total == total)&&(identical(other.skip, skip) || other.skip == skip)&&(identical(other.limit, limit) || other.limit == limit));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_todos),total,skip,limit);
+
+@override
+String toString() {
+  return 'TodosResponseDto(todos: $todos, total: $total, skip: $skip, limit: $limit)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TodosResponseDtoCopyWith<$Res> implements $TodosResponseDtoCopyWith<$Res> {
+  factory _$TodosResponseDtoCopyWith(_TodosResponseDto value, $Res Function(_TodosResponseDto) _then) = __$TodosResponseDtoCopyWithImpl;
+@override @useResult
+$Res call({
+ List<TodoDto> todos, int total, int skip, int limit
+});
+
+
+
+
+}
+/// @nodoc
+class __$TodosResponseDtoCopyWithImpl<$Res>
+    implements _$TodosResponseDtoCopyWith<$Res> {
+  __$TodosResponseDtoCopyWithImpl(this._self, this._then);
+
+  final _TodosResponseDto _self;
+  final $Res Function(_TodosResponseDto) _then;
+
+/// Create a copy of TodosResponseDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? todos = null,Object? total = null,Object? skip = null,Object? limit = null,}) {
+  return _then(_TodosResponseDto(
+todos: null == todos ? _self._todos : todos // ignore: cast_nullable_to_non_nullable
+as List<TodoDto>,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int,skip: null == skip ? _self.skip : skip // ignore: cast_nullable_to_non_nullable
+as int,limit: null == limit ? _self.limit : limit // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+// dart format on

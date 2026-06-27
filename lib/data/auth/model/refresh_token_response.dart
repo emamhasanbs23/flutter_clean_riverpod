@@ -7,7 +7,7 @@ part 'refresh_token_response.g.dart';
 ///
 /// Returns a fresh access token (and optionally a rotated refresh token).
 @freezed
-class RefreshTokenResponse with _$RefreshTokenResponse {
+abstract class RefreshTokenResponse with _$RefreshTokenResponse {
   const factory RefreshTokenResponse({
     @JsonKey(name: 'accessToken') required String accessToken,
     @JsonKey(name: 'refreshToken') String? refreshToken,

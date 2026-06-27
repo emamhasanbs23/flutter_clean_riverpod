@@ -6,42 +6,40 @@ part of 'todo_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TodoDtoImpl _$$TodoDtoImplFromJson(Map<String, dynamic> json) =>
-    _$TodoDtoImpl(
-      id: (json['id'] as num).toInt(),
-      todo: json['todo'] as String,
-      completed: json['completed'] as bool? ?? false,
-      userId: (json['userId'] as num?)?.toInt(),
-    );
+_TodoDto _$TodoDtoFromJson(Map<String, dynamic> json) => _TodoDto(
+  id: (json['id'] as num).toInt(),
+  todo: json['todo'] as String,
+  completed: json['completed'] as bool? ?? false,
+  userId: (json['userId'] as num?)?.toInt(),
+);
 
-Map<String, dynamic> _$$TodoDtoImplToJson(_$TodoDtoImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'todo': instance.todo,
-      'completed': instance.completed,
-      'userId': instance.userId,
-    };
+Map<String, dynamic> _$TodoDtoToJson(_TodoDto instance) => <String, dynamic>{
+  'id': instance.id,
+  'todo': instance.todo,
+  'completed': instance.completed,
+  'userId': instance.userId,
+};
 
-_$CreateTodoRequestDtoImpl _$$CreateTodoRequestDtoImplFromJson(
+_CreateTodoRequestDto _$CreateTodoRequestDtoFromJson(
   Map<String, dynamic> json,
-) => _$CreateTodoRequestDtoImpl(
+) => _CreateTodoRequestDto(
   todo: json['todo'] as String,
   userId: (json['userId'] as num).toInt(),
   completed: json['completed'] as bool? ?? false,
 );
 
-Map<String, dynamic> _$$CreateTodoRequestDtoImplToJson(
-  _$CreateTodoRequestDtoImpl instance,
+Map<String, dynamic> _$CreateTodoRequestDtoToJson(
+  _CreateTodoRequestDto instance,
 ) => <String, dynamic>{
   'todo': instance.todo,
   'userId': instance.userId,
   'completed': instance.completed,
 };
 
-_$UpdateTodoRequestDtoImpl _$$UpdateTodoRequestDtoImplFromJson(
+_UpdateTodoRequestDto _$UpdateTodoRequestDtoFromJson(
   Map<String, dynamic> json,
-) => _$UpdateTodoRequestDtoImpl(completed: json['completed'] as bool);
+) => _UpdateTodoRequestDto(completed: json['completed'] as bool);
 
-Map<String, dynamic> _$$UpdateTodoRequestDtoImplToJson(
-  _$UpdateTodoRequestDtoImpl instance,
+Map<String, dynamic> _$UpdateTodoRequestDtoToJson(
+  _UpdateTodoRequestDto instance,
 ) => <String, dynamic>{'completed': instance.completed};

@@ -11,7 +11,7 @@ part 'login_response.g.dart';
 /// The mapper in `auth_mapper.dart` flattens user fields into [userId] /
 /// [userEmail] so the repository can treat the response uniformly.
 @freezed
-class LoginResponse with _$LoginResponse {
+abstract class LoginResponse with _$LoginResponse {
   const factory LoginResponse({
     @JsonKey(name: 'accessToken') required String accessToken,
     @JsonKey(name: 'refreshToken') String? refreshToken,

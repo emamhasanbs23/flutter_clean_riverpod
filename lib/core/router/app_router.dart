@@ -89,7 +89,7 @@ GoRouter appRouter(Ref ref) {
 /// Inputs:
 /// - [matchedLocation]: the path the user is currently trying to land on.
 /// - [auth]: the current auth state (loading → stay put; resolved → use
-///   `valueOrNull`).
+///   `value`).
 /// - [pending]: the queued deep-link / push destination, if any.
 ///
 /// Returns the path to redirect to, or `null` to stay put.
@@ -110,7 +110,7 @@ String? pendingNavigationAwareRedirect({
     return matchedLocation == _splashPath ? null : _splashPath;
   }
 
-  final isLoggedIn = auth.valueOrNull ?? false;
+  final isLoggedIn = auth.value ?? false;
 
   // (2) Pending destination: if the user is authed, deliver it; if not, the
   // auth guard below will bounce them to /login and the destination is
@@ -130,7 +130,7 @@ String? authRedirect(String matchedLocation, AsyncValue<bool> authAsync) {
     return matchedLocation == _splashPath ? null : _splashPath;
   }
 
-  final isLoggedIn = authAsync.valueOrNull ?? false;
+  final isLoggedIn = authAsync.value ?? false;
   final goingToLogin = matchedLocation == '/login';
   final onSplash = matchedLocation == _splashPath;
 

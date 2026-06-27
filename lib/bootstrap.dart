@@ -269,18 +269,18 @@ class _BootstrapAnalytics implements Analytics {
 /// Lightweight [ProviderObserver] that pipes provider creation / errors
 /// through the global error pipeline. Keeps Riverpod's lifecycle aligned
 /// with the rest of the observability stack.
-class _ProviderLogger extends ProviderObserver {
+final class _ProviderLogger extends ProviderObserver {
   @override
   void providerDidFail(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object error,
     StackTrace stackTrace,
-    ProviderContainer container,
   ) {
     const NoOpCrashReporter().reportError(
       error,
       stackTrace: stackTrace,
-      reason: 'Riverpod provider failed: ${provider.name ?? '<anon>'}',
+      reason:
+          'Riverpod provider failed: ${context.provider.name ?? '<anon>'}',
     );
   }
 }

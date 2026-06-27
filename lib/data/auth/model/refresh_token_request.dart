@@ -7,7 +7,7 @@ part 'refresh_token_request.g.dart';
 ///
 /// Mirrors the JSON DummyJSON expects: `{ "refreshToken": "..." }`.
 @freezed
-class RefreshTokenRequest with _$RefreshTokenRequest {
+abstract class RefreshTokenRequest with _$RefreshTokenRequest {
   const factory RefreshTokenRequest({
     @JsonKey(name: 'refreshToken') required String refreshToken,
     int? expiresInMins,

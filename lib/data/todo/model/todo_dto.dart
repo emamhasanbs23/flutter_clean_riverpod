@@ -5,7 +5,7 @@ part 'todo_dto.g.dart';
 
 /// Wire-format representation of a DummyJSON Todo.
 @freezed
-class TodoDto with _$TodoDto {
+abstract class TodoDto with _$TodoDto {
   const factory TodoDto({
     required int id,
     @JsonKey(name: 'todo') required String todo,
@@ -19,7 +19,7 @@ class TodoDto with _$TodoDto {
 
 /// Request body for `POST /todos/add`.
 @freezed
-class CreateTodoRequestDto with _$CreateTodoRequestDto {
+abstract class CreateTodoRequestDto with _$CreateTodoRequestDto {
   const factory CreateTodoRequestDto({
     required String todo,
     @JsonKey(name: 'userId') required int userId,
@@ -32,7 +32,7 @@ class CreateTodoRequestDto with _$CreateTodoRequestDto {
 
 /// Partial update body for `PATCH /todos/{id}`.
 @freezed
-class UpdateTodoRequestDto with _$UpdateTodoRequestDto {
+abstract class UpdateTodoRequestDto with _$UpdateTodoRequestDto {
   const factory UpdateTodoRequestDto({required bool completed}) =
       _UpdateTodoRequestDto;
 
