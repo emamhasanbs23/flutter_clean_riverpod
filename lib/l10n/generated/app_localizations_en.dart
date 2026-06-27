@@ -69,6 +69,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todoListDeleteConfirm => 'Delete this todo?';
 
   @override
+  String get todoDetailTitle => 'Todo detail';
+
+  @override
+  String get todoDetailStatusCompleted => 'Completed';
+
+  @override
+  String get todoDetailStatusPending => 'Pending';
+
+  @override
+  String todoDetailIdLabel(String id) {
+    return 'Todo #$id';
+  }
+
+  @override
   String get connectivityOffline => 'You are offline';
 
   @override

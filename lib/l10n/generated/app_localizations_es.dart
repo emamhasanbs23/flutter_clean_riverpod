@@ -70,6 +70,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get todoListDeleteConfirm => '¿Eliminar esta tarea?';
 
   @override
+  String get todoDetailTitle => 'Detalle de tarea';
+
+  @override
+  String get todoDetailStatusCompleted => 'Completada';
+
+  @override
+  String get todoDetailStatusPending => 'Pendiente';
+
+  @override
+  String todoDetailIdLabel(String id) {
+    return 'Tarea #$id';
+  }
+
+  @override
   String get connectivityOffline => 'Sin conexión';
 
   @override

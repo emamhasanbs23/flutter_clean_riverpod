@@ -16,7 +16,7 @@ presentation/  ──►  domain/  ◄──  data/
 | `presentation/` | `domain/`, `core/`                                                           |
 | `domain/`       | `core/` **only** (never other features, never `data/`)                       |
 | `data/`         | `domain/`, `core/`                                                           |
-| `core/`         | Other `core/` submodules — **except** `core/network/dio_client.dart`, which is allowed to import `features/auth/domain/` |
+| `core/`         | Other `core/` submodules — **except** `core/network/dio_client.dart`, which is allowed to import `domain/auth/` |
 
 ## Why this matters
 
@@ -30,11 +30,13 @@ The domain layer is allowed to use shared utilities — `Either`, `Failure`, pri
 
 ## The one exception
 
-`core/network/dio_client.dart` (and the `AuthInterceptor`) is allowed to import `features/auth/domain/` because the interceptor needs the auth domain types to perform refresh. **This file is code-owner gated** — see [code-ownership.md](./code-ownership.md).
+`core/network/dio_client.dart` (and the `AuthInterceptor`) is allowed to import `domain/auth/` because the interceptor needs the auth domain types to perform refresh. **This file is code-owner gated** — see [code-ownership.md](./code-ownership.md).
 
 ## Tests
 
-Test files follow the same rules. Cross-cutting test helpers in `test/helpers/` may be imported anywhere.
+Test files follow the same rules and mirror the layer layout:
+`test/domain/<feature>/`, `test/data/<feature>/`, `test/presentation/<feature>/`.
+Cross-cutting test helpers in `test/helpers/` may be imported anywhere.
 
 ## Related
 

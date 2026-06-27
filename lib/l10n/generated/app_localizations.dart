@@ -218,6 +218,30 @@ abstract class AppLocalizations {
   /// **'Delete this todo?'**
   String get todoListDeleteConfirm;
 
+  /// No description provided for @todoDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Todo detail'**
+  String get todoDetailTitle;
+
+  /// No description provided for @todoDetailStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get todoDetailStatusCompleted;
+
+  /// No description provided for @todoDetailStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get todoDetailStatusPending;
+
+  /// No description provided for @todoDetailIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Todo #{id}'**
+  String todoDetailIdLabel(String id);
+
   /// No description provided for @connectivityOffline.
   ///
   /// In en, this message translates to:

@@ -10,7 +10,7 @@ analyzer:
     invalid_annotation_target: ignore
     # The dynamic repository accessor in [AuthInterceptor] reads
     # `refreshAccessToken` through `dynamic` to avoid a cycle between
-    # `core/network` and `features/auth/data`.
+    # `core/network` and `data/auth`.
     invalid_use_of_visible_for_testing_member: false
 
 linter:

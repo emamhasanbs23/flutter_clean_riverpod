@@ -18,7 +18,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_s
 ///
 /// The interceptor is intentionally typed against [Object] for the
 /// repository builder so the `core/network` package never has to import
-/// `features/auth/data` (that would create a cycle with the auth providers
+/// `data/auth` (that would create a cycle with the auth providers
 /// that wire the dio). [DioClient] wires the builder to the concrete
 /// `AuthRepository` at startup.
 class AuthInterceptor extends Interceptor {

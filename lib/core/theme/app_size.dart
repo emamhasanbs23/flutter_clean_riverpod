@@ -41,4 +41,15 @@ class AppSize {
   static double get inputHeight => 48.sp;
   static double get buttonHeight => 48.sp;
   static double get appBarHeight => 56.sp;
+
+  // --- Layout ---
+  static double get maxContentWidth => 480.w;
+  static const emptyStateTopOffsetFactor = 0.25;
+
+  // --- Progress indicators ---
+  static double get progressIndicatorSm => 20.sp;
+  static const progressIndicatorStrokeSm = 2.0;
+
+  /// Distance from the bottom of a scroll view that triggers pagination.
+  static double get loadMoreThreshold => space4xl;
 }

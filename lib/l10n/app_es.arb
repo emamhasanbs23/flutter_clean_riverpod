@@ -20,6 +20,17 @@
   "todoListCancel": "Cancelar",
   "todoListDelete": "Eliminar",
   "todoListDeleteConfirm": "¿Eliminar esta tarea?",
+  "todoDetailTitle": "Detalle de tarea",
+  "todoDetailStatusCompleted": "Completada",
+  "todoDetailStatusPending": "Pendiente",
+  "todoDetailIdLabel": "Tarea #{id}",
+  "@todoDetailIdLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
   "connectivityOffline": "Sin conexión",
   "connectivityRetry": "Reintentar",
   "errorUnexpected": "Algo salió mal",

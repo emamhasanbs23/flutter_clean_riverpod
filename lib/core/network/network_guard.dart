@@ -23,7 +23,7 @@ import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
 /// ```dart
 /// @override
 /// Future<List<TodoDto>> fetchAll() => guard(
-///       'TodoRemoteDataSource.fetchAll',
+///       'TodoRemoteDataSourceImpl.fetchAll',
 ///       () => _api.getTodos(),
 ///     );
 /// ```

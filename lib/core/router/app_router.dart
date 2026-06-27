@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/l10n/l10n_extension.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/pending_navigation_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
+import 'package:flutter_clean_riverpod_boilerplate/core/router/todo_routes.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/widgets/login_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_detail_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/widgets/todo_list_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/login_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/auth_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/splash/splash_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/todo_detail_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/todo_list_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,14 +20,12 @@ part 'app_router.g.dart';
 /// call sites to keep navigation refactor-safe.
 class AuthRoutes {
   AuthRoutes._();
+  static const splash = 'splash';
   static const login = 'login';
 }
 
-class TodoRoutes {
-  TodoRoutes._();
-  static const list = 'todo-list';
-  static const detail = 'todo-detail';
-}
+/// Cold-start gate shown while auth resolves. Not used for in-app navigation.
+const _splashPath = '/splash';
 
 /// Top-level [GoRouter] wired with the auth redirect AND the deep-link /
 /// push-notification replay.
@@ -45,7 +45,7 @@ GoRouter appRouter(Ref ref) {
   ref.onDispose(combined.dispose);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: _splashPath,
     refreshListenable: combined,
     redirect: (context, state) => pendingNavigationAwareRedirect(
       matchedLocation: state.matchedLocation,
@@ -53,6 +53,11 @@ GoRouter appRouter(Ref ref) {
       pending: ref.read(pendingNavigationProvider),
     ),
     routes: [
+      GoRoute(
+        path: _splashPath,
+        name: AuthRoutes.splash,
+        builder: (_, __) => const SplashPage(),
+      ),
       GoRoute(
         path: '/',
         name: TodoRoutes.list,
@@ -90,7 +95,8 @@ GoRouter appRouter(Ref ref) {
 /// Returns the path to redirect to, or `null` to stay put.
 ///
 /// Rules (in priority order):
-/// 1. While auth is still resolving (cold start), stay put.
+/// 1. While auth is still resolving (cold start), land on [_splashPath] so
+///    protected pages (todo list, detail) are not built prematurely.
 /// 2. If a destination is pending AND the user is authenticated, redirect
 ///    to it. **This is what makes push notifications land correctly even
 ///    while the router is still considering the cold-start route.**
@@ -100,7 +106,9 @@ String? pendingNavigationAwareRedirect({
   required AsyncValue<bool> auth,
   required RouteDescriptor? pending,
 }) {
-  if (auth.isLoading) return null;
+  if (auth.isLoading) {
+    return matchedLocation == _splashPath ? null : _splashPath;
+  }
 
   final isLoggedIn = auth.value ?? false;
 
@@ -118,10 +126,17 @@ String? pendingNavigationAwareRedirect({
 /// Pure auth-only decision. Kept exported so it can be unit-tested
 /// independently of the pending-navigation rule above.
 String? authRedirect(String matchedLocation, AsyncValue<bool> authAsync) {
-  if (authAsync.isLoading) return null;
+  if (authAsync.isLoading) {
+    return matchedLocation == _splashPath ? null : _splashPath;
+  }
 
   final isLoggedIn = authAsync.value ?? false;
   final goingToLogin = matchedLocation == '/login';
+  final onSplash = matchedLocation == _splashPath;
+
+  if (onSplash) {
+    return isLoggedIn ? '/' : '/login';
+  }
 
   if (!isLoggedIn && !goingToLogin) return '/login';
   if (isLoggedIn && goingToLogin) return '/';

@@ -3,17 +3,25 @@
 > Sensitive paths require a code-owner review.
 > Part of the [AGENTS.md](../../AGENTS.md) index.
 
+## Owners
+
+Default owner for the whole repo: `@mozammal-hossain` (see `*` rule in `CODEOWNERS`).
+
 ## Gated paths
 
 ```
-/lib/core/network/        @security-owner @networking-owner
-/lib/core/storage/        @security-owner
-/lib/features/auth/       @security-owner
-/android/app/build.gradle.kts  @mobile-owner
-/.github/                 @platform-owner
+*                               @mozammal-hossain
+/lib/core/network/              @mozammal-hossain
+/lib/core/storage/              @mozammal-hossain
+/lib/domain/auth/               @mozammal-hossain
+/lib/data/auth/                 @mozammal-hossain
+/lib/presentation/auth/         @mozammal-hossain
+/android/app/build.gradle.kts   @mozammal-hossain
+/android/app/proguard-rules.pro @mozammal-hossain
+/.github/                       @mozammal-hossain
 ```
 
-(Verify the exact owners in `CODEOWNERS` — the list above is the canonical pattern.)
+(Verify the exact owners in `CODEOWNERS` — the list above mirrors the file.)
 
 ## Why these are gated
 
@@ -21,7 +29,9 @@
 |-------------------------------|------------------------------------------------------------------|
 | `lib/core/network/`           | Auth refresh, token rotation, dedup logic. One bug = lockouts.   |
 | `lib/core/storage/`           | Secure-storage keys, token persistence.                          |
-| `lib/features/auth/`          | Login flows, session lifecycle.                                  |
+| `lib/domain/auth/`          | Auth domain contracts and use cases.                               |
+| `lib/data/auth/`            | Auth DTOs, API, repository impl, session persistence.            |
+| `lib/presentation/auth/`    | Login flows, session lifecycle UI.                                 |
 | `android/app/build.gradle.kts`| Signing config, flavors, SDK versions.                           |
 | `.github/`                    | CI pipeline — a bad change ships a broken release.              |
 
