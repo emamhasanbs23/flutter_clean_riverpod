@@ -53,7 +53,11 @@ lib/presentation/<feature>/
 
 ## Step 2 — Domain entity
 
-`lib/domain/<feature>/entities/<feature>.dart` — **pure Dart**. No Flutter, no Dio, no Riverpod imports.
+`lib/domain/<feature>/entities/<feature>.dart` — **pure Dart**. No Flutter, no
+Dio, no Riverpod imports. Use `@MappableClass(generateMethods:
+entityGenerateMethods)` from `lib/domain/entity_mappable_options.dart` — generates
+`copyWith`, `==`, `hashCode`, and `toString` only (no wire serialization). Run
+`build_runner` after edits. See `Todo`, `AuthUser`, or `TodoPage`.
 
 ## Step 3 — Repository contract
 

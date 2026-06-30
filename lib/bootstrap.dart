@@ -279,8 +279,7 @@ final class _ProviderLogger extends ProviderObserver {
     const NoOpCrashReporter().reportError(
       error,
       stackTrace: stackTrace,
-      reason:
-          'Riverpod provider failed: ${context.provider.name ?? '<anon>'}',
+      reason: 'Riverpod provider failed: ${context.provider.name ?? '<anon>'}',
     );
   }
 }

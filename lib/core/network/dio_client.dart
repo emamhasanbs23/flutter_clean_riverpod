@@ -4,7 +4,6 @@ import 'package:flutter_clean_riverpod_boilerplate/core/network/auth_interceptor
 import 'package:flutter_clean_riverpod_boilerplate/core/storage/secure_storage_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/repositories/auth_repository.dart'
     show AuthRepository;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

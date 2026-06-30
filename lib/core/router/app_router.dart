@@ -56,12 +56,12 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: _splashPath,
         name: AuthRoutes.splash,
-        builder: (_, __) => const SplashPage(),
+        builder: (_, _) => const SplashPage(),
       ),
       GoRoute(
         path: '/',
         name: TodoRoutes.list,
-        builder: (_, __) => const TodoListPage(),
+        builder: (_, _) => const TodoListPage(),
       ),
       GoRoute(
         path: '/todos/:id',
@@ -77,7 +77,7 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/login',
         name: AuthRoutes.login,
-        builder: (_, __) => const LoginPage(),
+        builder: (_, _) => const LoginPage(),
       ),
     ],
     errorBuilder: (context, state) => UnknownRoutePage(error: state.error),
@@ -149,7 +149,7 @@ class _AuthRefreshNotifier extends ChangeNotifier {
   _AuthRefreshNotifier(this._ref) {
     _subscription = _ref.listen<AsyncValue<bool>>(
       isAuthenticatedProvider,
-      (_, __) => notifyListeners(),
+      (_, _) => notifyListeners(),
     );
   }
 

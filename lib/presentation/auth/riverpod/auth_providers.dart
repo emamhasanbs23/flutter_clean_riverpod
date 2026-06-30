@@ -13,7 +13,6 @@ import 'package:flutter_clean_riverpod_boilerplate/domain/auth/usecases/get_curr
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/usecases/login_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/auth/usecases/logout_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/login_state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 export 'login_state.dart';

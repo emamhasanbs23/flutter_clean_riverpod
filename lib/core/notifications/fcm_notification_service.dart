@@ -6,7 +6,6 @@ import 'package:flutter_clean_riverpod_boilerplate/core/logger/app_logger.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/notification_service.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_descriptor_parser.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'fcm_notification_service.g.dart';

@@ -50,7 +50,7 @@ void main() {
     });
 
     test('getTodos paginates through the mock source', () async {
-      final first = await repository.getTodos(limit: 2, skip: 0);
+      final first = await repository.getTodos(limit: 2);
       final second = await repository.getTodos(limit: 2, skip: 2);
 
       first.fold((_) => fail('Expected success'), (page) {

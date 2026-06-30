@@ -25,7 +25,7 @@ abstract mixin class CancelableControllerMixin {
   }
 }
 
-/// Shared [refresh] helper for async Riverpod controllers.
+/// Shared [refreshWith] helper for async Riverpod controllers.
 ///
 /// Mixed into generated `AsyncNotifier` subclasses that expose sealed UI
 /// state via [AsyncValue.data].

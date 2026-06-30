@@ -1,4 +1,8 @@
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:flutter_clean_riverpod_boilerplate/domain/entity_mappable_options.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/entities/todo.dart';
+
+part 'todo_page.mapper.dart';
 
 /// Default page size for todo list pagination.
 abstract final class TodoListPageSize {
@@ -6,7 +10,8 @@ abstract final class TodoListPageSize {
 }
 
 /// A single page of todos plus pagination metadata from the backend.
-final class TodoPage {
+@MappableClass(generateMethods: entityGenerateMethods)
+class TodoPage with TodoPageMappable {
   const TodoPage({
     required this.todos,
     required this.total,

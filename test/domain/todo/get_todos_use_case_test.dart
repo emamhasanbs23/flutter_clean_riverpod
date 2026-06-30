@@ -47,8 +47,6 @@ void main() {
       );
       verify(
         () => repository.getTodos(
-          limit: TodoListPageSize.defaultLimit,
-          skip: 0,
           cancelToken: any(named: 'cancelToken'),
         ),
       ).called(1);

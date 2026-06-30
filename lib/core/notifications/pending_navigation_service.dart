@@ -50,7 +50,6 @@ class PendingNavigation extends _$PendingNavigation {
   }
 
   /// Clear without returning.
-  // ignore: use_setters_to_change_properties
   void clear() {
     state = null;
   }
@@ -66,7 +65,7 @@ class _PendingNavigationBridge extends ChangeNotifier {
   _PendingNavigationBridge(this._ref) {
     _subscription = _ref.listen<RouteDescriptor?>(
       pendingNavigationProvider,
-      (_, __) => notifyListeners(),
+      (_, _) => notifyListeners(),
     );
   }
 

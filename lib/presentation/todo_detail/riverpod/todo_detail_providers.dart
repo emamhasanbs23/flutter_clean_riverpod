@@ -3,7 +3,6 @@ import 'package:flutter_clean_riverpod_boilerplate/core/riverpod/async_controlle
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/get_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/riverpod/todo_detail_state.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/riverpod/todo_list_providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 export 'todo_detail_state.dart';

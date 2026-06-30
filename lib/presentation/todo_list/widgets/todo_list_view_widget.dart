@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/widgets/app_loading_indicator.dart';
@@ -48,7 +50,7 @@ class _TodoListViewWidgetState extends ConsumerState<TodoListViewWidget> {
     final position = _scrollController.position;
     if (position.pixels >=
         position.maxScrollExtent - AppSize.loadMoreThreshold) {
-      ref.read(todoListControllerProvider.notifier).loadMore();
+      unawaited(ref.read(todoListControllerProvider.notifier).loadMore());
     }
   }
 
@@ -61,7 +63,7 @@ class _TodoListViewWidgetState extends ConsumerState<TodoListViewWidget> {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: AppSize.pagePadding,
       itemCount: widget.todos.length + trailingCount,
-      separatorBuilder: (_, __) => SizedBox(height: AppSize.spaceSm),
+      separatorBuilder: (_, _) => SizedBox(height: AppSize.spaceSm),
       itemBuilder: (context, index) {
         if (index >= widget.todos.length) {
           return Padding(

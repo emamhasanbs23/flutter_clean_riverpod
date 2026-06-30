@@ -474,7 +474,7 @@ final class TodoListControllerProvider
 }
 
 String _$todoListControllerHash() =>
-    r'aaf5dc98a83b9ae36db687daa6e1edbe641e3e72';
+    r'176dbfb9a2df1fa7bcd472805603a09dd321a737';
 
 /// Manages the list state and exposes mutating methods. Mutations
 /// optimistically re-fetch to keep the data source authoritative, which also

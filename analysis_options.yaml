@@ -6,6 +6,7 @@ analyzer:
     - "**/*.freezed.dart"
     - "**/*.mocks.dart"
     - "lib/l10n/generated/**"
+    - "build/**"
   errors:
     invalid_annotation_target: ignore
     # The dynamic repository accessor in [AuthInterceptor] reads

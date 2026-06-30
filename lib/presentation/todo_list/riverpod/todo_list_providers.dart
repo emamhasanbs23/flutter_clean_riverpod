@@ -12,7 +12,6 @@ import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/delete_t
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/get_todos_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/domain/todo/usecases/toggle_todo_use_case.dart';
 import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/riverpod/todo_list_state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 export 'todo_list_state.dart';

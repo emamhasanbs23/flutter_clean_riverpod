@@ -98,8 +98,6 @@ void main() {
 
       when(
         () => repository.getTodos(
-          limit: pageSize,
-          skip: 0,
           cancelToken: any(named: 'cancelToken'),
         ),
       ).thenAnswer(
@@ -107,7 +105,6 @@ void main() {
       );
       when(
         () => repository.getTodos(
-          limit: pageSize,
           skip: pageSize,
           cancelToken: any(named: 'cancelToken'),
         ),
@@ -131,7 +128,6 @@ void main() {
       expect(state.hasMore, isFalse);
       verify(
         () => repository.getTodos(
-          limit: pageSize,
           skip: pageSize,
           cancelToken: any(named: 'cancelToken'),
         ),

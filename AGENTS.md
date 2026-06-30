@@ -36,11 +36,13 @@
 3. **Sealed UI states**: every controller exposes a `sealed class` state;
    widgets render via exhaustive `switch`.
 4. **Codegen where it fits**: Prefer `build_runner` generators over hand-written
-   boilerplate. **Data layer**: `@RestApi` (Retrofit), `freezed` +
-   `json_serializable` for DTOs. **Presentation**: `@riverpod` /
-   `riverpod_generator` for providers. Controllers still expose `sealed class`
-   states; widgets render via exhaustive `switch`. Hand-write only what codegen
-   cannot express cleanly (mappers, use cases, test mocks).
+   boilerplate. **Domain**: `dart_mappable` for entities (`copyWith`, `==`,
+   `hashCode`, `toString` only — no wire serialization). **Data layer**:
+   `@RestApi` (Retrofit), `freezed` + `json_serializable` for DTOs.
+   **Presentation**: `@riverpod` / `riverpod_generator` for providers.
+   Controllers still expose `sealed class` states; widgets render via exhaustive
+   `switch`. Hand-write only what codegen cannot express cleanly (mappers, use
+   cases, UI states, test mocks).
 5. **Typed routes**: navigate with `context.goNamed(TodoRoutes.detail,
    pathParameters: {'id': id})`. Never raw paths outside
    `app_router.dart`.
@@ -148,14 +150,16 @@ change. Each is independent.
 - All commands go through `fvm` -- see
   [commands.md](./docs/agents/commands.md).
 - **Do not** add a dependency that duplicates one already present
-  (e.g. don't add `freezed` for state classes -- use `sealed class`; don't
-  add `provider` -- this repo uses `flutter_riverpod`; don't add
-  `mockito` -- this repo uses `mocktail`).
+  (e.g. don't add `freezed` for domain entities — use `dart_mappable`; don't
+  add `freezed` for UI state — use hand-written `sealed class`; don't add
+  `provider` -- this repo uses `flutter_riverpod`; don't add `mockito` -- this
+  repo uses `mocktail`).
 
 ## API Design Principles
 
 - Repositories return `Future<Either<Failure, T>>`. Always.
-- DTOs never leak past the data layer. Domain has its own entities.
+- DTOs never leak past the data layer. Domain has its own `dart_mappable`
+  entities (value-type codegen only; no wire serialization).
 - Mappers are pure functions, one direction each (`fromDto`, `toDto`).
 - Use cases are 1-method classes named `<verb><Noun>` (e.g. `GetTodos`,
   `MarkTodoDone`).
@@ -246,6 +250,11 @@ flowchart LR
 
 ## Data Handling & Serialization
 
+- **Domain entities use `dart_mappable`** in `lib/domain/<feature>/entities/`.
+  Annotate with `@MappableClass(generateMethods: entityGenerateMethods)` from
+  `lib/domain/entity_mappable_options.dart` — generates `copyWith`, `==`,
+  `hashCode`, and `toString` only (no `fromJson` / `toJson`). Run
+  `build_runner` after changing entities. See `Todo`, `AuthUser`, or `TodoPage`.
 - **DTOs use `freezed` + `json_serializable` codegen** for immutable data
   classes with `fromJson` / `toJson`. Run `build_runner` after changing
   DTOs: `fvm dart run build_runner build --delete-conflicting-outputs`.
@@ -292,13 +301,16 @@ lib/data/<feature>/
 
 - This project **uses `build_runner`** for:
   - **Retrofit** API contracts (`*_api.g.dart`)
-  - **freezed** + **json_serializable** DTOs (`*.freezed.dart`, `*.g.dart`)
+  - **freezed** + **json_serializable** DTOs in `data/` (`*.freezed.dart`,
+    `*.g.dart`)
+  - **dart_mappable** domain entities in `domain/` (`*.mapper.dart`)
   - **Riverpod** providers (`@riverpod` → `*.g.dart` via `riverpod_generator`)
-- It **does not** use `build_runner` for tests (hand-written mocks with
-  `mocktail`).
+- It **does not** use `build_runner` for UI states or tests (hand-written
+  `sealed class` + `mocktail` mocks).
 - It **does** use `fvm flutter gen-l10n` (offline, no build_runner) for
   `AppLocalizations`.
-- Run codegen after changing DTOs, API contracts, or `@riverpod` providers:
+- Run codegen after changing DTOs, domain entities, API contracts, or
+  `@riverpod` providers:
   `fvm dart run build_runner build --delete-conflicting-outputs`.
 
 ## Testing
@@ -422,7 +434,11 @@ not introduce new `WidgetState` constants outside the existing theme.
 ## Cross-cutting "do not"s
 
 - :white_check_mark: **Do** use codegen where supported: `@riverpod` for
-  providers, `freezed` + `json_serializable` + Retrofit for the data layer.
+  providers, `freezed` + `json_serializable` + Retrofit for the data layer,
+  `dart_mappable` for domain entities.
+- :white_check_mark: **Do** hand-write UI states (`sealed class`).
+- :no_entry: Don't use `freezed` or `json_serializable` in `domain/` (use
+  `dart_mappable` with `entityGenerateMethods` instead).
 - :no_entry: Don't use `build_runner` for tests (use `mocktail` hand-written mocks).
 - :no_entry: Don't use `ValueNotifier` / `ChangeNotifier` / `provider`
   package.
@@ -446,9 +462,9 @@ not introduce new `WidgetState` constants outside the existing theme.
 ## TL;DR for an agent
 
 - Flutter 3.41.8 via FVM -- always `fvm flutter ...` / `fvm dart ...`.
-- Clean Architecture, layer-first; **strict layering**, **Riverpod +
-  codegen**, **Retrofit + freezed codegen for data layer**, **`Either<Failure, T>`**
-  for errors.
+- Clean Architecture, layer-first; **strict layering**, **`dart_mappable`
+  domain entities**, **Riverpod + codegen**, **Retrofit + freezed codegen for
+  data layer**, **`Either<Failure, T>`** for errors.
 - Sealed UI states with exhaustive `switch`. `AppSize` +
   `ThemeContextX` (`context.colors` / `context.semantic` /
   `context.textStyles`). Localize everything.
