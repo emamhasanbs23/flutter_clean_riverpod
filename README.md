@@ -222,15 +222,15 @@ gitignored file like `env.prod.local.json` and should be passed via
 
 ## Adding a new feature
 
-1. Create `lib/domain/<feature>/`, `lib/data/<feature>/`, and
-   `lib/presentation/<feature>/`.
+1. Create `lib/features/<feature>/domain/`, `lib/features/<feature>/data/`, and
+   `lib/features/<feature>/presentation/`.
 2. **Domain**: define plain Dart entities (with hand-written `copyWith`/`==`),
    repository interface, use cases.
 3. **Data**: add DTO + mapper, data source(s) (mock + Dio-backed), repository
    implementation that returns `Either<Failure, T>`.
 4. **Presentation**: create the page widget(s) plus a `Notifier`/`AsyncNotifier`
    exposing sealed states. Register providers in
-   `lib/presentation/<feature>/riverpod/<feature>_providers.dart`.
+   `lib/features/<feature>/presentation/riverpod/<feature>_providers.dart`.
    Hold [Failure] objects in error states (not raw strings) and call
    `failure.toMessage(context)` at the render site.
 5. **Routes**: add a `GoRoute` in `core/router/app_router.dart` and a typed
@@ -264,9 +264,9 @@ fvm flutter test --reporter expanded
 ```
 
 Unit-test coverage targets:
-- `test/data/todo/todo_repository_impl_test.dart`
-- `test/domain/todo/get_todos_use_case_test.dart`
-- `test/data/auth/auth_repository_impl_test.dart`
+- `test/features/todo/data/todo_repository_impl_test.dart`
+- `test/features/todo/domain/get_todos_use_case_test.dart`
+- `test/features/auth/data/auth_repository_impl_test.dart`
 
 No widget, golden, or integration tests per scope.
 
@@ -449,7 +449,7 @@ checked in.
 - `test/core/notifications/app_links_deep_link_service_test.dart` — wraps
   `AppLinks().uriLinkStream` with a fake and asserts the service forwards
   URIs.
-- `test/presentation/todo/todo_detail_page_test.dart` — widget test
+- `test/features/todo/presentation/todo_detail/todo_detail_page_test.dart` — widget test
   for the new demo page (closes the integration story).
 
 ---

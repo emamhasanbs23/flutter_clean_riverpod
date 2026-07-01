@@ -7,9 +7,7 @@
 # Security / auth / refresh flow needs extra scrutiny.
 /lib/core/network/ @mozammal-hossain
 /lib/core/storage/ @mozammal-hossain
-/lib/domain/auth/       @mozammal-hossain
-/lib/data/auth/         @mozammal-hossain
-/lib/presentation/auth/ @mozammal-hossain
+/lib/features/auth/ @mozammal-hossain
 /android/app/build.gradle.kts @mozammal-hossain
 /android/app/proguard-rules.pro @mozammal-hossain
 

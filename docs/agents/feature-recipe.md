@@ -14,59 +14,58 @@ Pick a short feature name (singular noun). Confirm:
 ## Step 1 — Directory tree
 
 ```
-lib/domain/<feature>/
-├── entities/
-│   └── <feature>.dart
-├── repositories/
-│   └── <feature>_repository.dart
-└── usecases/
-    └── <verb>_<feature>_use_case.dart
-
-lib/data/<feature>/
-├── api/
-│   └── <feature>_api.dart
-├── remote/
-│   └── <feature>_remote_source.dart          # Retrofit + guard
-├── data_source/
-│   ├── <feature>_data_source.dart            # aggregate contract (repo depends on this)
-│   └── <feature>_data_source_impl.dart       # facade; holds _remoteSource
-├── mock/                                     # only if needed
-│   └── <feature>_mock_source.dart
-├── local/                                    # only if needed
-│   └── <feature>_local_source.dart
-├── mapper/
-│   └── <feature>_mapper.dart
-├── model/
-│   └── <feature>_dto.dart
-└── repository_impl/
-    └── <feature>_repository_impl.dart
-
-lib/presentation/<feature>/
-├── riverpod/
-│   └── <feature>_providers.dart
-├── <feature>_page.dart              # entry widget at feature root
-└── widgets/
-    ├── <section>_widget.dart        # one public widget class per file
-    └── dialogs/                     # optional
-        └── <name>_dialog.dart
+lib/features/<feature>/
+├── domain/
+│   ├── entities/
+│   │   └── <feature>.dart
+│   ├── repositories/
+│   │   └── <feature>_repository.dart
+│   └── usecases/
+│       └── <verb>_<feature>_use_case.dart
+├── data/
+│   ├── api/
+│   │   └── <feature>_api.dart
+│   ├── remote/
+│   │   └── <feature>_remote_source.dart          # Retrofit + guard
+│   ├── data_source/
+│   │   ├── <feature>_data_source.dart            # aggregate contract (repo depends on this)
+│   │   └── <feature>_data_source_impl.dart       # facade; holds _remoteSource
+│   ├── mock/                                     # only if needed
+│   │   └── <feature>_mock_source.dart
+│   ├── local/                                    # only if needed
+│   │   └── <feature>_local_source.dart
+│   ├── mapper/
+│   │   └── <feature>_mapper.dart
+│   ├── model/
+│   │   └── <feature>_dto.dart
+│   └── repository_impl/
+│       └── <feature>_repository_impl.dart
+└── presentation/
+    ├── riverpod/
+    │   └── <feature>_providers.dart
+    ├── <feature>_page.dart              # entry widget at feature root
+    └── widgets/
+        ├── <section>_widget.dart        # one public widget class per file
+        └── dialogs/                     # optional
+            └── <name>_dialog.dart
 ```
 
 ## Step 2 — Domain entity
 
-`lib/domain/<feature>/entities/<feature>.dart` — **pure Dart**. No Flutter, no
+`lib/features/<feature>/domain/entities/<feature>.dart` — **pure Dart**. No Flutter, no
 Dio, no Riverpod imports. Use `@MappableClass(generateMethods:
-entityGenerateMethods)` from `lib/domain/entity_mappable_options.dart` — generates
+entityGenerateMethods)` from `lib/core/entity_mappable_options.dart` — generates
 `copyWith`, `==`, `hashCode`, and `toString` only (no wire serialization). Run
 `build_runner` after edits. See `Todo`, `AuthUser`, or `TodoPage`.
 
 ## Step 3 — Repository contract
 
-`lib/domain/<feature>/repositories/<feature>_repository.dart` returns `Future<Either<Failure, T>>`.
+`lib/features/<feature>/domain/repositories/<feature>_repository.dart` returns `Future<Either<Failure, T>>`.
 
 ## Step 4 — Data layer
 
-- DTOs (`lib/data/<feature>/model/<feature>_dto.dart`) match the wire schema.
-- Mappers (`lib/data/<feature>/mapper/<feature>_mapper.dart`) convert DTO ↔ entity. Use `dynamic` calls only inside mappers — see [analyzer-overrides.md](./analyzer-overrides.md).
+- DTOs (`lib/features/<feature>/data/model/<feature>_dto.dart`) match the wire schema.
+- Mappers (`lib/features/<feature>/data/mapper/<feature>_mapper.dart`) convert DTO ↔ entity. Use `dynamic` calls only inside mappers — see [analyzer-overrides.md](./analyzer-overrides.md).
 - Remote data source talks to Dio via the central `dioClientProvider` —
   lives in `remote/<feature>_remote_source.dart` and is injected into
   `<feature>_data_source_impl.dart`.
@@ -75,7 +74,7 @@ entityGenerateMethods)` from `lib/domain/entity_mappable_options.dart` — gener
 
 ## Step 5 — Providers
 
-`lib/presentation/<feature>/riverpod/<feature>_providers.dart` exposes:
+`lib/features/<feature>/presentation/riverpod/<feature>_providers.dart` exposes:
 
 - `repositoryProvider`
 - `featureControllerProvider` (or per-use-case providers)
@@ -84,7 +83,7 @@ Do **not** import this file from `core/`.
 
 ## Step 6 — UI
 
-- Page at `lib/presentation/<feature>/<feature>_page.dart`; decompose UI into
+- Page at `lib/features/<feature>/presentation/<feature>_page.dart`; decompose UI into
   `<Feature><Section>Widget` classes under `widgets/` (see
   [split-presentation-widgets.md](../tasks/split-presentation-widgets.md)).
 - Sealed `*State` in the controller.
@@ -100,11 +99,11 @@ Do **not** import this file from `core/`.
 
 ## Step 8 — Tests
 
-Mirror the layer layout under `test/`:
+Mirror the feature layout under `test/features/<feature>/`:
 
-- `test/data/<feature>/` — repository + mapper tests.
-- `test/domain/<feature>/` — use case tests.
-- `test/presentation/<feature>/` — controller + widget smoke tests.
+- `test/features/<feature>/data/` — repository + mapper tests.
+- `test/features/<feature>/domain/` — use case tests.
+- `test/features/<feature>/presentation/` — controller + widget smoke tests.
 
 See [testing.md](./testing.md) for patterns.
 

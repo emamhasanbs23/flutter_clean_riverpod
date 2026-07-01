@@ -5,11 +5,11 @@ import 'package:flutter_clean_riverpod_boilerplate/core/notifications/route_desc
 import 'package:flutter_clean_riverpod_boilerplate/core/router/todo_routes.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/app_size.dart';
 import 'package:flutter_clean_riverpod_boilerplate/core/theme/theme_context_extension.dart';
-import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/login_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/presentation/auth/riverpod/auth_providers.dart';
-import 'package:flutter_clean_riverpod_boilerplate/presentation/splash/splash_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_detail/todo_detail_page.dart';
-import 'package:flutter_clean_riverpod_boilerplate/presentation/todo_list/todo_list_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/login_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/auth/presentation/riverpod/auth_providers.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/splash/presentation/splash_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/todo_detail/todo_detail_page.dart';
+import 'package:flutter_clean_riverpod_boilerplate/features/todo/presentation/todo_list/todo_list_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

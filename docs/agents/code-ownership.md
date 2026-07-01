@@ -13,9 +13,7 @@ Default owner for the whole repo: `@mozammal-hossain` (see `*` rule in `CODEOWNE
 *                               @mozammal-hossain
 /lib/core/network/              @mozammal-hossain
 /lib/core/storage/              @mozammal-hossain
-/lib/domain/auth/               @mozammal-hossain
-/lib/data/auth/                 @mozammal-hossain
-/lib/presentation/auth/         @mozammal-hossain
+/lib/features/auth/             @mozammal-hossain
 /android/app/build.gradle.kts   @mozammal-hossain
 /android/app/proguard-rules.pro @mozammal-hossain
 /.github/                       @mozammal-hossain
@@ -29,9 +27,7 @@ Default owner for the whole repo: `@mozammal-hossain` (see `*` rule in `CODEOWNE
 |-------------------------------|------------------------------------------------------------------|
 | `lib/core/network/`           | Auth refresh, token rotation, dedup logic. One bug = lockouts.   |
 | `lib/core/storage/`           | Secure-storage keys, token persistence.                          |
-| `lib/domain/auth/`          | Auth domain contracts and use cases.                               |
-| `lib/data/auth/`            | Auth DTOs, API, repository impl, session persistence.            |
-| `lib/presentation/auth/`    | Login flows, session lifecycle UI.                                 |
+| `lib/features/auth/`          | Auth domain, data, and presentation — session lifecycle end-to-end. |
 | `android/app/build.gradle.kts`| Signing config, flavors, SDK versions.                           |
 | `.github/`                    | CI pipeline — a bad change ships a broken release.              |
 

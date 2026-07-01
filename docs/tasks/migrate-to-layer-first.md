@@ -4,7 +4,8 @@
 > **feature-first** (`lib/features/<x>/{data,domain,presentation}`) to
 > **layer-first** (`lib/{data,domain,presentation}/<x>` + shared `lib/core/`).
 >
-> Status: **completed** — migrated on branch `feat/layer-first-architecture`.
+> Status: **superseded** — migrated on branch `feat/layer-first-architecture`.
+> Reversed by [migrate-to-feature-first.md](./migrate-to-feature-first.md).
 
 ---
 

@@ -10,7 +10,7 @@
 
 ## Steps
 
-1. **DTO**: extend `lib/data/<feature>/model/<feature>_dto.dart`
+1. **DTO**: extend `lib/features/<feature>/data/model/<feature>_dto.dart`
    or add a sibling DTO file. Hand-written `fromJson` / `toJson`. No
    `json_serializable`.
 2. **Mapper**: extend `<feature>_mapper.dart` with the new

@@ -1,10 +1,10 @@
 # Refactor Data Source Layer Structure
 
-> Implementation plan for standardizing `lib/data/<feature>/` data access:
+> Implementation plan for standardizing `lib/features/<feature>/data/` data access:
 > a **feature-level facade** in `data_source/` that constructor-injects a
 > **remote** dependency from a sibling `remote/` folder.
 >
-> Status: **completed** — applied on branch implementing layer-first data sources.
+> Status: **completed** — applied on branch implementing feature-first data sources.
 
 ---
 
@@ -27,7 +27,7 @@ This gives us:
 ## 2. Target folder layout
 
 ```
-lib/data/<feature>/
+lib/features/<feature>/data/
 ├── mock/
 │   └── <feature>_mock_source.dart
 ├── local/
@@ -154,7 +154,7 @@ class TodoMockSource implements TodoDataSource {
 
 ## 6. Current state vs target
 
-### Auth (`lib/data/auth/`)
+### Auth (`lib/features/auth/data/`)
 
 | Today | Target |
 |-------|--------|
@@ -164,7 +164,7 @@ class TodoMockSource implements TodoDataSource {
 | *(missing)* | `data_source/auth_data_source_impl.dart` |
 | `AuthRepositoryImpl` takes `AuthRemoteDataSource` | `AuthRepositoryImpl` takes `AuthDataSource` |
 
-### Todo (`lib/data/todo/`)
+### Todo (`lib/features/todo/data/`)
 
 | Today | Target |
 |-------|--------|
@@ -185,7 +185,7 @@ class TodoMockSource implements TodoDataSource {
 
 ### Phase 1 — Auth (CODEOWNERS-gated)
 
-> Touching `data/auth/` may need code-owner review — see
+> Touching `features/auth/data/` may need code-owner review — see
 > [code-ownership.md](../agents/code-ownership.md).
 
 1. **Add aggregate contract** — `data_source/auth_data_source.dart`
@@ -198,12 +198,12 @@ class TodoMockSource implements TodoDataSource {
    - `AuthDataSourceImpl(this._remoteSource)` delegating to `_remoteSource`.
 4. **Update repository** — `repository_impl/auth_repository_impl.dart`
    - `AuthDataSource dataSource` (field `_dataSource`); replace `_remote` calls.
-5. **Update providers** — `presentation/auth/riverpod/auth_providers.dart`
+5. **Update providers** — `features/auth/presentation/riverpod/auth_providers.dart`
    - `authRemoteSourceProvider` → `AuthRemoteSourceImpl`
    - `authDataSourceProvider` → `AuthDataSourceImpl(ref.watch(authRemoteSourceProvider))`
    - `authRepositoryProvider` → uses `authDataSourceProvider`
 6. **Regenerate** — `fvm dart run build_runner build --delete-conflicting-outputs`
-7. **Fix tests** — `test/data/auth/auth_repository_impl_test.dart` mocks `AuthDataSource`.
+7. **Fix tests** — `test/features/auth/data/auth_repository_impl_test.dart` mocks `AuthDataSource`.
 
 ### Phase 2 — Todo
 
@@ -219,7 +219,7 @@ class TodoMockSource implements TodoDataSource {
 5. **Delete** old `data_source/todo_remote_data_source.dart` and
    `data_source/todo_remote_data_source_impl.dart`.
 6. **Update providers** — `presentation/todo/riverpod/todo_providers.dart`
-7. **Fix tests** — `test/data/todo/`
+7. **Fix tests** — `test/features/todo/data/`
 
 ### Phase 3 — Cleanup legacy `lib/features/` duplicates
 
@@ -318,7 +318,7 @@ class TodoDataSourceImpl implements TodoDataSource {
 
 ## 10. Done criteria
 
-- [x] Every feature under `lib/data/` follows the §2 tree.
+- [x] Every feature under `lib/features/<feature>/data/` follows the §2 tree.
 - [x] Every `*RepositoryImpl` depends on `<Feature>DataSource`, not `<Feature>RemoteSource`.
 - [x] Every `<feature>_data_source_impl.dart` injects `_remoteSource` via constructor.
 - [x] Remote logic lives in a single `remote/<feature>_remote_source.dart`.
